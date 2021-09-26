@@ -16,7 +16,7 @@ const Signup = () => {
   const [nickName, setNickName] = useState('')
   const [university, setUniversity] = useState('')
   const [email, setEmail] = useState('')
-  const [valificationNumber, setValificationNumber] = useState('')
+  const [verificationCode, setVerificationCode] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
 
@@ -59,9 +59,9 @@ const Signup = () => {
         />
         <AuthInput
           label="인증번호"
-          value={valificationNumber}
-          onChangeText={(text) => setValificationNumber(text)}
-          placeholder="Valification number"
+          value={verificationCode}
+          onChangeText={(text) => setVerificationCode(text)}
+          placeholder="Verification code"
         />
         <AuthInput
           label="비밀번호"
