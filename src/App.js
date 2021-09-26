@@ -4,6 +4,7 @@ import styled, { ThemeProvider } from 'styled-components/native'
 import { theme } from './theme'
 import Login from './screens/Login'
 import Signup from './screens/Signup'
+import Splash from './screens/Splash'
 
 // const Container = styled.View`
 //   flex: 1;
@@ -15,7 +16,7 @@ import Signup from './screens/Signup'
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <Login />
+      <Splash />
     </ThemeProvider>
   )
 }
