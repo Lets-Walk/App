@@ -19,9 +19,9 @@ const StyledInput = styled.TextInput`
   width: 100%;
   height: 50px;
   margin: 5px 0;
-  padding: 15px 20px;
+  padding: 10px 20px;
   border-radius: 10px;
-  background-color: #ffffff;
+  background-color: #d4edfd;
   font-size: 20px;
   color: #000000;
   margin-bottom: 10px;
