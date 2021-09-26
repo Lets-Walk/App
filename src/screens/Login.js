@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components/native'
 import { Text, Pressable } from 'react-native'
 import AuthInput from '../components/AuthInput'
+import { validateEmail, removeWhitespace } from '../utils/common'
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -11,9 +12,33 @@ const Container = styled.SafeAreaView`
   padding: 30px;
 `
 
+const ErrorText = styled.Text`
+  align-items: flex-start;
+  width: 100%;
+  height: 15px;
+  margin-bottom: 10px;
+  line-height: 15px;
+  color: ${({ theme }) => theme.errorText};
+  font-style: italic;
+`
+
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const _handleEmailChange = (email) => {
+    const changedEmail = removeWhitespace(email)
+    setEmail(changedEmail)
+    setErrorMessage(
+      validateEmail(changedEmail) && email !== ''
+        ? ''
+        : '! 이메일 주소를 확인하세요.',
+    )
+  }
+  const _handlePasswordChange = (password) => {
+    setPassword(removeWhitespace(password))
+  }
 
   return (
     <Container>
@@ -41,13 +66,14 @@ const Login = ({ navigation }) => {
       <AuthInput
         label="이메일"
         value={email}
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={_handleEmailChange}
         placeholder="Email"
       />
+      <ErrorText>{errorMessage}</ErrorText>
       <AuthInput
         label="비밀번호"
         value={password}
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={_handlePasswordChange}
         placeholder="Password"
         isPassword
       />
@@ -60,6 +86,7 @@ const Login = ({ navigation }) => {
           borderRadius: 10,
           backgroundColor: '#121212',
           marginBottom: 20,
+          marginTop: 20,
         }}
       >
         <Text

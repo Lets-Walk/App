@@ -16,7 +16,7 @@ import Splash from './screens/Splash'
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
-      <Signup />
+      <Login />
     </ThemeProvider>
   )
 }

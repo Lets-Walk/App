@@ -12,7 +12,7 @@ const Label = styled.Text`
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 2px;
-  color: #ffffff;
+  color: ${({ theme }) => theme.text};
 `
 
 const StyledInput = styled.TextInput`
@@ -24,10 +24,10 @@ const StyledInput = styled.TextInput`
   background-color: #d4edfd;
   font-size: 20px;
   color: #000000;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 `
 
-const AuthInput = ({ label, placeholder, isPassword }) => {
+const AuthInput = ({ label, placeholder, isPassword, onChangeText }) => {
   const width = useWindowDimensions().width
   return (
     <Container>
@@ -36,6 +36,7 @@ const AuthInput = ({ label, placeholder, isPassword }) => {
         width={width}
         placeholder={placeholder}
         secureTextEntry={isPassword}
+        onChangeText={onChangeText}
       />
     </Container>
   )
