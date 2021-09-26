@@ -1,32 +1,23 @@
-/**
- * Sample Code
- * https://github.com/Lets-Walk/App
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { StatusBar, View, StyleSheet, Text } from 'react-native'
+import styled, { ThemeProvider } from 'styled-components/native'
+import { theme } from './theme'
+import Login from './screens/Login'
+import Signup from './screens/Signup'
+
+// const Container = styled.View`
+//   flex: 1;
+//   background-color: ${({ theme }) => theme.background};
+//   justify-content: center;
+//   align-items: center;
+// `
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>걷고 땅 먹고</Text>
-    </View>
+    <ThemeProvider theme={theme}>
+      <Login />
+    </ThemeProvider>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-  },
-  title: {
-    fontSize: 35,
-  },
-})
 
 export default App
