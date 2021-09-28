@@ -99,7 +99,7 @@ const Login = ({ navigation }) => {
           로그인
         </Text>
       </Pressable>
-      <Pressable onPress={() => navigation.navigate('Signup')}>
+      <Pressable onPress={() => navigation.navigate('회원가입')}>
         <Text
           style={{
             color: 'yellow',

@@ -23,7 +23,7 @@ const Signup = () => {
   return (
     <KeyboardAwareScrollView extraScrollHeight={20}>
       <Container>
-        <Text
+        {/* <Text
           style={{
             fontSize: 40,
             color: '#ffffff',
@@ -32,7 +32,7 @@ const Signup = () => {
           }}
         >
           회원가입
-        </Text>
+        </Text> */}
         <AuthInput
           label="이름"
           value={name}
