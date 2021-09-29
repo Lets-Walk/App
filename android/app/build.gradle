@@ -131,7 +131,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-        manifestPlaceholders = [ GMAP_API_KEY: "System.getenv('GMAP_API_KEY')" ]
     }
     splits {
         abi {

@@ -5227,6 +5227,11 @@ react-native-make@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-native-make/-/react-native-make-1.0.1.tgz#3e919ca032bd67792040397504017c2a80a96417"
   integrity sha512-+Wo2JSp6NyeKleH9aZcdPsW7X8KiBOZkwx6L65UkPCDbk4FlcYd4yw+YIuK0SUVFkUaFHTU1n8LjIjFpT+YICA==
 
+react-native-nmap@^0.0.66:
+  version "0.0.66"
+  resolved "https://registry.yarnpkg.com/react-native-nmap/-/react-native-nmap-0.0.66.tgz#caea39b1af54d4e46c4313c21130986d3adea3fc"
+  integrity sha512-+XMJOqn4zZ6PWO0UH478yj0b9PjYGHQcLUd0W5gJQ3DqGeJEb3vvWVDMbkzcuHsh59hkhGPsE9Q6pZkXxKsYtQ==
+
 react-native-reanimated@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.2.2.tgz#8bc81c7ee93d599991507bb826050a5eeee1e7f2"
