@@ -34,6 +34,7 @@
     "metro-react-native-babel-preset": "^0.66.0",
     "react-native-codegen": "^0.0.7",
     "react-native-dotenv": "^3.2.0",
+    "react-native-make": "^1.0.1",
     "react-test-renderer": "17.0.2"
   },
   "jest": {
