@@ -8,7 +8,7 @@ import Login from './screens/Login'
 import Signup from './screens/Signup'
 import Splash from './screens/Splash'
 import SplashScreen from 'react-native-splash-screen'
-
+import Nmapexample from './Nmapexample'
 // const Container = styled.View`
 //   flex: 1;
 //   background-color: ${({ theme }) => theme.background};
@@ -22,11 +22,12 @@ const App = () => {
   }, [])
 
   return (
-    <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <StackNavigation />
-      </NavigationContainer>
-    </ThemeProvider>
+    <Nmapexample />
+    // <ThemeProvider theme={theme}>
+    //   <NavigationContainer>
+    //     <StackNavigation />
+    //   </NavigationContainer>
+    // </ThemeProvider>
   )
 }
 
