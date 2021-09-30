@@ -3,6 +3,7 @@ import styled from 'styled-components/native'
 import { Text, Pressable } from 'react-native'
 import AuthInput from '../components/AuthInput'
 import { validateEmail, removeWhitespace } from '../utils/common'
+import { Button, WhiteSpace, WingBlank } from '@ant-design/react-native'
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -77,7 +78,7 @@ const Login = ({ navigation }) => {
         placeholder="Password"
         isPassword
       />
-      <Pressable
+      {/* <Pressable
         style={{
           paddingLeft: 100,
           paddingRight: 100,
@@ -98,7 +99,33 @@ const Login = ({ navigation }) => {
         >
           로그인
         </Text>
-      </Pressable>
+      </Pressable> */}
+      <WingBlank>
+        <WhiteSpace />
+        <Button
+          type="primary"
+          style={{
+            paddingLeft: 100,
+            paddingRight: 100,
+            paddingTop: 10,
+            paddingBottom: 10,
+            borderRadius: 10,
+            backgroundColor: '#121212',
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 25,
+              color: 'white',
+              fontFamily: 'BMHANNAAir_ttf',
+            }}
+          >
+            로그인
+          </Text>
+        </Button>
+        <WhiteSpace />
+      </WingBlank>
+
       <Pressable onPress={() => navigation.navigate('회원가입')}>
         <Text
           style={{

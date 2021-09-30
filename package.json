@@ -10,8 +10,13 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@ant-design/react-native": "^4.2.0",
+    "@react-native-community/cameraroll": "^4.0.4",
+    "@react-native-community/segmented-control": "^2.2.2",
+    "@react-native-community/slider": "^4.1.7",
     "@react-navigation/native": "^6.0.4",
     "@react-navigation/stack": "^6.0.9",
+    "antd-mobile": "^5.0.0-beta.13",
     "prop-types": "^15.7.2",
     "react": "17.0.2",
     "react-native": "^0.65.1",
@@ -19,6 +24,7 @@
     "react-native-gesture-handler": "^1.10.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-nmap": "^0.0.66",
+    "react-native-pager-view": "^5.4.4",
     "react-native-reanimated": "^2.2.2",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.7.2",

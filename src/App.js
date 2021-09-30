@@ -22,12 +22,12 @@ const App = () => {
   }, [])
 
   return (
-    <Nmapexample />
-    // <ThemeProvider theme={theme}>
-    //   <NavigationContainer>
-    //     <StackNavigation />
-    //   </NavigationContainer>
-    // </ThemeProvider>
+    // <Nmapexample />
+    <ThemeProvider theme={theme}>
+      <NavigationContainer>
+        <StackNavigation />
+      </NavigationContainer>
+    </ThemeProvider>
   )
 }
 
