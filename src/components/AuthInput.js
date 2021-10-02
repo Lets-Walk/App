@@ -4,8 +4,7 @@ import { useWindowDimensions } from 'react-native'
 
 const Container = styled.View`
   width: 100%;
-  margin: 5px 0;
-  padding: 10px 0;
+  margin: 10px;
 `
 
 const StyledInput = styled.TextInput`
@@ -16,7 +15,6 @@ const StyledInput = styled.TextInput`
   background-color: #d4edfd;
   font-size: 20px;
   color: #000000;
-  margin-bottom: 0px;
 `
 
 const AuthInput = ({ placeholder, isPassword, onChangeText }) => {

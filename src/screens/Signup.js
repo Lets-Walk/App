@@ -1,17 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/native'
-import {
-  Text,
-  Pressable,
-  View,
-  useWindowDimensions,
-  TextInput,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-} from 'react-native'
+import { Text, useWindowDimensions, StyleSheet, Dimensions } from 'react-native'
 import AuthInput from '../components/AuthInput'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {
@@ -24,21 +13,13 @@ import {
   Provider,
 } from '@ant-design/react-native'
 import SelectDropDown from 'react-native-select-dropdown'
-const width = Dimensions.get('window')
-
-const university = [
-  '중앙대학교',
-  '서울대학교',
-  '연세대학교',
-  '고려대학교',
-  '숭실대학교',
-]
+import Icon from 'react-native-vector-icons/AntDesign'
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
   justify-content: center;
   align-items: center;
-  padding: 30px 20px;
+  padding: 0 25px;
 `
 
 const ErrorText = styled.Text`
@@ -52,10 +33,10 @@ const ErrorText = styled.Text`
 `
 
 const ButtonContainer = styled.View`
-  flex: 1;
   flex-direction: row;
   align-items: center;
-  padding: 30px 30px;
+  margin-left: 30px;
+  margin-right: 40px;
 `
 
 const Signup = () => {
@@ -67,6 +48,18 @@ const Signup = () => {
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
   const [passwordConfirmError, setPasswordConfirmError] = useState('')
+
+  const universityData = [
+    // sample data
+    '고려대학교',
+    '서울대학교',
+    '숭실대학교',
+    '연세대학교',
+    '중앙대학교',
+    '한양대학교',
+  ]
+
+  const width = Dimensions.get('window')
 
   const _handlePasswordConfirmChange = (passwordConfirm) => {
     setPasswordConfirm(passwordConfirm)
@@ -93,48 +86,27 @@ const Signup = () => {
           onChangeText={(text) => setNickName(text)}
           placeholder="닉네임"
         />
-        <AuthInput
-          value={university}
-          onChangeText={(text) => setUniversity(text)}
-          placeholder="학교명"
-        />
 
         <SelectDropDown
-          data={[
-            '중앙대학교',
-            '서울대학교',
-            '연세대학교',
-            '고려대학교',
-            '숭실대학교',
-          ]}
+          data={universityData}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index)
           }}
-          defaultButtonText={'학교명을 선택하세요.'}
+          defaultButtonText={'---------- 학교명을 선택하세요 ----------'}
           buttonTextAfterSelection={(selectedItem, index) => {
             return selectedItem
           }}
           rowTextForSelection={(item, index) => {
             return item
           }}
-          buttonStyle={{
-            width: '80%',
-            height: 50,
-            backgroundColor: '#444',
-            borderRadius: 8,
+          renderDropdownIcon={() => {
+            return <Icon name="down" />
           }}
-          buttonTextStyle={{
-            color: '#FFF',
-            textAlign: 'center',
-            fontWeight: 'bold',
-          }}
-          dropdownStyle={{ backgroundColor: '#444' }}
-          rowStyle={{ backgroundColor: '#444', borderBottomColor: '#C5C5C5' }}
-          rowTextStyle={{
-            color: '#FFF',
-            textAlign: 'center',
-            fontWeight: 'bold',
-          }}
+          buttonStyle={styles.dropdownButtonStyle}
+          buttonTextStyle={styles.dropdownButtonTextStyle}
+          dropdownStyle={styles.dropdownDropdownStyle}
+          rowStyle={styles.dropdownRowStyle}
+          rowTextStyle={styles.dropdownRowTextStyle}
         />
 
         <ButtonContainer>
@@ -147,12 +119,7 @@ const Signup = () => {
           <Button
             type="primary"
             style={{
-              paddingLeft: 13,
-              paddingRight: 13,
-              paddingTop: 5,
-              paddingBottom: 5,
               borderRadius: 10,
-              marginLeft: 5,
               backgroundColor: 'white',
             }}
           >
@@ -182,7 +149,7 @@ const Signup = () => {
               paddingTop: 10,
               paddingBottom: 10,
               borderRadius: 10,
-              marginLeft: 5,
+              // marginLeft: 5,
               backgroundColor: 'white',
             }}
           >
@@ -231,7 +198,7 @@ const Signup = () => {
                 fontFamily: 'BMHANNAAir_ttf',
               }}
             >
-              로그인
+              회원가입
             </Text>
           </Button>
           <WhiteSpace />
@@ -240,5 +207,23 @@ const Signup = () => {
     </KeyboardAwareScrollView>
   )
 }
+
+const styles = StyleSheet.create({
+  dropdownButtonStyle: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#d4edfd',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#444',
+  },
+  dropdownButtonTextStyle: { color: '#444', textAlign: 'left' },
+  dropdownDropdownStyle: { backgroundColor: '#d4edfd' },
+  dropdownRowStyle: {
+    backgroundColor: '#d4edfd',
+    borderBottomColor: '#C5C5C5',
+  },
+  dropdownRowTextStyle: { color: '#444', textAlign: 'left' },
+})
 
 export default Signup
