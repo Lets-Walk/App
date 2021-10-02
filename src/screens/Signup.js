@@ -6,6 +6,11 @@ import {
   View,
   useWindowDimensions,
   TextInput,
+  SafeAreaView,
+  StatusBar,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
 } from 'react-native'
 import AuthInput from '../components/AuthInput'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -18,6 +23,16 @@ import {
   PickerView,
   Provider,
 } from '@ant-design/react-native'
+import SelectDropDown from 'react-native-select-dropdown'
+const width = Dimensions.get('window')
+
+const university = [
+  '중앙대학교',
+  '서울대학교',
+  '연세대학교',
+  '고려대학교',
+  '숭실대학교',
+]
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -83,6 +98,45 @@ const Signup = () => {
           onChangeText={(text) => setUniversity(text)}
           placeholder="학교명"
         />
+
+        <SelectDropDown
+          data={[
+            '중앙대학교',
+            '서울대학교',
+            '연세대학교',
+            '고려대학교',
+            '숭실대학교',
+          ]}
+          onSelect={(selectedItem, index) => {
+            console.log(selectedItem, index)
+          }}
+          defaultButtonText={'학교명을 선택하세요.'}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem
+          }}
+          rowTextForSelection={(item, index) => {
+            return item
+          }}
+          buttonStyle={{
+            width: '80%',
+            height: 50,
+            backgroundColor: '#444',
+            borderRadius: 8,
+          }}
+          buttonTextStyle={{
+            color: '#FFF',
+            textAlign: 'center',
+            fontWeight: 'bold',
+          }}
+          dropdownStyle={{ backgroundColor: '#444' }}
+          rowStyle={{ backgroundColor: '#444', borderBottomColor: '#C5C5C5' }}
+          rowTextStyle={{
+            color: '#FFF',
+            textAlign: 'center',
+            fontWeight: 'bold',
+          }}
+        />
+
         <ButtonContainer>
           <AuthInput
             value={email}
