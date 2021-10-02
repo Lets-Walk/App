@@ -4,6 +4,9 @@ import { Text, Pressable } from 'react-native'
 import AuthInput from '../components/AuthInput'
 import { validateEmail, removeWhitespace } from '../utils/common'
 import { Button, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import axios from 'axios'
+import { SERVER_URL } from '@env'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -111,6 +114,23 @@ const Login = ({ navigation }) => {
             paddingBottom: 10,
             borderRadius: 10,
             backgroundColor: '#121212',
+          }}
+          onPress={async () => {
+            //TODO :: 함수화 해서 따로 빼기
+            const userData = { email, password }
+            console.log(userData)
+            try {
+              const result = await axios.post(
+                SERVER_URL + '/api/auth/login',
+                userData,
+              )
+              const { token } = result.data
+              await AsyncStorage.setItem('jwt_token', token)
+
+              //TODO :: 로그인 완료, 메인페이지로 이동
+            } catch (err) {
+              console.error(err.response.data)
+            }
           }}
         >
           <Text
