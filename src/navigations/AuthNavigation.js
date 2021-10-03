@@ -5,7 +5,7 @@ import Signup from '../screens/Signup'
 
 const Stack = createStackNavigator()
 
-const StackNavigation = () => {
+const AuthNavigation = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -33,4 +33,4 @@ const StackNavigation = () => {
   )
 }
 
-export default StackNavigation
+export default AuthNavigation
