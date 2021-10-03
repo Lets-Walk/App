@@ -17,7 +17,7 @@ const StyledInput = styled.TextInput`
   color: #000000;
 `
 
-const AuthInput = ({ placeholder, isPassword, onChangeText }) => {
+const AuthInput = ({ placeholder, isPassword, onChangeText, value }) => {
   return (
     <Container>
       <StyledInput
@@ -25,6 +25,7 @@ const AuthInput = ({ placeholder, isPassword, onChangeText }) => {
         secureTextEntry={isPassword}
         onChangeText={onChangeText}
         autoCapitalize="none"
+        value={value}
       />
     </Container>
   )
