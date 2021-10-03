@@ -4,13 +4,13 @@ import { useWindowDimensions } from 'react-native'
 
 const Container = styled.View`
   width: 100%;
-  margin: 10px;
+  margin: 10px 0;
 `
 
 const StyledInput = styled.TextInput`
   width: 100%;
   height: 50px;
-  padding: 10px 20px;
+  padding: 10px 10px;
   border-radius: 10px;
   background-color: #d4edfd;
   font-size: 20px;
