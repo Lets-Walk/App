@@ -81,28 +81,7 @@ const Login = ({ navigation }) => {
         placeholder="Password"
         isPassword
       />
-      {/* <Pressable
-        style={{
-          paddingLeft: 100,
-          paddingRight: 100,
-          paddingTop: 15,
-          paddingBottom: 15,
-          borderRadius: 10,
-          backgroundColor: '#121212',
-          marginBottom: 20,
-          marginTop: 20,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 20,
-            color: 'white',
-            fontFamily: 'BMHANNAAir_ttf',
-          }}
-        >
-          로그인
-        </Text>
-      </Pressable> */}
+
       <WingBlank>
         <WhiteSpace />
         <Button
