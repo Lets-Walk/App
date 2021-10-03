@@ -10,15 +10,7 @@ import {
 } from 'react-native'
 import AuthInput from '../components/AuthInput'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import {
-  Button,
-  WhiteSpace,
-  WingBlank,
-  List,
-  Picker,
-  PickerView,
-  Provider,
-} from '@ant-design/react-native'
+import { Button, WhiteSpace, WingBlank } from '@ant-design/react-native'
 import SelectDropDown from 'react-native-select-dropdown'
 import Icon from 'react-native-vector-icons/AntDesign'
 
@@ -33,7 +25,8 @@ const ErrorText = styled.Text`
   align-items: flex-start;
   width: 100%;
   height: 15px;
-  margin-bottom: 10px;
+  margin-bottom: -5px;
+  margin-top: -5px;
   line-height: 15px;
   color: ${({ theme }) => theme.errorText};
   font-style: italic;
@@ -48,18 +41,22 @@ const ButtonContainer = styled.View`
 
 const Signup = () => {
   const [name, setName] = useState('')
-  const [nickName, setNickName] = useState('')
+  const [nickname, setNickname] = useState('')
+  const [nicknameDuplicate, setNicknameDuplicate] = useState(false) // nickname duplication check
   const [emailId, setEmailId] = useState('')
   const [verificationCode, setVerificationCode] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
   const [passwordConfirmError, setPasswordConfirmError] = useState('')
-  const [colleges, setColleges] = useState([])
+  const [passwordLengthError, setPasswordLengthError] = useState('')
+  const [nicknameDuplicationError, setNicknameDuplicationError] = useState('')
+  const [college, setCollege] = useState([])
   const [domains, setDomains] = useState('')
+  const [disabled, setDisabled] = useState(true)
 
   useEffect(() => {
-    //sample data
-    setColleges([
+    // sample data
+    setCollege([
       {
         title: '고려대학교',
         domains: '@korea.ac.kr',
@@ -87,11 +84,49 @@ const Signup = () => {
     ])
   }, [])
 
-  const _handlePasswordConfirmChange = (passwordConfirm) => {
-    setPasswordConfirm(passwordConfirm)
-    setPasswordConfirmError(
-      password == passwordConfirm ? '' : '! 다시 입력하세요.',
+  useEffect(() => {
+    setPasswordLengthError('')
+    setPasswordConfirmError('')
+    if (password.length > 0 && password.length < 6) {
+      setPasswordLengthError('! 6자리 이상 입력하세요.')
+    } else if (passwordConfirm.length != 0 && password != passwordConfirm) {
+      setPasswordConfirmError(
+        password == passwordConfirm ? '' : '! 다시 입력하세요.',
+      )
+    }
+  }, [password, passwordConfirm])
+
+  useEffect(() => {
+    // 인증코드 일치 여부 확인하여 verification code 자리에 수정 필요
+    // nickname duplication check 결과 추가
+    setDisabled(
+      !(
+        name &&
+        nickname &&
+        emailId &&
+        college &&
+        verificationCode && // here
+        password &&
+        passwordConfirm &&
+        !passwordConfirmError &&
+        !passwordLengthError
+      ),
     )
+  })
+
+  const _handleSignupButtonPress = () => {
+    //sign-up logic
+    console.log('Sign-up!')
+  }
+
+  const _handleVerificationReqButtonPress = () => {
+    // email verifiaction request logic & email duplication check
+    console.log('verification request')
+  }
+
+  const _handleVerificationButtonPress = () => {
+    // email verification by sending verification code
+    console.log('verification')
   }
 
   return (
@@ -104,21 +139,20 @@ const Signup = () => {
       >
         <AuthInput
           value={name}
-          onChangeText={(text) => setName(text)}
+          onChangeText={(text) => setName(text.trim())}
           placeholder="이름"
         />
         <AuthInput
-          value={nickName}
-          onChangeText={(text) => setNickName(text)}
+          value={nickname}
+          onChangeText={(text) => setNickname(text.trim())}
           placeholder="닉네임"
         />
+        <ErrorText>{nicknameDuplicationError}</ErrorText>
 
         <SelectDropDown
-          data={colleges}
+          data={college}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index)
-            // domainRef.current.reset
-            // setDomains('')
             setDomains(selectedItem.domains)
           }}
           defaultButtonText={'---------- 학교명을 선택하세요 ----------'}
@@ -143,7 +177,7 @@ const Signup = () => {
             <View style={styles.inputWrap}>
               <TextInput
                 style={styles.inputEmailId}
-                onChangeText={(text) => setEmailId(text)}
+                onChangeText={(text) => setEmailId(text.trim())}
                 placeholder="학교 이메일"
                 fontSize={15}
                 value={emailId}
@@ -171,6 +205,7 @@ const Signup = () => {
               borderRadius: 10,
               backgroundColor: 'powderblue',
             }}
+            onPress={_handleVerificationReqButtonPress} // here
           >
             <Text
               style={{
@@ -186,7 +221,7 @@ const Signup = () => {
         <ButtonContainer>
           <AuthInput
             value={verificationCode}
-            onChangeText={(text) => setVerificationCode(text)}
+            onChangeText={(text) => setVerificationCode(text.trim())}
             placeholder="인증번호"
           />
           <Button
@@ -199,6 +234,7 @@ const Signup = () => {
               borderRadius: 10,
               backgroundColor: 'powderblue',
             }}
+            onPress={_handleVerificationButtonPress} // here
           >
             <Text
               style={{
@@ -214,13 +250,14 @@ const Signup = () => {
 
         <AuthInput
           value={password}
-          onChangeText={(text) => setPassword(text)}
-          placeholder="비밀번호"
+          onChangeText={(text) => setPassword(text.trim())}
+          placeholder="비밀번호(6자리 이상)"
           isPassword
         />
+        <ErrorText>{passwordLengthError}</ErrorText>
         <AuthInput
           value={passwordConfirm}
-          onChangeText={(text) => _handlePasswordConfirmChange(text)}
+          onChangeText={(text) => setPasswordConfirm(text.trim())}
           placeholder="비밀번호 확인"
           isPassword
         />
@@ -237,6 +274,8 @@ const Signup = () => {
               borderRadius: 10,
               backgroundColor: '#121212',
             }}
+            onPress={_handleSignupButtonPress} // here
+            disabled={disabled}
           >
             <Text
               style={{
