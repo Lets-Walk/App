@@ -44,6 +44,22 @@ const Login = ({ navigation }) => {
     setPassword(removeWhitespace(password))
   }
 
+  const login = async () => {
+    const userData = { email, password }
+    try {
+      const result = await axios.post(SERVER_URL + '/api/auth/login', userData)
+      const { token } = result.data
+      await AsyncStorage.setItem('token', token)
+      console.log('login success')
+      setEmail('')
+      setPassword('')
+
+      //TODO :: 로그인 완료, 메인페이지로 이동
+    } catch (err) {
+      console.error(err.response.data)
+    }
+  }
+
   return (
     <Container>
       <Text
@@ -94,23 +110,7 @@ const Login = ({ navigation }) => {
             borderRadius: 10,
             backgroundColor: '#121212',
           }}
-          onPress={async () => {
-            //TODO :: 함수화 해서 따로 빼기
-            const userData = { email, password }
-            console.log(userData)
-            try {
-              const result = await axios.post(
-                SERVER_URL + '/api/auth/login',
-                userData,
-              )
-              const { token } = result.data
-              await AsyncStorage.setItem('jwt_token', token)
-
-              //TODO :: 로그인 완료, 메인페이지로 이동
-            } catch (err) {
-              console.error(err.response.data)
-            }
-          }}
+          onPress={login}
         >
           <Text
             style={{

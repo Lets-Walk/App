@@ -3,7 +3,7 @@ import { StatusBar, View, StyleSheet, Text } from 'react-native'
 import styled, { ThemeProvider } from 'styled-components/native'
 import { theme } from './theme'
 import { NavigationContainer } from '@react-navigation/native'
-import StackNavigation from './navigations/Stack'
+import AuthNavigation from './navigations/AuthNavigation'
 import Login from './screens/Login'
 import Signup from './screens/Signup'
 import Splash from './screens/Splash'
@@ -12,6 +12,7 @@ import Nmapexample from './Nmapexample'
 import axios from 'axios'
 import { SERVER_URL, PORT } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import MainNavigation from './navigations/MainNavigation'
 // const Container = styled.View`
 //   flex: 1;
 //   background-color: ${({ theme }) => theme.background};
@@ -22,34 +23,33 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const App = () => {
   const [user, setUser] = useState(null)
 
-  useEffect(async () => {
-    SplashScreen.hide()
+  const getCurrentUser = async () => {
+    const token = await AsyncStorage.getItem('token')
 
-    //TODO :: 함수 리팩토링 및 auth정보에 따른 Stack 분기 처리하기
-    console.log('auth')
-    const token = await AsyncStorage.getItem('jwt_token')
-    console.log(token)
-    axios
-      .get(`${SERVER_URL}/api/auth/me`, {
+    try {
+      const response = await axios.get(SERVER_URL + '/api/auth/me', {
         headers: {
           authorization: 'Bearer ' + token,
+          'Content-type': 'application/json',
+          Accept: 'application/json',
         },
+        timeout: 10000,
       })
-      .then((res) => {
-        console.log('조회 성공')
-        console.log(res.data)
-      })
-      .catch((err) => {
-        console.log('조회 실패')
-        console.error(err.response.data)
-      })
+      setUser(response.data.user)
+    } catch (err) {
+      console.log(err.response.data)
+    }
+  }
+
+  useEffect(async () => {
+    getCurrentUser()
+    SplashScreen.hide()
   }, [])
 
   return (
-    // <Nmapexample />
     <ThemeProvider theme={theme}>
       <NavigationContainer>
-        <StackNavigation />
+        {user ? <MainNavigation /> : <AuthNavigation />}
       </NavigationContainer>
     </ThemeProvider>
   )
