@@ -5,7 +5,7 @@ import Signup from '../screens/Signup'
 
 const Stack = createStackNavigator()
 
-const AuthNavigation = () => {
+const AuthNavigation = ({ setUser }) => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -23,11 +23,9 @@ const AuthNavigation = () => {
         headerTitle: '회원가입',
       }}
     >
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Login" options={{ headerShown: false }}>
+        {(props) => <Login {...props} setUser={setUser} />}
+      </Stack.Screen>
       <Stack.Screen name="회원가입" component={Signup} />
     </Stack.Navigator>
   )

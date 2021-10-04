@@ -7,6 +7,8 @@ import { Button, WhiteSpace, WingBlank } from '@ant-design/react-native'
 import axios from 'axios'
 import { SERVER_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import auth from '../utils/auth'
+import { ActivityIndicator } from '@ant-design/react-native'
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -26,10 +28,11 @@ const ErrorText = styled.Text`
   font-style: italic;
 `
 
-const Login = ({ navigation }) => {
+const Login = ({ navigation, setUser }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const _handleEmailChange = (email) => {
     const changedEmail = removeWhitespace(email)
@@ -45,23 +48,30 @@ const Login = ({ navigation }) => {
   }
 
   const login = async () => {
+    setLoading(true)
     const userData = { email, password }
     try {
       const result = await axios.post(SERVER_URL + '/api/auth/login', userData)
       const { token } = result.data
       await AsyncStorage.setItem('token', token)
       console.log('login success')
+      auth(setUser)
       setEmail('')
       setPassword('')
-
-      //TODO :: 로그인 완료, 메인페이지로 이동
     } catch (err) {
-      console.error(err.response.data)
+      console.log(err.response.data)
     }
+    setLoading(false)
   }
 
   return (
     <Container>
+      <ActivityIndicator
+        animating={loading}
+        toast
+        text="Loading..."
+        size="large"
+      />
       <Text
         style={{
           fontSize: 40,

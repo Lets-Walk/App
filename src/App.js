@@ -4,15 +4,10 @@ import styled, { ThemeProvider } from 'styled-components/native'
 import { theme } from './theme'
 import { NavigationContainer } from '@react-navigation/native'
 import AuthNavigation from './navigations/AuthNavigation'
-import Login from './screens/Login'
-import Signup from './screens/Signup'
-import Splash from './screens/Splash'
 import SplashScreen from 'react-native-splash-screen'
-import Nmapexample from './Nmapexample'
-import axios from 'axios'
-import { SERVER_URL, PORT } from '@env'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import MainNavigation from './navigations/MainNavigation'
+import auth from './utils/auth'
+import { ActivityIndicator } from '@ant-design/react-native'
 // const Container = styled.View`
 //   flex: 1;
 //   background-color: ${({ theme }) => theme.background};
@@ -22,34 +17,21 @@ import MainNavigation from './navigations/MainNavigation'
 
 const App = () => {
   const [user, setUser] = useState(null)
-
-  const getCurrentUser = async () => {
-    const token = await AsyncStorage.getItem('token')
-
-    try {
-      const response = await axios.get(SERVER_URL + '/api/auth/me', {
-        headers: {
-          authorization: 'Bearer ' + token,
-          'Content-type': 'application/json',
-          Accept: 'application/json',
-        },
-        timeout: 10000,
-      })
-      setUser(response.data.user)
-    } catch (err) {
-      console.log(err.response.data)
-    }
-  }
+  const [loading, setLoading] = useState(false)
 
   useEffect(async () => {
-    getCurrentUser()
+    setLoading(true)
+    await auth(setUser)
+    setLoading(false)
     SplashScreen.hide()
   }, [])
 
+  // TODO :: setUser로 user로그인 하는 대신 글로벌 state로 관리하기.
+  if (loading) return <ActivityIndicator toast text="Loading..." size="large" />
   return (
     <ThemeProvider theme={theme}>
       <NavigationContainer>
-        {user ? <MainNavigation /> : <AuthNavigation />}
+        {user ? <MainNavigation /> : <AuthNavigation setUser={setUser} />}
       </NavigationContainer>
     </ThemeProvider>
   )
