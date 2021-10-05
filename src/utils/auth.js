@@ -18,7 +18,8 @@ const auth = async (setUser) => {
     setUser(response.data.user)
   } catch (err) {
     console.log(err)
-    // console.log(err.response.data)
+    if(err.response)
+      console.log(err.response.data)
   }
 }
 

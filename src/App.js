@@ -21,9 +21,8 @@ const App = () => {
 
   useEffect(async () => {
     setLoading(true)
-    // await auth(setUser)
+    await auth(setUser) //스플래시 무한로딩이면 주석처리하기
     setLoading(false)
-    setUser({name : 'test', email : 'test@test.com'})
     SplashScreen.hide()
   }, [])
 
