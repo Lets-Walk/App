@@ -17,7 +17,8 @@ const auth = async (setUser) => {
     console.log('jwt auth success')
     setUser(response.data.user)
   } catch (err) {
-    console.log(err.response.data)
+    console.log(err)
+    // console.log(err.response.data)
   }
 }
 

@@ -21,8 +21,9 @@ const App = () => {
 
   useEffect(async () => {
     setLoading(true)
-    await auth(setUser)
+    // await auth(setUser)
     setLoading(false)
+    setUser({name : 'test', email : 'test@test.com'})
     SplashScreen.hide()
   }, [])
 
