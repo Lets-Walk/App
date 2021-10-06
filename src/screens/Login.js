@@ -66,17 +66,15 @@ const Login = ({ navigation, setUser }) => {
       )
       const { token } = result.data
       await AsyncStorage.setItem('token', token)
-      console.log('login success')
+      setLoading(false)
       await auth(setUser)
-      setEmail('')
-      setPassword('')
     } catch (err) {
       console.log(err)
       if (err.response) console.log(err.response.data)
       setPassword('')
+      setLoading(false)
       setModalVisible(true)
     }
-    setLoading(false)
   }
 
   return (
