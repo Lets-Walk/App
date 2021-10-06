@@ -16,9 +16,13 @@ const Container = styled.View`
   border-radius: 5px;
 `
 
-const ConfirmModal = ({ isVisible, setVisible, texts }) => {
+const ConfirmModal = ({ isVisible, setVisible, texts, onConfirm = null }) => {
+  if (!onConfirm) {
+    onConfirm = () => setVisible(false)
+  }
+
   return (
-    <Modal isVisible={isVisible} onBackdropPress={() => setVisible(false)}>
+    <Modal isVisible={isVisible} onBackdropPress={onConfirm}>
       <CenterView>
         <Container>
           <View
@@ -34,13 +38,7 @@ const ConfirmModal = ({ isVisible, setVisible, texts }) => {
             ))}
           </View>
           <View style={styles.Button}>
-            <Button
-              type="ghost"
-              style={styles.confirm}
-              onPress={() => {
-                setVisible(false)
-              }}
-            >
+            <Button type="ghost" style={styles.confirm} onPress={onConfirm}>
               <Text
                 style={{
                   fontSize: 25,

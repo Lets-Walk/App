@@ -10,9 +10,17 @@ import {
 } from 'react-native'
 import AuthInput from '../components/AuthInput'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { Button, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import {
+  Button,
+  WhiteSpace,
+  WingBlank,
+  ActivityIndicator,
+} from '@ant-design/react-native'
 import SelectDropDown from 'react-native-select-dropdown'
 import Icon from 'react-native-vector-icons/AntDesign'
+import axios from 'axios'
+import { SERVER_URL } from '@env'
+import ConfirmModal from '../components/ConfirmModal'
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -39,74 +47,83 @@ const ButtonContainer = styled.View`
   margin-right: 30px;
 `
 
-const Signup = () => {
-  const [name, setName] = useState('')
-  const [nickname, setNickname] = useState('')
-  const [nicknameDuplicate, setNicknameDuplicate] = useState(false) // nickname duplication check
-  const [emailId, setEmailId] = useState('')
-  const [verificationCode, setVerificationCode] = useState('')
-  const [password, setPassword] = useState('')
-  const [passwordConfirm, setPasswordConfirm] = useState('')
-  const [passwordConfirmError, setPasswordConfirmError] = useState('')
-  const [passwordLengthError, setPasswordLengthError] = useState('')
-  const [nicknameDuplicationError, setNicknameDuplicationError] = useState('')
-  const [college, setCollege] = useState([])
-  const [domains, setDomains] = useState('')
-  const [disabled, setDisabled] = useState(true)
+const Signup = ({ navigation }) => {
+  //유저 정보
+  const [user, setUser] = useState({
+    name: '',
+    nickname: '',
+    email: '',
+    password: '',
+  })
 
-  useEffect(() => {
-    // sample data
-    setCollege([
-      {
-        title: '고려대학교',
-        domains: '@korea.ac.kr',
-      },
-      {
-        title: '서울대학교',
-        domains: '@snu.ac.kr',
-      },
-      {
-        title: '숭실대학교',
-        domains: '@ssu.ac.kr',
-      },
-      {
-        title: '연세대학교',
-        domains: '@yonsei.ac.kr',
-      },
-      {
-        title: '중앙대학교',
-        domains: '@cau.ac.kr',
-      },
-      {
-        title: '한양대학교',
-        domains: '@hanyang.ac.kr',
-      },
-    ])
+  //유저 eamil input
+  const [emailId, setEmailId] = useState('')
+  //유저가 입력한 인증코드
+  const [verificationCode, setVerificationCode] = useState('')
+  //서버로 부터 받은 인증코드
+  const [authCode, setAuthcode] = useState('')
+  //인증코드 유효성
+  const [isVerify, setVerify] = useState(false)
+  //패스워드 확인 input
+  const [passwordConfirm, setPasswordConfirm] = useState('')
+  //패스워드 확인 에러 메세지
+  const [passwordConfirmError, setPasswordConfirmError] = useState('')
+  //패스워드 길이 에러 메세지
+  const [passwordLengthError, setPasswordLengthError] = useState('')
+
+  //전체 대학 정보
+  const [college, setCollege] = useState([])
+  //유저가 선택한 대학정보
+  const [campus, setCampus] = useState({})
+  //회원가입 버튼 disable
+  const [disabled, setDisabled] = useState(true)
+  //모달 view 여부
+  const [modalVisible, setModalVisible] = useState(false)
+  //모달 메세지
+  const [modalMessages, setModalMessages] = useState([])
+  //로딩
+  const [loading, setLoading] = useState(false)
+
+  useEffect(async () => {
+    //campus data fetch
+    console.log('campus fetch')
+    try {
+      const result = await axios.get(SERVER_URL + '/api/campus', {
+        timeout: 5000,
+      })
+      setCollege(result.data.data)
+    } catch (err) {
+      console.log(err)
+    }
   }, [])
 
   useEffect(() => {
     setPasswordLengthError('')
     setPasswordConfirmError('')
-    if (password.length > 0 && password.length < 6) {
+    if (user.password.length > 0 && user.password.length < 6) {
       setPasswordLengthError('! 6자리 이상 입력하세요.')
-    } else if (passwordConfirm.length != 0 && password != passwordConfirm) {
+    } else if (
+      passwordConfirm.length != 0 &&
+      user.password != passwordConfirm
+    ) {
       setPasswordConfirmError(
-        password == passwordConfirm ? '' : '! 다시 입력하세요.',
+        user.password == passwordConfirm ? '' : '! 다시 입력하세요.',
       )
     }
-  }, [password, passwordConfirm])
+  }, [user.password, passwordConfirm])
 
   useEffect(() => {
     // 인증코드 일치 여부 확인하여 verification code 자리에 수정 필요
-    // nickname duplication check 결과 추가
     setDisabled(
       !(
-        name &&
-        nickname &&
-        emailId &&
+        user.name &&
+        user.nickname &&
+        user.email &&
+        user.password &&
+        campus &&
         college &&
-        verificationCode && // here
-        password &&
+        verificationCode &&
+        isVerify &&
         passwordConfirm &&
         !passwordConfirmError &&
         !passwordLengthError
@@ -114,23 +131,94 @@ const Signup = () => {
     )
   })
 
-  const _handleSignupButtonPress = () => {
+  const _handleSignupButtonPress = async () => {
     //sign-up logic
-    console.log('Sign-up!')
+    setLoading(true)
+    try {
+      const result = await axios.post(
+        SERVER_URL + '/api/auth/sign-up',
+        {
+          ...user,
+          campusId: campus.id,
+        },
+        {
+          timeout: 5000,
+        },
+      )
+      console.log(result.data.data)
+      setLoading(false)
+      setModalMessages(['회원가입이 완료되었습니다.'])
+      setModalVisible(true)
+    } catch (err) {
+      console.log(err)
+      if (err.response) console.log(err.response)
+      setLoading(false)
+      setModalMessages(['회원가입에 실패했습니다..'])
+      setModalVisible(true)
+    }
   }
 
-  const _handleVerificationReqButtonPress = () => {
-    // email verifiaction request logic & email duplication check
-    console.log('verification request')
+  const _handleVerificationReqButtonPress = async () => {
+    if (!emailId || !campus) return
+    // email verifiaction request logic
+    setUser({ ...user, email: emailId + campus.domain })
+
+    try {
+      const result = await axios.post(
+        SERVER_URL + '/api/auth/email',
+        {
+          email: emailId + campus.domain,
+        },
+        {
+          timeout: 5000,
+        },
+      )
+      setAuthcode(result.data.data)
+      setModalMessages(['인증번호를 전송했습니다.', '이메일을 확인해주세요.'])
+      setModalVisible(true)
+    } catch (err) {
+      console.log(err)
+      setModalMessages(['이미 존재하는 이메일입니다.'])
+      setModalVisible(true)
+      if (err.response) console.log(err.response.data)
+    }
   }
 
   const _handleVerificationButtonPress = () => {
     // email verification by sending verification code
+    if (
+      verificationCode !== '' &&
+      authCode !== '' &&
+      verificationCode === authCode
+    )
+      setVerify(true)
+    else {
+      setModalMessages(['인증번호가 일치하지 않습니다.'])
+      setModalVisible(true)
+    }
     console.log('verification')
   }
 
   return (
     <KeyboardAwareScrollView extraScrollHeight={40}>
+      <ConfirmModal
+        isVisible={modalVisible}
+        setVisible={setModalVisible}
+        texts={modalMessages}
+        onConfirm={
+          disabled
+            ? null
+            : () => {
+                navigation.goBack()
+              }
+        }
+      />
+      <ActivityIndicator
+        animating={loading}
+        toast
+        text="Loading..."
+        size="large"
+      />
       <Container
         style={{
           height: useWindowDimensions().height - 60,
@@ -138,29 +226,27 @@ const Signup = () => {
         }}
       >
         <AuthInput
-          value={name}
-          onChangeText={(text) => setName(text.trim())}
+          value={user.name}
+          onChangeText={(text) => setUser({ ...user, name: text.trim() })}
           placeholder="이름"
         />
         <AuthInput
-          value={nickname}
-          onChangeText={(text) => setNickname(text.trim())}
+          value={user.nickname}
+          onChangeText={(text) => setUser({ ...user, nickname: text.trim() })}
           placeholder="닉네임"
         />
-        <ErrorText>{nicknameDuplicationError}</ErrorText>
 
         <SelectDropDown
           data={college}
           onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index)
-            setDomains(selectedItem.domains)
+            setCampus(selectedItem)
           }}
           defaultButtonText={'---------- 학교명을 선택하세요 ----------'}
           buttonTextAfterSelection={(selectedItem, index) => {
-            return selectedItem.title
+            return selectedItem.name
           }}
           rowTextForSelection={(item, index) => {
-            return item.title
+            return item.name
           }}
           renderDropdownIcon={() => {
             return <Icon name="down" />
@@ -188,7 +274,7 @@ const Signup = () => {
               <TextInput
                 style={styles.inputDomain}
                 editable={false}
-                placeholder={domains}
+                placeholder={campus.domain}
                 placeholderTextColor={'#000000'}
                 fontSize={15}
               />
@@ -236,21 +322,25 @@ const Signup = () => {
             }}
             onPress={_handleVerificationButtonPress} // here
           >
-            <Text
-              style={{
-                fontSize: 18,
-                color: 'black',
-                fontFamily: 'BMHANNAAir_ttf',
-              }}
-            >
-              인증
-            </Text>
+            {isVerify ? (
+              <Icon name="check" color="green" size={30} />
+            ) : (
+              <Text
+                style={{
+                  fontSize: 18,
+                  color: 'black',
+                  fontFamily: 'BMHANNAAir_ttf',
+                }}
+              >
+                인증
+              </Text>
+            )}
           </Button>
         </ButtonContainer>
 
         <AuthInput
-          value={password}
-          onChangeText={(text) => setPassword(text.trim())}
+          value={user.password}
+          onChangeText={(text) => setUser({ ...user, password: text.trim() })}
           placeholder="비밀번호(6자리 이상)"
           isPassword
         />
