@@ -26,6 +26,7 @@
     "react-native-config": "^1.4.4",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
+    "react-native-modal": "^13.0.0",
     "react-native-nmap": "^0.0.66",
     "react-native-pager-view": "^5.4.4",
     "react-native-reanimated": "^2.2.2",
