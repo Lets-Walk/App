@@ -9,7 +9,7 @@ import { SERVER_URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import auth from '../utils/auth'
 import { ActivityIndicator, Toast } from '@ant-design/react-native'
-import LoginError from '../components/LoginError'
+import ConfirmModal from '../components/ConfirmModal'
 import Modal from 'react-native-modal'
 
 const Container = styled.SafeAreaView`
@@ -53,10 +53,6 @@ const Login = ({ navigation, setUser }) => {
     setPassword(removeWhitespace(password))
   }
 
-  const toggleModalVisible = () => {
-    setModalVisible(!modalVisible)
-  }
-
   const login = async () => {
     setLoading(true)
     const userData = { email, password }
@@ -78,7 +74,7 @@ const Login = ({ navigation, setUser }) => {
       console.log(err)
       if (err.response) console.log(err.response.data)
       setPassword('')
-      toggleModalVisible()
+      setModalVisible(true)
     }
     setLoading(false)
   }
@@ -92,12 +88,14 @@ const Login = ({ navigation, setUser }) => {
           text="Loading..."
           size="large"
         />
-        <Modal
+        <ConfirmModal
           isVisible={modalVisible}
-          onBackdropPress={() => setModalVisible(false)}
-        >
-          <LoginError toggleModalVisible={toggleModalVisible} />
-        </Modal>
+          setVisible={setModalVisible}
+          texts={[
+            '로그인에 실패하였습니다',
+            '이메일과 비밀번호를 확인해주세요.',
+          ]}
+        />
         <Text
           style={{
             fontSize: 40,
