@@ -12,14 +12,13 @@ const auth = async (setUser) => {
         'Content-type': 'application/json',
         Accept: 'application/json',
       },
-      timeout: 10000,
+      timeout: 5000,
     })
     console.log('jwt auth success')
     setUser(response.data.user)
   } catch (err) {
     console.log(err)
-    if(err.response)
-      console.log(err.response.data)
+    if (err.response) console.log(err.response.data)
   }
 }
 
