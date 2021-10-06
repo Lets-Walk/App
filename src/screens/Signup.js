@@ -178,7 +178,7 @@ const Signup = ({ navigation }) => {
       setModalVisible(true)
     } catch (err) {
       console.log(err)
-      setModalMessages(['이미 존재하는 이메일입니다.'])
+      setModalMessages(['이미 존재하는 이메일 입니다.'])
       setModalVisible(true)
       if (err.response) console.log(err.response.data)
     }
@@ -321,6 +321,7 @@ const Signup = ({ navigation }) => {
               backgroundColor: 'powderblue',
             }}
             onPress={_handleVerificationButtonPress} // here
+            disabled={isVerify}
           >
             {isVerify ? (
               <Icon name="check" color="green" size={30} />
