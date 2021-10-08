@@ -5,10 +5,11 @@ import { Text, StyleSheet, View } from 'react-native'
 import Modal from 'react-native-modal'
 
 const CenterView = styled.View`
-	flex : 1
-	justify-content: center;
-	align-items: center;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 `
+
 const Container = styled.View`
   width: 90%;
   height: 35%;

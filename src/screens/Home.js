@@ -1,14 +1,6 @@
 import React from 'react'
-import {View, Text} from 'react-native'
-import styled from 'styled-components/native'
-
-const Container = styled.SafeAreaView`
-  flex: 1;
-  background-color: ${({ theme }) => theme.background};
-  justify-content: center;
-  align-items: center;
-  padding: 30px;
-`
+import { View, Text } from 'react-native'
+import ScreenName from '../components/ScreenName'
 
 /*
     하단 네비게이션 바 아이콘, 색상 변경
@@ -18,12 +10,11 @@ const Container = styled.SafeAreaView`
 */
 
 const Home = () => {
-    return (
-      <Container>
-        <Text>Home!</Text>
-      </Container>
-    );
-  }
-
+  return (
+    <ScreenName name="홈">
+      <Text>메인 내용</Text>
+    </ScreenName>
+  )
+}
 
 export default Home
