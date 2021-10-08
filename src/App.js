@@ -8,12 +8,6 @@ import SplashScreen from 'react-native-splash-screen'
 import MainNavigation from './navigations/MainNavigation'
 import auth from './utils/auth'
 import { ActivityIndicator } from '@ant-design/react-native'
-// const Container = styled.View`
-//   flex: 1;
-//   background-color: ${({ theme }) => theme.background};
-//   justify-content: center;
-//   align-items: center;
-// `
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -31,7 +25,17 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <NavigationContainer>
-        {user ? <MainNavigation /> : <AuthNavigation setUser={setUser} />}
+        {user ? (
+          <>
+            <StatusBar barStyle="dark-content" backgroundColor="#f6f6f9" />
+            <MainNavigation />
+          </>
+        ) : (
+          <>
+            <StatusBar hidden />
+            <AuthNavigation setUser={setUser} />
+          </>
+        )}
       </NavigationContainer>
     </ThemeProvider>
   )
