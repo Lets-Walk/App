@@ -149,11 +149,11 @@ export const Lab = ({ size }) => {
   )
 }
 
-export const RedPaper = ({ size }) => {
+const PaperContainer = ({ color, size }) => {
   return (
     <View
       style={{
-        backgroundColor: '#AA1945',
+        backgroundColor: color,
         width: '20%',
         height: '12%',
         borderRadius: 15,
@@ -186,82 +186,16 @@ export const RedPaper = ({ size }) => {
       </View>
     </View>
   )
+}
+
+export const RedPaper = ({ size }) => {
+  return <PaperContainer color="#AA1945" size={size} />
 }
 
 export const BluePaper = ({ size }) => {
-  return (
-    <View
-      style={{
-        backgroundColor: '#059DC0',
-        width: '20%',
-        height: '12%',
-        borderRadius: 15,
-        borderWidth: 1,
-        borderColor: 'black',
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-      }}
-    >
-      <View
-        style={{
-          borderRadius: 15,
-          width: '90%',
-          height: '90%',
-          borderWidth: 2,
-          borderColor: 'black',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <AwesomeIcon name="scroll" size={size} color="white" />
-      </View>
-    </View>
-  )
+  return <PaperContainer color="#059DC0" size={size} />
 }
 
 export const WhitePaper = ({ size }) => {
-  return (
-    <View
-      style={{
-        backgroundColor: '#868B8E',
-        width: '20%',
-        height: '12%',
-        borderRadius: 15,
-        borderWidth: 2,
-        borderColor: 'black',
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-      }}
-    >
-      <View
-        style={{
-          borderRadius: 15,
-          width: '90%',
-          height: '90%',
-          borderWidth: 1,
-          borderColor: 'black',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <AwesomeIcon name="scroll" size={size} color="white" />
-      </View>
-    </View>
-  )
+  return <PaperContainer color="#868B8E" size={size} />
 }
