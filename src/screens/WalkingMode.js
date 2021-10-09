@@ -30,6 +30,10 @@ const P0 = { latitude: 37.564362, longitude: 126.977011 }
 const P1 = { latitude: 37.565051, longitude: 126.978567 }
 const P2 = { latitude: 37.565383, longitude: 126.976292 }
 
+// walking time sample data
+const walkingTime = 90
+const steps = 1000
+
 const ButtonContainer = styled.View`
   flex: 1;
   flex-direction: row;
@@ -41,9 +45,31 @@ const ButtonContainer = styled.View`
   margin: 0px 0px;
 `
 
+const InfoContainer = styled.View`
+  position: absolute;
+  right: 10;
+  top: 10;
+  height: 17%;
+  width: 40%;
+  background-color: #ffffff;
+  padding: 3px 5px;
+  border-radius: 10px;
+  justify-content: space-around;
+  border-width: 1;
+  border-color: #4495d0;
+`
+
 const Container = styled.View`
   flex: 8;
   align-items: center;
+`
+
+const WalkingInfoText = styled.Text`
+  font-size: 23px;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  font-family: BMHANNAAir_ttf;
 `
 
 const ButtonText = styled.Text`
@@ -82,6 +108,18 @@ const WalkingMode = ({ navigation }) => {
             onClick={() => console.warn('onClick! p2')}
           />
         </NaverMapView>
+        <InfoContainer>
+          <WalkingInfoText>
+            <Ionicons name="time" color="#4495D0" size={30} />
+            {'\t'}
+            {Math.floor(walkingTime / 60)}시간 {walkingTime % 60}분
+          </WalkingInfoText>
+          <WalkingInfoText>
+            <MaterialCmIcons name="walk" color="#4495D0" size={30} />
+            {'\t'}
+            {steps}보
+          </WalkingInfoText>
+        </InfoContainer>
       </Container>
       <ButtonContainer>
         <Pressable onPress={() => console.log('BAG touched')}>
