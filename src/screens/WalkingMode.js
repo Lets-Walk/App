@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacit, Pressable } from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
@@ -8,31 +8,11 @@ import NaverMapView, {
   Polyline,
   Polygon,
 } from 'react-native-nmap'
-import GetLocation from 'react-native-get-location'
+import Geolocation from 'react-native-geolocation-service'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCmIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-
-// 현재 위치정보 Load -> emulator에서는 google 본사 위치로 고정되어있음
-GetLocation.getCurrentPosition({
-  enableHighAccuracy: true,
-  timeout: 15000,
-})
-  .then((location) => {
-    console.log(location)
-  })
-  .catch((error) => {
-    const { code, message } = error
-    console.warn(code, message)
-  })
-// sample location data
-const P0 = { latitude: 37.564362, longitude: 126.977011 }
-const P1 = { latitude: 37.565051, longitude: 126.978567 }
-const P2 = { latitude: 37.565383, longitude: 126.976292 }
-
-// walking time sample data
-const walkingTime = 90
-const steps = 1000
+import requestPermission from '../utils/requestPermission'
 
 const ButtonContainer = styled.View`
   flex: 1;
@@ -47,15 +27,15 @@ const ButtonContainer = styled.View`
 
 const InfoContainer = styled.View`
   position: absolute;
-  right: 10;
-  top: 10;
+  right: 10px;
+  top: 10px;
   height: 17%;
   width: 40%;
   background-color: #ffffff;
   padding: 3px 5px;
   border-radius: 10px;
   justify-content: space-around;
-  border-width: 1;
+  border-width: 1px;
   border-color: #4495d0;
 `
 
@@ -80,33 +60,48 @@ const ButtonText = styled.Text`
   padding: 3px 0px;
 `
 
+// walking time sample data
+const walkingTime = 90
+const steps = 1000
+
 const WalkingMode = ({ navigation }) => {
+  const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
+  const [location, setLocation] = useState(initialLocation)
+
+  useEffect(async () => {
+    const result = await requestPermission()
+    console.log(result)
+    if (result === 'granted') {
+      Geolocation.getCurrentPosition(
+        ({ coords }) => {
+          setLocation({
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+          })
+        },
+        (error) => {
+          console.log(error.code, error.message)
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      )
+    }
+  }, [])
+
   return (
     <>
       <Container>
         <NaverMapView
           style={{ width: '100%', height: '100%' }}
           showsMyLocationButton={true}
-          center={{ ...P0, zoom: 16 }}
-          onTouch={(e) =>
-            console.warn('onTouch', JSON.stringify(e.nativeEvent))
-          }
-          onCameraChange={(e) =>
-            console.warn('onCameraChange', JSON.stringify(e))
-          }
-          onMapClick={(e) => console.warn('onMapClick', JSON.stringify(e))}
+          center={{ ...location, zoom: 16 }}
         >
-          <Marker coordinate={P0} onClick={() => console.warn('onClick! p0')} />
           <Marker
-            coordinate={P1}
-            pinColor="blue"
-            onClick={() => console.warn('onClick! p1')}
-          />
-          <Marker
-            coordinate={P2}
-            pinColor="red"
-            onClick={() => console.warn('onClick! p2')}
-          />
+            coordinate={location}
+            image={require('../../assets/icons/pencil.png')}
+            width={65}
+            height={65}
+            onClick={() => console.log('marker click')}
+          ></Marker>
         </NaverMapView>
         <InfoContainer>
           <WalkingInfoText>
