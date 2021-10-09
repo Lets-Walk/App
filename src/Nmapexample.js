@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { View, Text, Image } from 'react-native'
 import NaverMapView, {
   Circle,
   Marker,
@@ -6,52 +7,47 @@ import NaverMapView, {
   Polyline,
   Polygon,
 } from 'react-native-nmap'
+import Geolocation from 'react-native-geolocation-service'
+import requestPermission from './utils/requestPermission'
 
 export default function MyMap() {
-  const P0 = { latitude: 37.564362, longitude: 126.977011 }
-  const P1 = { latitude: 37.565051, longitude: 126.978567 }
-  const P2 = { latitude: 37.565383, longitude: 126.976292 }
+  const initialLocation = { latitude: 0, longitude: 0 }
+  const [location, setLocation] = useState(initialLocation)
+
+  useEffect(async () => {
+    const result = await requestPermission()
+    if (result === 'granted') {
+      Geolocation.getCurrentPosition(
+        ({ coords }) => {
+          setLocation({
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+          })
+        },
+        (error) => {
+          console.log(error.code, error.message)
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      )
+    }
+  }, [])
 
   return (
     <NaverMapView
       style={{ width: '100%', height: '100%' }}
       showsMyLocationButton={true}
-      center={{ ...P0, zoom: 16 }}
-      onTouch={(e) => console.warn('onTouch', JSON.stringify(e.nativeEvent))}
-      onCameraChange={(e) => console.warn('onCameraChange', JSON.stringify(e))}
-      onMapClick={(e) => console.warn('onMapClick', JSON.stringify(e))}
+      center={{ ...location, zoom: 16 }}
+      // onTouch={(e) => console.warn('onTouch', JSON.stringify(e.nativeEvent))}
+      // onCameraChange={(e) => console.warn('onCameraChange', JSON.stringify(e))}
+      // onMapClick={(e) => console.warn('onMapClick', JSON.stringify(e))}
     >
-      <Marker coordinate={P0} onClick={() => console.warn('onClick! p0')} />
       <Marker
-        coordinate={P1}
-        pinColor="blue"
-        onClick={() => console.warn('onClick! p1')}
-      />
-      <Marker
-        coordinate={P2}
-        pinColor="red"
-        onClick={() => console.warn('onClick! p2')}
-      />
-      <Path
-        coordinates={[P0, P1]}
-        onClick={() => console.warn('onClick! path')}
-        width={10}
-      />
-      <Polyline
-        coordinates={[P1, P2]}
-        onClick={() => console.warn('onClick! polyline')}
-      />
-      <Circle
-        coordinate={P0}
-        color={'rgba(255,0,0,0.3)'}
-        radius={200}
-        onClick={() => console.warn('onClick! circle')}
-      />
-      <Polygon
-        coordinates={[P0, P1, P2]}
-        color={`rgba(0, 0, 0, 0.5)`}
-        onClick={() => console.warn('onClick! polygon')}
-      />
+        coordinate={location}
+        image={require('../assets/icons/pencil.png')}
+        width={65}
+        height={65}
+        onClick={() => console.log('marker click')}
+      ></Marker>
     </NaverMapView>
   )
 }
