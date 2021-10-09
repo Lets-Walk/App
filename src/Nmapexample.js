@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { View, Text, Image } from 'react-native'
 import NaverMapView, {
   Circle,
   Marker,
@@ -39,6 +40,14 @@ export default function MyMap() {
       // onTouch={(e) => console.warn('onTouch', JSON.stringify(e.nativeEvent))}
       // onCameraChange={(e) => console.warn('onCameraChange', JSON.stringify(e))}
       // onMapClick={(e) => console.warn('onMapClick', JSON.stringify(e))}
-    ></NaverMapView>
+    >
+      <Marker
+        coordinate={location}
+        image={require('../assets/icons/pencil.png')}
+        width={65}
+        height={65}
+        onClick={() => console.log('marker click')}
+      ></Marker>
+    </NaverMapView>
   )
 }
