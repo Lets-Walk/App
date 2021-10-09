@@ -1,17 +1,14 @@
 import React from 'react'
-import {View, Text} from 'react-native'
-import {Button} from '@ant-design/react-native'
+import { View, Text } from 'react-native'
 
 //지도
 //
-const WalkingMode = ({navigation}) => {
-    return (
-        <View>
-            <View>지도UI</View>
-            <View>하단 메뉴</View>
-        </View>
-    );
-  }
-
+const WalkingMode = ({ navigation }) => {
+  return (
+    <View>
+      <Text>워킹모드UI</Text>
+    </View>
+  )
+}
 
 export default WalkingMode
