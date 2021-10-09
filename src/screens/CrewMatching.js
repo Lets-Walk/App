@@ -10,10 +10,17 @@ const CrewMatching = ({ navigation }) => {
         <Text>CrewMatching!</Text>
         <Button
           onPress={() => {
-            navigation.navigate('워킹모드')
+            navigation.navigate('매칭중')
           }}
         >
           매칭시작
+        </Button>
+        <Button
+          onPress={() => {
+            navigation.navigate('워킹모드')
+          }}
+        >
+          워킹모드
         </Button>
       </View>
     </ScreenName>

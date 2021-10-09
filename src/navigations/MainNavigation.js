@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { getFocusedRouteNameFromRoute } from '@react-navigation/core'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
@@ -9,18 +9,25 @@ import Home from '../screens/Home'
 import CrewNavigation from './CrewNavigation'
 import Ranking from '../screens/Ranking'
 import Setting from '../screens/Setting'
-import { color } from 'react-native-reanimated'
 
 const Tab = createBottomTabNavigator()
+
+const getTabBarVisibility = (route) => {
+  const routeName = getFocusedRouteNameFromRoute(route)
+  const hideOnScreens = ['매칭중', '워킹모드'] //탭바 안보이게 하려는 Screen 이름
+  if (hideOnScreens.indexOf(routeName) > -1) return false
+  return true
+}
 
 const MainNavigation = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home" //initial screen
-      screenOptions={{
-        tabBarShowLabel: false, //탭 아이콘 라벨
-        tabBarActiveTintColor: '#1B97E2', //탭 focus 색깔
-        tabBarStyle: {
+      tabBarOptions={{
+        showLabel: false, //탭 아이콘 라벨
+        activeTintColor: '#1B97E2', //탭 focus 색깔
+        style: {
+          // 탭 스타일
           position: 'absolute',
           width: '100%',
           height: '10%',
@@ -40,12 +47,13 @@ const MainNavigation = () => {
       <Tab.Screen
         name="CrewNavigation"
         component={CrewNavigation}
-        options={{
+        options={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5Icon name="walking" color={color} size={size} />
           ),
-        }}
+          tabBarVisible: getTabBarVisibility(route),
+        })}
       />
       <Tab.Screen
         name="Ranking"
