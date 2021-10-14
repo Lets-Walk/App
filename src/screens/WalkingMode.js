@@ -6,6 +6,7 @@ import {
   Pressable,
   BackHandler,
   useWindowDimensions,
+  Button,
 } from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
@@ -22,6 +23,7 @@ import MaterialCmIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import requestPermission from '../utils/requestPermission'
 import { useFocusEffect } from '@react-navigation/native'
 import Toast from 'react-native-easy-toast'
+import Modal from 'react-native-modal'
 
 const ButtonContainer = styled.View`
   flex: 1;
@@ -69,6 +71,21 @@ const ButtonText = styled.Text`
   padding: 3px 0px;
 `
 
+const FinishConfirmText = styled.Text`
+  font-size: 28px;
+  font-family: BMHANNAAir_ttf;
+  color: white;
+  margin: 20px 0px;
+`
+
+const FinishConfirmButtonText = styled.Text`
+  font-size: 20px;
+  align-items: center;
+  color: yellow;
+  font-family: BMHANNAAir_ttf;
+  margin: 18px 0px;
+`
+
 // walking time sample data
 const walkingTime = 90
 const steps = 1000
@@ -76,11 +93,21 @@ const steps = 1000
 const WalkingMode = ({ navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
+  const [modalVisible, setModalVisible] = useState(false)
   const toastRef = useRef()
 
   const showBackButtonToast = useCallback(() => {
     toastRef.current.show("'종료' 버튼을 이용하세요.")
   }, [])
+
+  const finishModal = () => {
+    setModalVisible(!modalVisible)
+  }
+
+  const finishWalkingMode = () => {
+    // 워킹모드 종료 전  워킹 데이터 처리, 워킹 결과 출력
+    navigation.navigate('Home')
+  }
 
   useFocusEffect(
     React.useCallback(() => {
@@ -168,7 +195,7 @@ const WalkingMode = ({ navigation }) => {
           ></Ionicons>
           <ButtonText>{'\t'}채팅</ButtonText>
         </Pressable>
-        <Pressable onPress={() => console.log('CLOSE touched')}>
+        <Pressable onPress={finishModal}>
           <Ionicons
             name="close-circle-outline"
             size={35}
@@ -176,6 +203,22 @@ const WalkingMode = ({ navigation }) => {
           ></Ionicons>
           <ButtonText>{'\t'}종료</ButtonText>
         </Pressable>
+        <Modal isVisible={modalVisible}>
+          <View
+            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          >
+            <FinishConfirmText>워킹모드를 종료하시겠습니까?</FinishConfirmText>
+
+            <Pressable onPress={(finishModal, finishWalkingMode)}>
+              <FinishConfirmButtonText>네, 그만할래요.</FinishConfirmButtonText>
+            </Pressable>
+            <Pressable onPress={finishModal}>
+              <FinishConfirmButtonText>
+                아니요, 더 할래요.
+              </FinishConfirmButtonText>
+            </Pressable>
+          </View>
+        </Modal>
       </ButtonContainer>
       <Toast
         ref={toastRef}
