@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, TouchableOpacit, Pressable } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacit,
+  Pressable,
+  BackHandler,
+} from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
   Circle,
@@ -13,6 +19,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCmIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import requestPermission from '../utils/requestPermission'
+import { useFocusEffect } from '@react-navigation/native'
 
 const ButtonContainer = styled.View`
   flex: 1;
@@ -67,6 +74,18 @@ const steps = 1000
 const WalkingMode = ({ navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        // navigation.navigate('Home')
+        return true
+      }
+      BackHandler.addEventListener('hardwareBackPress', onBackPress)
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+    }, []),
+  )
 
   useEffect(async () => {
     const result = await requestPermission()
