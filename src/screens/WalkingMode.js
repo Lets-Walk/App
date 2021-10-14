@@ -21,7 +21,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCmIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import requestPermission from '../utils/requestPermission'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
 
@@ -95,6 +95,7 @@ const WalkingMode = ({ navigation }) => {
   const [location, setLocation] = useState(initialLocation)
   const [modalVisible, setModalVisible] = useState(false)
   const toastRef = useRef()
+  const usedNavigation = useNavigation()
 
   const showBackButtonToast = useCallback(() => {
     toastRef.current.show("'종료' 버튼을 이용하세요.")
@@ -105,8 +106,14 @@ const WalkingMode = ({ navigation }) => {
   }
 
   const finishWalkingMode = () => {
-    // 워킹모드 종료 전  워킹 데이터 처리, 워킹 결과 출력
-    navigation.navigate('Home')
+    // 워킹 모드 종료 후 워킹 데이터 처리, 결과 출력
+    // 종료 후 이동화면은 추후 변경
+
+    // navigation stack clear
+    usedNavigation.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    })
   }
 
   useFocusEffect(
