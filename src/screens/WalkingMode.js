@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import {
   View,
   Text,
   TouchableOpacit,
   Pressable,
   BackHandler,
+  useWindowDimensions,
 } from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
@@ -20,6 +21,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCmIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import requestPermission from '../utils/requestPermission'
 import { useFocusEffect } from '@react-navigation/native'
+import Toast from 'react-native-easy-toast'
 
 const ButtonContainer = styled.View`
   flex: 1;
@@ -74,11 +76,17 @@ const steps = 1000
 const WalkingMode = ({ navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
+  const toastRef = useRef()
+
+  const showBackButtonToast = useCallback(() => {
+    toastRef.current.show("'종료' 버튼을 이용하세요.")
+  }, [])
 
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
         // navigation.navigate('Home')
+        showBackButtonToast()
         return true
       }
       BackHandler.addEventListener('hardwareBackPress', onBackPress)
@@ -169,6 +177,13 @@ const WalkingMode = ({ navigation }) => {
           <ButtonText>{'\t'}종료</ButtonText>
         </Pressable>
       </ButtonContainer>
+      <Toast
+        ref={toastRef}
+        positionValue={useWindowDimensions().height * 0.12}
+        fadeInDuration={300}
+        fadeOutDuration={2000}
+        style={{ backgroundColor: '#4495D0' }}
+      />
     </>
   )
 }
