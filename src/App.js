@@ -34,7 +34,7 @@ const App = () => {
           </>
         ) : (
           <>
-            <StatusBar hidden />
+            <StatusBar barStyle="dark-content" backgroundColor="#b7daf1" />
             <AuthNavigation setUser={setUser} />
           </>
         )}
