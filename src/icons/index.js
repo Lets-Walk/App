@@ -6,15 +6,31 @@ import EntypoIcon from 'react-native-vector-icons/Entypo'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 
 const IconStyle = {
   transform: [{ rotate: '-135deg' }],
 }
 
-export const Pencil = ({ size }) => {
+/*
+  Icon 사용 Example.
+
+  1. 아이템
+  <Computer bgSize='small' size={20} />
+  <Pencil bgSize='normal' size={25} />
+  <Book bgSize='large' size={30} />
+
+  2. 연구실
+  <Lab size={40}/>
+
+  3. 페이퍼
+  <RedPaper name="공과" />
+  <WhitePaper name="의학" />
+*/
+
+export const Pencil = ({ bgSize = 'normal', size }) => {
   return (
-    <IconContainer backgroundColor="#F8EA8C" borderColor="black">
+    <IconContainer backgroundColor="#F8EA8C" borderColor="black" size={bgSize}>
       <AwesomeIcon
         style={IconStyle}
         name="pencil-alt"
@@ -25,9 +41,9 @@ export const Pencil = ({ size }) => {
   )
 }
 
-export const Computer = ({ size }) => {
+export const Computer = ({ bgSize = 'normal', size }) => {
   return (
-    <IconContainer backgroundColor="#4CD7D0" borderColor="black">
+    <IconContainer backgroundColor="#4CD7D0" borderColor="black" size={bgSize}>
       <MaterialIcon
         style={IconStyle}
         name="computer"
@@ -38,17 +54,17 @@ export const Computer = ({ size }) => {
   )
 }
 
-export const Book = ({ size }) => {
+export const Book = ({ bgSize = 'normal', size }) => {
   return (
-    <IconContainer backgroundColor="#E1C340" borderColor="black">
+    <IconContainer backgroundColor="#E1C340" borderColor="black" size={bgSize}>
       <EntypoIcon style={IconStyle} name="book" size={size} color="black" />
     </IconContainer>
   )
 }
 
-export const Calculator = ({ size }) => {
+export const Calculator = ({ bgSize = 'normal', size }) => {
   return (
-    <IconContainer backgroundColor="#868B8E" borderColor="black">
+    <IconContainer backgroundColor="#868B8E" borderColor="black" size={bgSize}>
       <AwesomeIcon
         style={IconStyle}
         name="calculator"
@@ -59,9 +75,9 @@ export const Calculator = ({ size }) => {
   )
 }
 
-export const Stethoscope = ({ size }) => {
+export const Stethoscope = ({ bgSize = 'normal', size }) => {
   return (
-    <IconContainer backgroundColor="#E7D2CC" borderColor="black">
+    <IconContainer backgroundColor="#E7D2CC" borderColor="black" size={bgSize}>
       <AwesomeIcon
         style={IconStyle}
         name="stethoscope"
@@ -72,9 +88,9 @@ export const Stethoscope = ({ size }) => {
   )
 }
 
-export const Pill = ({ size }) => {
+export const Pill = ({ bgSize = 'normal', size }) => {
   return (
-    <IconContainer backgroundColor="#FFA384" borderColor="black">
+    <IconContainer backgroundColor="#FFA384" borderColor="black" size={bgSize}>
       <MaterialCommunityIcon
         style={IconStyle}
         name="pill"
@@ -85,9 +101,9 @@ export const Pill = ({ size }) => {
   )
 }
 
-export const Microscope = ({ size }) => {
+export const Microscope = ({ bgSize = 'normal', size }) => {
   return (
-    <IconContainer backgroundColor="#81B622" borderColor="black">
+    <IconContainer backgroundColor="#81B622" borderColor="black" size={bgSize}>
       <AwesomeIcon
         style={IconStyle}
         name="microscope"
@@ -149,7 +165,7 @@ export const Lab = ({ size }) => {
   )
 }
 
-const PaperContainer = ({ color, size }) => {
+const PaperContainer = ({ color, size, name }) => {
   return (
     <View
       style={{
@@ -182,20 +198,39 @@ const PaperContainer = ({ color, size }) => {
           justifyContent: 'center',
         }}
       >
-        <AwesomeIcon name="scroll" size={size} color="white" />
+        <View
+          style={{
+            flex: 1,
+            padding: 10,
+            paddingBottom: 5,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <AwesomeIcon name="scroll" size={size} color="white" />
+          <Text
+            style={{
+              fontSize: 14,
+              color: 'white',
+              fontWeight: 'bold',
+            }}
+          >
+            {name}
+          </Text>
+        </View>
       </View>
     </View>
   )
 }
 
-export const RedPaper = ({ size }) => {
-  return <PaperContainer color="#AA1945" size={size} />
+export const RedPaper = ({ size = 35, name }) => {
+  return <PaperContainer color="#AA1945" name={name} size={size} />
 }
 
-export const BluePaper = ({ size }) => {
-  return <PaperContainer color="#059DC0" size={size} />
+export const BluePaper = ({ size = 35, name }) => {
+  return <PaperContainer color="#059DC0" name={name} size={size} />
 }
 
-export const WhitePaper = ({ size }) => {
-  return <PaperContainer color="#868B8E" size={size} />
+export const WhitePaper = ({ size = 35, name }) => {
+  return <PaperContainer color="#868B8E" name={name} size={size} />
 }
