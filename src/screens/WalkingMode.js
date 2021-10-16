@@ -7,6 +7,7 @@ import {
   BackHandler,
   useWindowDimensions,
   Button,
+  Image,
 } from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
@@ -24,6 +25,7 @@ import requestPermission from '../utils/requestPermission'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
+import { Pencil, RedPaper } from '../icons'
 
 const ButtonContainer = styled.View`
   flex: 1;
@@ -227,6 +229,53 @@ const WalkingMode = ({ navigation }) => {
           </View>
         </Modal>
       </ButtonContainer>
+      <View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '45%',
+          bottom: 0,
+          backgroundColor: '#F9F9F9',
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 12,
+          },
+          shadowOpacity: 0.58,
+          shadowRadius: 16.0,
+          elevation: 24,
+          flex: 1,
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'row',
+            paddingRight: 40,
+          }}
+        >
+          {/* <RedPaper name="공과" /> */}
+          {/* <Pencil size={35} /> */}
+          <Image
+            style={{ width: 30 }}
+            source={require('../../assets/icons/pencil.png')}
+          />
+          <Text
+            style={{
+              paddingLeft: 10,
+              fontSize: 35,
+              fontFamily: 'BMHANNAAir_ttf',
+            }}
+          >
+            공과대학 연구실
+          </Text>
+        </View>
+        <View style={{ flex: 3, borderColor: 'red', borderWidth: 2 }}></View>
+      </View>
       <Toast
         ref={toastRef}
         positionValue={useWindowDimensions().height * 0.12}
