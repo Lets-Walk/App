@@ -28,7 +28,7 @@ const IconStyle = {
   <WhitePaper name="의학" />
 */
 
-export const Pencil = ({ bgSize = 'normal', size }) => {
+export const Pencil = ({ bgSize = 'normal', size = 38 }) => {
   return (
     <IconContainer backgroundColor="#F8EA8C" borderColor="black" size={bgSize}>
       <AwesomeIcon
@@ -41,7 +41,7 @@ export const Pencil = ({ bgSize = 'normal', size }) => {
   )
 }
 
-export const Computer = ({ bgSize = 'normal', size }) => {
+export const Computer = ({ bgSize = 'normal', size = 38 }) => {
   return (
     <IconContainer backgroundColor="#4CD7D0" borderColor="black" size={bgSize}>
       <MaterialIcon
@@ -54,7 +54,7 @@ export const Computer = ({ bgSize = 'normal', size }) => {
   )
 }
 
-export const Book = ({ bgSize = 'normal', size }) => {
+export const Book = ({ bgSize = 'normal', size = 38 }) => {
   return (
     <IconContainer backgroundColor="#E1C340" borderColor="black" size={bgSize}>
       <EntypoIcon style={IconStyle} name="book" size={size} color="black" />
@@ -62,7 +62,7 @@ export const Book = ({ bgSize = 'normal', size }) => {
   )
 }
 
-export const Calculator = ({ bgSize = 'normal', size }) => {
+export const Calculator = ({ bgSize = 'normal', size = 38 }) => {
   return (
     <IconContainer backgroundColor="#868B8E" borderColor="black" size={bgSize}>
       <AwesomeIcon
@@ -75,7 +75,7 @@ export const Calculator = ({ bgSize = 'normal', size }) => {
   )
 }
 
-export const Stethoscope = ({ bgSize = 'normal', size }) => {
+export const Stethoscope = ({ bgSize = 'normal', size = 38 }) => {
   return (
     <IconContainer backgroundColor="#E7D2CC" borderColor="black" size={bgSize}>
       <AwesomeIcon
@@ -88,7 +88,7 @@ export const Stethoscope = ({ bgSize = 'normal', size }) => {
   )
 }
 
-export const Pill = ({ bgSize = 'normal', size }) => {
+export const Pill = ({ bgSize = 'normal', size = 38 }) => {
   return (
     <IconContainer backgroundColor="#FFA384" borderColor="black" size={bgSize}>
       <MaterialCommunityIcon
@@ -101,7 +101,7 @@ export const Pill = ({ bgSize = 'normal', size }) => {
   )
 }
 
-export const Microscope = ({ bgSize = 'normal', size }) => {
+export const Microscope = ({ bgSize = 'normal', size = 38 }) => {
   return (
     <IconContainer backgroundColor="#81B622" borderColor="black" size={bgSize}>
       <AwesomeIcon
@@ -165,13 +165,13 @@ export const Lab = ({ size }) => {
   )
 }
 
-const PaperContainer = ({ color, size, name }) => {
+const PaperContainer = ({ color, size, name, width, height }) => {
   return (
     <View
       style={{
         backgroundColor: color,
-        width: '20%',
-        height: '12%',
+        width: width,
+        height: height,
         borderRadius: 15,
         borderWidth: 1,
         borderColor: 'black',
@@ -201,36 +201,62 @@ const PaperContainer = ({ color, size, name }) => {
         <View
           style={{
             flex: 1,
-            padding: 10,
-            paddingBottom: 5,
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
           <AwesomeIcon name="scroll" size={size} color="white" />
-          <Text
-            style={{
-              fontSize: 14,
-              color: 'white',
-              fontWeight: 'bold',
-            }}
-          >
-            {name}
-          </Text>
+          {name ? (
+            <Text
+              style={{
+                fontSize: 14,
+                color: 'white',
+                fontWeight: 'bold',
+              }}
+            >
+              {name}
+            </Text>
+          ) : (
+            <></>
+          )}
         </View>
       </View>
     </View>
   )
 }
 
-export const RedPaper = ({ size = 35, name }) => {
-  return <PaperContainer color="#AA1945" name={name} size={size} />
+export const RedPaper = ({ name, size = 35, width = 70, height = 60 }) => {
+  return (
+    <PaperContainer
+      color="#AA1945"
+      name={name}
+      size={size}
+      width={width}
+      height={height}
+    />
+  )
 }
 
-export const BluePaper = ({ size = 35, name }) => {
-  return <PaperContainer color="#059DC0" name={name} size={size} />
+export const BluePaper = ({ name, size = 35, width = 70, height = 60 }) => {
+  return (
+    <PaperContainer
+      color="#059DC0"
+      name={name}
+      size={size}
+      width={width}
+      height={height}
+    />
+  )
 }
 
-export const WhitePaper = ({ size = 35, name }) => {
-  return <PaperContainer color="#868B8E" name={name} size={size} />
+export const WhitePaper = ({ name, size = 35, width = 70, height = 60 }) => {
+  return (
+    <PaperContainer
+      color="#868B8E"
+      name={name}
+      size={size}
+      width={width}
+      height={height}
+    />
+  )
 }
