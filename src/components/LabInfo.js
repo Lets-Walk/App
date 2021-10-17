@@ -50,7 +50,7 @@ const LabInfo = ({ name }) => {
 
   const getIconComponent = useCallback((name) => {
     const IconComponent = maapingIcon[name]
-    return <IconComponent />
+    return <IconComponent key={name} />
   }, [])
 
   const itemList = ingredient[name]
