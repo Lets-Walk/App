@@ -25,6 +25,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
 import LabInfo from '../components/LabInfo'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const ButtonContainer = styled.View`
   flex: 1;
@@ -95,7 +96,9 @@ const WalkingMode = ({ navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
   const [modalVisible, setModalVisible] = useState(false)
+  const [infoVisible, setInfoVisible] = useState(false)
   const toastRef = useRef()
+  const ref = useRef(null)
   const usedNavigation = useNavigation()
 
   const showBackButtonToast = useCallback(() => {
@@ -116,6 +119,10 @@ const WalkingMode = ({ navigation }) => {
       routes: [{ name: 'Home' }],
     })
   }
+
+  const cameraChange = useCallback((location) => {
+    ref.current.animateToCoordinate(location) //마커 좌표로 이동
+  }, [])
 
   useFocusEffect(
     React.useCallback(() => {
@@ -156,13 +163,18 @@ const WalkingMode = ({ navigation }) => {
           style={{ width: '100%', height: '100%' }}
           showsMyLocationButton={true}
           center={{ ...location, zoom: 16 }}
+          ref={ref}
         >
           <Marker
             coordinate={location}
             image={require('../../assets/icons/pencil.png')}
             width={65}
             height={65}
-            onClick={() => console.log('marker click')}
+            onClick={() => {
+              console.log('marker click')
+              setInfoVisible(true)
+              cameraChange(location)
+            }}
           ></Marker>
         </NaverMapView>
         <InfoContainer>
@@ -228,7 +240,16 @@ const WalkingMode = ({ navigation }) => {
           </View>
         </Modal>
       </ButtonContainer>
-      <LabInfo name="공과대학" />
+      <Modal
+        backdropOpacity={0}
+        onBackdropPress={() => {
+          setInfoVisible(false)
+        }}
+        isVisible={infoVisible}
+        style={{ margin: 0 }}
+      >
+        <LabInfo name="약학대학" setVisible={setInfoVisible} />
+      </Modal>
       <Toast
         ref={toastRef}
         positionValue={useWindowDimensions().height * 0.12}

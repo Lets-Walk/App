@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import {
   Computer,
@@ -39,9 +39,10 @@ const maapingIcon = {
   약학대학: WhitePaper,
 }
 
-const LabInfo = ({ name }) => {
+const LabInfo = ({ name, setVisible }) => {
   const onClose = () => {
     console.log('close button click')
+    setVisible(false)
   }
 
   const startConfirm = () => {
@@ -112,14 +113,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9F9F9',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    shadowColor: '#000',
+    shadowRadius: 2,
     shadowOffset: {
       width: 0,
-      height: 12,
+      height: -3,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 16.0,
-    elevation: 50,
+    shadowColor: '#000000',
+    elevation: 30,
   },
   header: {
     flex: 1,
