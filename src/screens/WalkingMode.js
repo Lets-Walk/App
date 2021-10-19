@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import {
-  View,
-  Text,
-  TouchableOpacit,
-  Pressable,
-  BackHandler,
-  useWindowDimensions,
-  Image,
-} from 'react-native'
+import { View, Pressable, BackHandler, useWindowDimensions } from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
   Circle,
@@ -16,16 +8,18 @@ import NaverMapView, {
   Polyline,
   Polygon,
 } from 'react-native-nmap'
+import axios from 'axios'
 import Geolocation from 'react-native-geolocation-service'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCmIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import requestPermission from '../utils/requestPermission'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
+
+import requestPermission from '../utils/requestPermission'
 import LabInfo from '../components/LabInfo'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { SERVER_URL } from '@env'
 
 const ButtonContainer = styled.View`
   flex: 1;
@@ -97,6 +91,7 @@ const WalkingMode = ({ navigation }) => {
   const [location, setLocation] = useState(initialLocation)
   const [modalVisible, setModalVisible] = useState(false)
   const [infoVisible, setInfoVisible] = useState(false)
+  const [ingredient, setIngredient] = useState(null)
   const toastRef = useRef()
   const ref = useRef(null)
   const usedNavigation = useNavigation()
@@ -120,8 +115,20 @@ const WalkingMode = ({ navigation }) => {
     })
   }
 
-  const cameraChange = useCallback((location) => {
+  const cameraChange = (location) => {
     ref.current.animateToCoordinate(location) //마커 좌표로 이동
+  }
+
+  useEffect(async () => {
+    let result = null
+    try {
+      result = await axios.get(SERVER_URL + '/api/map/lab', { timeout: 3000 })
+      // console.log(result.data)
+      setIngredient(result.data.data)
+    } catch (err) {
+      console.log(err)
+      if (err.response) console.log(err.response.data)
+    }
   }, [])
 
   useFocusEffect(
@@ -248,7 +255,11 @@ const WalkingMode = ({ navigation }) => {
         isVisible={infoVisible}
         style={{ margin: 0 }}
       >
-        <LabInfo name="약학대학" setVisible={setInfoVisible} />
+        <LabInfo
+          name="약학대학"
+          ingredient={ingredient}
+          setVisible={setInfoVisible}
+        />
       </Modal>
       <Toast
         ref={toastRef}

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import {
   Computer,
@@ -13,15 +13,6 @@ import {
   WhitePaper,
 } from '../icons'
 import { Button } from '@ant-design/react-native'
-
-const ingredient = {
-  공과대학: ['Pencil', 'Computer'],
-  자연과학대학: ['Pencil', 'Microscope'],
-  인문대학: ['Pencil', 'Book'],
-  경영대학: ['Pencil', 'Calculator'],
-  의과대학: ['Pencil', 'Stethoscope'],
-  약학대학: ['Pencil', 'Pill'],
-}
 
 const maapingIcon = {
   Pencil,
@@ -39,7 +30,7 @@ const maapingIcon = {
   약학대학: WhitePaper,
 }
 
-const LabInfo = ({ name, setVisible }) => {
+const LabInfo = ({ name, ingredient, setVisible }) => {
   const onClose = () => {
     console.log('close button click')
     setVisible(false)
