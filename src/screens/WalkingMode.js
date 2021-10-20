@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { View, Pressable, BackHandler, useWindowDimensions } from 'react-native'
+import {
+  View,
+  Pressable,
+  Text,
+  BackHandler,
+  useWindowDimensions,
+} from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
   Circle,
@@ -17,6 +23,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
 
+import WalkingInfo from '../components/WalkingInfo'
 import requestPermission from '../utils/requestPermission'
 import LabInfo from '../components/LabInfo'
 import { SERVER_URL } from '@env'
@@ -30,20 +37,6 @@ const ButtonContainer = styled.View`
   justify-content: space-around;
   padding: 5px;
   margin: 0px 0px;
-`
-
-const InfoContainer = styled.View`
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  height: 17%;
-  width: 40%;
-  background-color: #ffffff;
-  padding: 3px 5px;
-  border-radius: 10px;
-  justify-content: space-around;
-  border-width: 1px;
-  border-color: #4495d0;
 `
 
 const Container = styled.View`
@@ -82,16 +75,15 @@ const FinishConfirmButtonText = styled.Text`
   margin: 18px 0px;
 `
 
-// walking time sample data
-const walkingTime = 90
-const steps = 1000
-
 const WalkingMode = ({ navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
   const [modalVisible, setModalVisible] = useState(false)
   const [infoVisible, setInfoVisible] = useState(false)
   const [ingredient, setIngredient] = useState(null)
+  const [walkingTime, setWalkingTime] = useState(130) //초기값 0으로 setting 필요
+  const [steps, setSteps] = useState(1542) //초기값 0으로 setting 필요
+
   const toastRef = useRef()
   const ref = useRef(null)
   const usedNavigation = useNavigation()
@@ -184,18 +176,7 @@ const WalkingMode = ({ navigation }) => {
             }}
           ></Marker>
         </NaverMapView>
-        <InfoContainer>
-          <WalkingInfoText>
-            <Ionicons name="time" color="#4495D0" size={30} />
-            {'\t'}
-            {Math.floor(walkingTime / 60)}시간 {walkingTime % 60}분
-          </WalkingInfoText>
-          <WalkingInfoText>
-            <MaterialCmIcons name="walk" color="#4495D0" size={30} />
-            {'\t'}
-            {steps}보
-          </WalkingInfoText>
-        </InfoContainer>
+        <WalkingInfo walkingTime={walkingTime} steps={steps} />
       </Container>
       <ButtonContainer>
         <Pressable onPress={() => console.log('BAG touched')}>
