@@ -2,34 +2,40 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import styled from 'styled-components'
 import MaterialCmIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
 
 const InfoContainer = styled.View`
   position: absolute;
   right: 10px;
   top: 10px;
   height: 17%;
-  width: 43%;
+  width: 42%;
   background-color: #ffffff;
   padding: 3px 5px;
   border-radius: 10px;
   justify-content: space-around;
   flex: 1;
-  /* border-width: 1px; */
-  /* border-color: #4495d0; */
 `
 
-const WalkTime = styled.View`
+const Box = styled.View`
   flex: 1;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `
 
-// walking time sample data
-const walkingTime = 120
-const steps = 1000
+const IconContainer = styled.View`
+  left: 7%;
+  width: 30px;
+  height: 30px;
+  background-color: ${({ color }) => color};
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+`
 
-const WalkingInfo = () => {
+const WalkingInfo = ({ walkingTime, steps }) => {
+  console.log('walking info render')
   return (
     <InfoContainer
       style={{
@@ -37,39 +43,34 @@ const WalkingInfo = () => {
         elevation: 10,
       }}
     >
-      <WalkTime>
-        <View style={styles.icon}>
+      <Box>
+        <IconContainer color="#3D4ABA">
           <MaterialCmIcons name="timer-outline" color="white" size={20} />
-        </View>
-        <View style={styles.timeBox}>
+        </IconContainer>
+        <View style={styles.infoBox}>
           <Text style={styles.time}>{Math.floor(walkingTime / 60)}</Text>
           <Text style={styles.timeText}>시간</Text>
           <Text style={styles.time}>{Math.floor(walkingTime % 60)}</Text>
           <Text style={styles.timeText}>분</Text>
         </View>
-      </WalkTime>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>걸음</Text>
-      </View>
+      </Box>
+      <Box>
+        <IconContainer color="#07E092">
+          <FontAwesome5Icon name="walking" color="white" size={20} />
+        </IconContainer>
+        <View style={styles.infoBox}>
+          <Text style={styles.step}>{steps}</Text>
+          <Text style={styles.stepText}>걸음</Text>
+        </View>
+      </Box>
     </InfoContainer>
   )
 }
 
-export default WalkingInfo
+export default React.memo(WalkingInfo)
 
 const styles = StyleSheet.create({
-  icon: {
-    left: '7%',
-    width: 30,
-    height: 30,
-    backgroundColor: '#3D4ABA',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    shadowColor: '#000000',
-    elevation: 5,
-  },
-  timeBox: {
+  infoBox: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   time: {
-    fontSize: 35,
+    fontSize: 32,
     fontWeight: '500',
     paddingRight: 2,
   },
@@ -89,5 +90,19 @@ const styles = StyleSheet.create({
     fontFamily: 'BMHANNAAir_ttf',
     color: 'grey',
     paddingRight: 3,
+  },
+  step: {
+    flex: 1,
+    paddingRight: 2,
+    fontSize: 28,
+    fontWeight: '500',
+    textAlign: 'right',
+  },
+  stepText: {
+    top: '4%',
+    marginRight: '7%',
+    fontSize: 20,
+    fontFamily: 'BMHANNAAir_ttf',
+    color: 'grey',
   },
 })

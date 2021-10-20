@@ -39,21 +39,6 @@ const ButtonContainer = styled.View`
   margin: 0px 0px;
 `
 
-const InfoContainer = styled.View`
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  height: 17%;
-  width: 43%;
-  background-color: #ffffff;
-  padding: 3px 5px;
-  border-radius: 10px;
-  justify-content: space-around;
-  flex: 1;
-  /* border-width: 1px; */
-  /* border-color: #4495d0; */
-`
-
 const Container = styled.View`
   flex: 8;
   align-items: center;
@@ -90,16 +75,15 @@ const FinishConfirmButtonText = styled.Text`
   margin: 18px 0px;
 `
 
-// walking time sample data
-const walkingTime = 90
-const steps = 1000
-
 const WalkingMode = ({ navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
   const [modalVisible, setModalVisible] = useState(false)
   const [infoVisible, setInfoVisible] = useState(false)
   const [ingredient, setIngredient] = useState(null)
+  const [walkingTime, setWalkingTime] = useState(130) //초기값 0으로 setting 필요
+  const [steps, setSteps] = useState(1542) //초기값 0으로 setting 필요
+
   const toastRef = useRef()
   const ref = useRef(null)
   const usedNavigation = useNavigation()
@@ -192,7 +176,7 @@ const WalkingMode = ({ navigation }) => {
             }}
           ></Marker>
         </NaverMapView>
-        <WalkingInfo />
+        <WalkingInfo walkingTime={walkingTime} steps={steps} />
       </Container>
       <ButtonContainer>
         <Pressable onPress={() => console.log('BAG touched')}>
