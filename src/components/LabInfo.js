@@ -31,6 +31,8 @@ const maapingIcon = {
 }
 
 const LabInfo = ({ name, ingredient, setVisible }) => {
+  if (!ingredient) return <></>
+
   const onClose = () => {
     console.log('close button click')
     setVisible(false)
