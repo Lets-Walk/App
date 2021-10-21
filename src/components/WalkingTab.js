@@ -10,6 +10,7 @@ import styled from 'styled-components/native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCmIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import AntIcon from 'react-native-vector-icons/AntDesign'
 import Modal from 'react-native-modal'
 import { useNavigation } from '@react-navigation/native'
 import TabInventory from './TabInventory'
@@ -85,6 +86,7 @@ const WalkingTab = () => {
     })
   }
 
+  //React.Memo 사용해서 렌더 두번되는거 방지하기.
   return (
     <Container style={{ shadowColor: '#000000', elevation: 30 }}>
       <Animated.View
@@ -98,22 +100,22 @@ const WalkingTab = () => {
         }}
       >
         <TouchableOpacity onPress={() => toggleMenu(INVENTORY)}>
-          <MaterialIcons
-            name="inventory"
-            size={35}
-            color="#4495D0"
-          ></MaterialIcons>
+          <AntIcon name="enviromento" size={35} color="#545f66"></AntIcon>
           <ButtonText>인벤토리</ButtonText>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toggleMenu(PAPER)}>
-          <Ionicons name="newspaper-outline" size={35} color="black"></Ionicons>
+          <Ionicons
+            name="newspaper-outline"
+            size={35}
+            color="#545f66"
+          ></Ionicons>
           <ButtonText>페이퍼</ButtonText>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log('CHATTING touched')}>
           <Ionicons
             name="chatbubble-ellipses-outline"
             size={35}
-            color="#4495D0"
+            color="#545f66"
           ></Ionicons>
           <ButtonText>{'\t'}채팅</ButtonText>
         </TouchableOpacity>
@@ -121,7 +123,7 @@ const WalkingTab = () => {
           <Ionicons
             name="close-circle-outline"
             size={35}
-            color="red"
+            color="#e76f51"
           ></Ionicons>
           <ButtonText>{'\t'}종료</ButtonText>
         </TouchableOpacity>
