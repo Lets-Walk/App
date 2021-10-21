@@ -21,7 +21,7 @@ const Container = styled.View`
   align-items: center;
   background-color: #f9f9f9;
   border-radius: 10px;
-  padding: 5px;
+  /* padding: 5px; */
   margin: 0px 0px;
   overflow: hidden;
 `
@@ -52,37 +52,22 @@ const FinishConfirmButtonText = styled.Text`
 const WalkingTab = () => {
   const [menuVisible, setMenuVisible] = useState(true)
   const [modalVisible, setModalVisible] = useState(false)
+  const [type, setType] = useState('')
   const [menuValue] = useState(new Animated.Value(0))
-  const [invValue] = useState(new Animated.Value(100))
-  const [paperValue] = useState(new Animated.Value(100))
-
   const usedNavigation = useNavigation()
-  //지금 문제, value값이 변함. 근데 bag을 선택했을땐 bag이 올라오고, paper를 선택했을땐 paper가 올라와야함.
-  //지금은 두개를 구분할 수 있는 방법이 없음.
-  const toggleMenu = () => {
+
+  const INVENTORY = 'inventory'
+  const PAPER = 'paper'
+
+  const toggleMenu = (name) => {
+    setType(name)
     Animated.timing(menuValue, {
       toValue: menuVisible ? -100 : 0,
-      duration: 500,
+      duration: 300,
       useNativeDriver: true,
     }).start(() => {
       setMenuVisible(!menuVisible)
     })
-  }
-
-  const toggleInv = () => {
-    Animated.timing(invValue, {
-      toValue: menuVisible ? -100 : 0,
-      duration: 500,
-      useNativeDriver: true,
-    }).start()
-  }
-
-  const togglePaper = () => {
-    Animated.timing(paperValue, {
-      toValue: menuVisible ? -100 : 0,
-      duration: 500,
-      useNativeDriver: true,
-    }).start()
   }
 
   const finishModal = () => {
@@ -112,12 +97,7 @@ const WalkingTab = () => {
           transform: [{ translateY: menuValue }],
         }}
       >
-        <TouchableOpacity
-          onPress={() => {
-            toggleMenu()
-            toggleInv()
-          }}
-        >
+        <TouchableOpacity onPress={() => toggleMenu(INVENTORY)}>
           <MaterialIcons
             name="inventory"
             size={35}
@@ -125,7 +105,7 @@ const WalkingTab = () => {
           ></MaterialIcons>
           <ButtonText>인벤토리</ButtonText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('PAPER touched')}>
+        <TouchableOpacity onPress={() => toggleMenu(PAPER)}>
           <Ionicons name="newspaper-outline" size={35} color="black"></Ionicons>
           <ButtonText>페이퍼</ButtonText>
         </TouchableOpacity>
@@ -148,11 +128,13 @@ const WalkingTab = () => {
       </Animated.View>
       <Animated.View
         style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'space-around',
-          transform: [{ translateY: invValue }],
-          overflow: 'hidden',
+          justifyContent: 'center',
+          transform: [{ translateY: type === INVENTORY ? menuValue : 0 }],
           top: 100,
         }}
       >
@@ -161,12 +143,35 @@ const WalkingTab = () => {
           type="primary"
           size={35}
           onPress={() => {
-            toggleMenu()
-            toggleInv()
+            toggleMenu(INVENTORY)
           }}
         >
           뒤로가기
         </Button>
+        <Text>인벤토리</Text>
+      </Animated.View>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transform: [{ translateY: type === PAPER ? menuValue : 0 }],
+          top: 100,
+        }}
+      >
+        <Button
+          type="primary"
+          size={35}
+          onPress={() => {
+            toggleMenu(PAPER)
+          }}
+        >
+          뒤로가기
+        </Button>
+        <Text>페이퍼</Text>
       </Animated.View>
       <Modal isVisible={modalVisible}>
         <View
