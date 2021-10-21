@@ -54,20 +54,6 @@ const CrewMatching = ({ navigation }) => {
         >
           매칭시작
         </Button>
-
-        {/* 임시버튼-> 추후 삭제(워킹모드 진입은 '매칭시작'을 통해서 진행*/}
-        {/* <Button
-          type="primary"
-          style={{
-            backgroundColor: 'black',
-            width: useWindowDimensions().width * 0.5,
-          }}
-          onPress={() => {
-            navigation.navigate('워킹모드')
-          }}
-        >
-          워킹모드
-        </Button> */}
       </View>
     </ScreenName>
   )
