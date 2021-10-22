@@ -43,22 +43,24 @@ const WalkingTab = () => {
   const [type, setType] = useState('')
   const [animation] = useState(new Animated.Value(0))
 
-  const toggleMenu = (name) => {
-    setType(name)
-    Animated.timing(animation, {
-      toValue: menuVisible ? -100 : 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => {
-      setMenuVisible(!menuVisible)
-    })
-  }
+  const toggleMenu = useCallback(
+    (name) => {
+      setType(name)
+      Animated.timing(animation, {
+        toValue: menuVisible ? -100 : 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => {
+        setMenuVisible(!menuVisible)
+      })
+    },
+    [menuVisible],
+  )
+
   const toggleModal = useCallback(() => {
     setModalVisible(!modalVisible)
   }, [modalVisible])
 
-  console.log('render')
-  //React.Memo 사용해서 렌더 두번되는거 방지하기.
   return (
     <Container style={{ shadowColor: '#000000', elevation: 30 }}>
       <MenuView style={{ transform: [{ translateY: animation }] }}>
@@ -83,4 +85,4 @@ const WalkingTab = () => {
   )
 }
 
-export default WalkingTab
+export default React.memo(WalkingTab)

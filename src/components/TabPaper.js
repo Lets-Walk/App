@@ -2,7 +2,6 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { PAPER } from '../constants/walkingmode'
 import { Button } from '@ant-design/react-native'
-import Animated from 'react-native-reanimated'
 
 const TabPaper = ({ toggleMenu }) => {
   return (
@@ -21,6 +20,6 @@ const TabPaper = ({ toggleMenu }) => {
   )
 }
 
-export default TabPaper
+export default React.memo(TabPaper)
 
 const styles = StyleSheet.create({})

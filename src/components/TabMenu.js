@@ -17,7 +17,6 @@ const ButtonText = styled.Text`
 `
 
 const TabMenu = ({ toggleModal, toggleMenu }) => {
-  console.log('menu')
   return (
     <>
       <TouchableOpacity
@@ -72,4 +71,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default TabMenu
+export default React.memo(TabMenu)

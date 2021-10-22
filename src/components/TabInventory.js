@@ -4,7 +4,6 @@ import { StyleSheet, Text } from 'react-native'
 import { INVENTORY } from '../constants/walkingmode'
 
 const TabInventory = ({ toggleMenu }) => {
-  console.log('inv')
   return (
     <>
       <Button
