@@ -43,7 +43,7 @@ const CrewMatching = ({ navigation }) => {
   }, [campus])
 
   return (
-    <ScreenName name="워킹크루">
+    <ScreenName name="워킹크루 매칭">
       <ShapesBackground />
       <View style={styles.container}>
         <Text style={styles.campusNameText}>{campus}</Text>
@@ -76,6 +76,7 @@ const CrewMatching = ({ navigation }) => {
           style={{
             backgroundColor: '#4495D0',
             width: width * 0.8,
+            elevation: 5,
           }}
           onPress={() => {
             navigation.navigate('매칭중')
