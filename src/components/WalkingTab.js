@@ -22,17 +22,14 @@ const Container = styled.View`
   align-items: center;
   background-color: #f9f9f9;
   border-radius: 10px;
-  /* padding: 5px; */
   margin: 0px 0px;
   overflow: hidden;
 `
 
 const ButtonText = styled.Text`
-  font-size: 12px;
-  align-items: center;
-
+  font-size: 15px;
   font-family: BMHANNAAir_ttf;
-  padding: 3px 0px;
+  padding-top: 3px;
 `
 
 const FinishConfirmText = styled.Text`
@@ -99,33 +96,42 @@ const WalkingTab = () => {
           transform: [{ translateY: menuValue }],
         }}
       >
-        <TouchableOpacity onPress={() => toggleMenu(INVENTORY)}>
-          <AntIcon name="enviromento" size={35} color="#545f66"></AntIcon>
+        <TouchableOpacity
+          style={styles.centerView}
+          onPress={() => toggleMenu(INVENTORY)}
+        >
+          <Ionicons name="briefcase-outline" size={35} color="#001219" />
           <ButtonText>인벤토리</ButtonText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => toggleMenu(PAPER)}>
+        <TouchableOpacity
+          style={styles.centerView}
+          onPress={() => toggleMenu(PAPER)}
+        >
           <Ionicons
             name="newspaper-outline"
             size={35}
-            color="#545f66"
+            color="#001219"
           ></Ionicons>
           <ButtonText>페이퍼</ButtonText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log('CHATTING touched')}>
+        <TouchableOpacity
+          style={styles.centerView}
+          onPress={() => console.log('CHATTING touched')}
+        >
           <Ionicons
             name="chatbubble-ellipses-outline"
             size={35}
-            color="#545f66"
+            color="#001219"
           ></Ionicons>
-          <ButtonText>{'\t'}채팅</ButtonText>
+          <ButtonText>채팅</ButtonText>
         </TouchableOpacity>
-        <TouchableOpacity onPress={finishModal}>
+        <TouchableOpacity style={styles.centerView} onPress={finishModal}>
           <Ionicons
             name="close-circle-outline"
             size={35}
-            color="#e76f51"
+            color="#ae2012"
           ></Ionicons>
-          <ButtonText>{'\t'}종료</ButtonText>
+          <ButtonText>종료</ButtonText>
         </TouchableOpacity>
       </Animated.View>
       <Animated.View
@@ -197,4 +203,9 @@ const WalkingTab = () => {
 
 export default WalkingTab
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  centerView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
