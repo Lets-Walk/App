@@ -1,17 +1,26 @@
 import { Button } from '@ant-design/react-native'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
+import { INVENTORY } from '../constants/walkingmode'
 
-const TabInventory = () => {
+const TabInventory = ({ toggleMenu }) => {
+  console.log('inv')
   return (
-    <View>
-      <Button type="primary" size={35}>
+    <>
+      <Button
+        type="primary"
+        size={35}
+        onPress={() => {
+          toggleMenu(INVENTORY)
+        }}
+      >
         뒤로가기
       </Button>
-    </View>
+      <Text>인벤토리</Text>
+    </>
   )
 }
 
-export default TabInventory
+export default React.memo(TabInventory)
 
 const styles = StyleSheet.create({})
