@@ -5,6 +5,7 @@ import ScreenName from '../components/ScreenName'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SERVER_URL } from '@env'
+import ShapesBackground from '../animations/ShapesBackground'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -43,8 +44,10 @@ const CrewMatching = ({ navigation }) => {
 
   return (
     <ScreenName name="워킹크루">
+      <ShapesBackground />
       <View style={styles.container}>
         <Text style={styles.campusNameText}>{campus}</Text>
+
         <Image
           source={{ uri: 'https://ifh.cc/g/oSrubm.png' }} // sample url
           style={styles.logoContainer}
@@ -52,6 +55,7 @@ const CrewMatching = ({ navigation }) => {
         {/* server에 학교별 logo 저장 완료 후, 나중에 위 Image tag는 삭제 후 아래 Image tag로 대체 */}
         {/* <Image source={{uri: logoURL}} style={styles.logoContainer} /> */}
       </View>
+
       <View style={styles.campusRankContainer}>
         <Text
           style={{
@@ -91,7 +95,7 @@ const styles = StyleSheet.create({
     left: (width - width * 0.8) / 2,
     alignItems: 'center',
   },
-  container: { alignItems: 'center', marginTop: height * 0.15 },
+  container: { alignItems: 'center', marginTop: height * 0.2 },
   campusNameText: {
     fontFamily: 'BMHANNAAir_ttf',
     fontSize: 35,
