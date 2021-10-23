@@ -33,7 +33,7 @@ const ItemView = styled(Animated.View)`
   height: 100%;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   top: 100px;
 `
 

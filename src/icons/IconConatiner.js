@@ -5,14 +5,14 @@ import { View } from 'react-native'
 const IconContainer = ({ backgroundColor, borderColor, children, size }) => {
   let width, height
   if (size == 'normal') {
-    width = '12%'
-    height = '7%'
+    width = 50
+    height = 50
   } else if (size == 'small') {
-    width = '9%'
-    height = '5%'
+    width = 40
+    height = 40
   } else if (size == 'large') {
-    width = '15%'
-    height = '9%'
+    width = 60
+    height = 60
   }
 
   return (
@@ -22,8 +22,8 @@ const IconContainer = ({ backgroundColor, borderColor, children, size }) => {
         borderBottomStartRadius: 60,
         borderBottomEndRadius: 60,
         borderTopLeftRadius: 60,
-        width: 60,
-        height: 60,
+        width: width,
+        height: height,
         borderWidth: 2,
         borderColor: borderColor,
         alignItems: 'center',

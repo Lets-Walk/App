@@ -13,25 +13,12 @@ import {
   WhitePaper,
 } from '../icons'
 import { Button } from '@ant-design/react-native'
-
-const maapingIcon = {
-  Pencil,
-  Computer,
-  Microscope,
-  Book,
-  Calculator,
-  Stethoscope,
-  Pill,
-  공과대학: RedPaper,
-  자연과학대학: RedPaper,
-  인문대학: BluePaper,
-  경영대학: BluePaper,
-  의과대학: WhitePaper,
-  약학대학: WhitePaper,
-}
+import IconComponent from './IconComponent'
 
 const LabInfo = ({ name, ingredient, setVisible }) => {
   if (!ingredient) return <></>
+  const itemList = ingredient[name]
+  if (!itemList) return <></>
 
   const onClose = () => {
     console.log('close button click')
@@ -42,17 +29,10 @@ const LabInfo = ({ name, ingredient, setVisible }) => {
     console.log('연구시작 버튼 클릭')
   }
 
-  const getIconComponent = useCallback((name) => {
-    const IconComponent = maapingIcon[name]
-    return <IconComponent key={name} />
-  }, [])
-
-  const itemList = ingredient[name]
-  if (!itemList) return <View></View>
   return (
     <View style={styles.infoConatiner}>
       <View style={styles.header}>
-        {getIconComponent(name)}
+        <IconComponent name={name} />
         <Text style={styles.title}>{name} 연구실</Text>
         <Pressable
           onPress={onClose}
@@ -81,7 +61,9 @@ const LabInfo = ({ name, ingredient, setVisible }) => {
             justifyContent: 'space-evenly',
           }}
         >
-          {itemList.map((item) => getIconComponent(item, 38))}
+          {itemList.map((item, index) => (
+            <IconComponent key={index} name={item} bgSize="large" />
+          ))}
         </View>
         <View style={styles.centerView}>
           <Button
