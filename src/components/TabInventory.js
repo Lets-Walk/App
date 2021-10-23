@@ -1,7 +1,6 @@
-import { Button } from '@ant-design/react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { StyleSheet, Text, Pressable, View } from 'react-native'
+import { StyleSheet, Pressable, View, FlatList } from 'react-native'
 import { INVENTORY } from '../constants/walkingmode'
 import IconComponent from './IconComponent'
 
@@ -37,6 +36,14 @@ const exampleItem = [
 ]
 
 const TabInventory = ({ toggleMenu }) => {
+  const renderItem = ({ item }) => {
+    return (
+      <View style={styles.iconConatiner}>
+        <IconComponent name={item.type} size={30} bgSize="normal" />
+      </View>
+    )
+  }
+
   return (
     <>
       <Pressable
@@ -45,23 +52,15 @@ const TabInventory = ({ toggleMenu }) => {
       >
         <Ionicons name="chevron-back" size={30} color="gray" />
       </Pressable>
-      <View
-        style={{
-          height: '100%',
-          width: '100%',
-          marginLeft: '2%',
-          alignItems: 'center',
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-        }}
-      >
-        {exampleItem.map((item, index) => {
-          return (
-            <View key={item.type} style={styles.iconConatiner}>
-              <IconComponent name={item.type} size={30} bgSize="normal" />
-            </View>
-          )
-        })}
+      <View style={styles.listContainer}>
+        <FlatList
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          data={exampleItem}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.type}
+          contentContainerStyle={{ paddingRight: 35 }}
+        />
       </View>
     </>
   )
@@ -71,13 +70,18 @@ export default React.memo(TabInventory)
 
 const styles = StyleSheet.create({
   backButton: {
-    // position: 'absolute',
     left: '2%',
     transform: [{ rotate: '90deg' }],
   },
-  iconConatiner: {
+  listContainer: {
     height: '100%',
-    marginTop: 10,
-    marginRight: '2%',
+    width: '100%',
+    marginLeft: '2%',
+  },
+  iconConatiner: {
+    flex: 1,
+    height: '100%',
+    marginTop: 7,
+    marginRight: 10,
   },
 })
