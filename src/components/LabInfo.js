@@ -13,6 +13,7 @@ import {
   WhitePaper,
 } from '../icons'
 import { Button } from '@ant-design/react-native'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import IconComponent from './IconComponent'
 
 const LabInfo = ({ name, ingredient, setVisible }) => {
@@ -36,9 +37,9 @@ const LabInfo = ({ name, ingredient, setVisible }) => {
         <Text style={styles.title}>{name} 연구실</Text>
         <Pressable
           onPress={onClose}
-          style={{ position: 'absolute', right: '3%', top: 0 }}
+          style={{ position: 'absolute', right: '1%', top: 0 }}
         >
-          <Text style={{ fontSize: 30, color: 'gray' }}>X</Text>
+          <Ionicons name="close-outline" size={38} color="gray" />
         </Pressable>
       </View>
       <View style={styles.divider}>
