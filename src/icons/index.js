@@ -8,6 +8,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { View, Text } from 'react-native'
 import IconBadge from '../components/IconBadge'
+import { COLORS, ICONS } from '../constants/walkingmode'
 
 const rotate = {
   transform: [{ rotate: '-135deg' }],
@@ -33,10 +34,10 @@ export const Pencil = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
-      <IconContainer backgroundColor="#F8EA8C" bgSize={bgSize}>
+      <IconContainer backgroundColor={COLORS.PENCIL} bgSize={bgSize}>
         <AwesomeIcon
           style={rotate}
-          name="pencil-alt"
+          name={ICONS.PENCIL}
           size={iconSize}
           color="black"
         />
@@ -49,10 +50,10 @@ export const Computer = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
-      <IconContainer backgroundColor="#4CD7D0" bgSize={bgSize}>
+      <IconContainer backgroundColor={COLORS.COMPUTER} bgSize={bgSize}>
         <MaterialIcon
           style={rotate}
-          name="computer"
+          name={ICONS.COMPUTER}
           size={iconSize}
           color="black"
         />
@@ -65,8 +66,13 @@ export const Book = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
-      <IconContainer backgroundColor="#E1C340" bgSize={bgSize}>
-        <EntypoIcon style={rotate} name="book" size={iconSize} color="black" />
+      <IconContainer backgroundColor={COLORS.BOOK} bgSize={bgSize}>
+        <EntypoIcon
+          style={rotate}
+          name={ICONS.BOOK}
+          size={iconSize}
+          color="black"
+        />
       </IconContainer>
     </>
   )
@@ -76,10 +82,10 @@ export const Calculator = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
-      <IconContainer backgroundColor="#868B8E" bgSize={bgSize}>
+      <IconContainer backgroundColor={COLORS.CALCULATOR} bgSize={bgSize}>
         <AwesomeIcon
           style={rotate}
-          name="calculator"
+          name={ICONS.CALCULATOR}
           size={iconSize}
           color="black"
         />
@@ -92,10 +98,10 @@ export const Stethoscope = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
-      <IconContainer backgroundColor="#E7D2CC" bgSize={bgSize}>
+      <IconContainer backgroundColor={COLORS.STETHOSCOPE} bgSize={bgSize}>
         <AwesomeIcon
           style={rotate}
-          name="stethoscope"
+          name={ICONS.STETHOSCOPE}
           size={iconSize}
           color="black"
         />
@@ -108,10 +114,10 @@ export const Pill = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
-      <IconContainer backgroundColor="#FFA384" bgSize={bgSize}>
+      <IconContainer backgroundColor={COLORS.PILL} bgSize={bgSize}>
         <MaterialCommunityIcon
           style={rotate}
-          name="pill"
+          name={ICONS.PILL}
           size={iconSize}
           color="black"
         />
@@ -124,10 +130,10 @@ export const Microscope = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
-      <IconContainer backgroundColor="#81B622" bgSize={bgSize}>
+      <IconContainer backgroundColor={COLORS.MICROSCOPE} bgSize={bgSize}>
         <AwesomeIcon
           style={rotate}
-          name="microscope"
+          name={ICONS.MICROSCOPE}
           size={iconSize}
           color="black"
         />
@@ -140,7 +146,7 @@ export const Lab = ({ size }) => {
   return (
     <View
       style={{
-        backgroundColor: '#122620',
+        backgroundColor: COLORS.LAB,
         borderBottomStartRadius: 100,
         borderBottomEndRadius: 100,
         borderTopLeftRadius: 100,
@@ -178,7 +184,7 @@ export const Lab = ({ size }) => {
           style={{
             transform: [{ rotate: '-135deg' }],
           }}
-          name="award"
+          name={ICONS.LAB}
           size={size}
           color="#122620"
         />
@@ -228,7 +234,7 @@ const PaperContainer = ({ color, iconSize, name, text, width, height }) => {
             justifyContent: 'center',
           }}
         >
-          <AwesomeIcon name="scroll" size={iconSize} color="white" />
+          <AwesomeIcon name={ICONS.PAPER} size={iconSize} color="white" />
           {text ? (
             <Text
               style={{
@@ -253,7 +259,7 @@ export const RedPaper = ({ badge, name, text, iconSize = 25, bgSize = 70 }) => {
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
       <PaperContainer
-        color="#AA1945"
+        color={COLORS.REDPAPER}
         name={name}
         iconSize={iconSize}
         width={bgSize}
@@ -275,7 +281,7 @@ export const BluePaper = ({
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
       <PaperContainer
-        color="#059DC0"
+        color={COLORS.BLUEPAPER}
         name={name}
         iconSize={iconSize}
         width={bgSize}
@@ -297,7 +303,7 @@ export const WhitePaper = ({
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
       <PaperContainer
-        color="#868B8E"
+        color={COLORS.WHITEPAPER}
         name={name}
         iconSize={iconSize}
         width={bgSize}
