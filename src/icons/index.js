@@ -187,7 +187,8 @@ export const Lab = ({ size }) => {
   )
 }
 
-const PaperContainer = ({ color, size, name, text, width, height }) => {
+const PaperContainer = ({ color, iconSize, name, text, width, height }) => {
+  name = name.replace('대학', '')
   return (
     <View
       style={{
@@ -211,7 +212,7 @@ const PaperContainer = ({ color, size, name, text, width, height }) => {
     >
       <View
         style={{
-          borderRadius: 15,
+          borderRadius: 10,
           width: '90%',
           height: '90%',
           borderWidth: 2,
@@ -227,11 +228,11 @@ const PaperContainer = ({ color, size, name, text, width, height }) => {
             justifyContent: 'center',
           }}
         >
-          <AwesomeIcon name="scroll" size={size} color="white" />
+          <AwesomeIcon name="scroll" size={iconSize} color="white" />
           {text ? (
             <Text
               style={{
-                fontSize: 14,
+                fontSize: 12,
                 color: 'white',
                 fontWeight: 'bold',
               }}
@@ -247,59 +248,62 @@ const PaperContainer = ({ color, size, name, text, width, height }) => {
   )
 }
 
-export const RedPaper = ({
-  name,
-  text,
-  size = 35,
-  width = 70,
-  height = 60,
-}) => {
+export const RedPaper = ({ badge, name, text, iconSize = 25, bgSize = 70 }) => {
   return (
-    <PaperContainer
-      color="#AA1945"
-      name={name}
-      size={size}
-      width={width}
-      height={height}
-      text={text}
-    />
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <PaperContainer
+        color="#AA1945"
+        name={name}
+        iconSize={iconSize}
+        width={bgSize}
+        height={bgSize - 10}
+        text={text}
+      />
+    </>
   )
 }
 
 export const BluePaper = ({
+  badge,
   name,
   text,
-  size = 35,
-  width = 70,
-  height = 60,
+  iconSize = 25,
+  bgSize = 70,
 }) => {
   return (
-    <PaperContainer
-      color="#059DC0"
-      name={name}
-      size={size}
-      width={width}
-      height={height}
-      text={text}
-    />
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <PaperContainer
+        color="#059DC0"
+        name={name}
+        iconSize={iconSize}
+        width={bgSize}
+        height={bgSize - 10}
+        text={text}
+      />
+    </>
   )
 }
 
 export const WhitePaper = ({
+  badge,
   name,
   text,
-  size = 35,
-  width = 70,
-  height = 60,
+  iconSize = 25,
+  bgSize = 70,
 }) => {
   return (
-    <PaperContainer
-      color="#868B8E"
-      name={name}
-      size={size}
-      width={width}
-      height={height}
-      text={text}
-    />
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <PaperContainer
+        color="#868B8E"
+        name={name}
+        iconSize={iconSize}
+        width={bgSize}
+        height={bgSize - 10}
+        text={text}
+      />
+    </>
   )
 }

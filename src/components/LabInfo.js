@@ -33,7 +33,7 @@ const LabInfo = ({ name, ingredient, setVisible }) => {
   return (
     <View style={styles.infoConatiner}>
       <View style={styles.header}>
-        <IconComponent name={name} text={false} size={35}/>
+        <IconComponent name={name} text={false} bgSize={70} iconSize={35} />
         <Text style={styles.title}>{name} 연구실</Text>
         <Pressable
           onPress={onClose}
