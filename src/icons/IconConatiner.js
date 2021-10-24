@@ -1,31 +1,18 @@
 import React from 'react'
-import styled from 'styled-components/native'
 import { View } from 'react-native'
 
-const IconContainer = ({ backgroundColor, borderColor, children, size }) => {
-  let width, height
-  if (size == 'normal') {
-    width = 50
-    height = 50
-  } else if (size == 'small') {
-    width = 40
-    height = 40
-  } else if (size == 'large') {
-    width = 60
-    height = 60
-  }
-
+const IconContainer = ({ backgroundColor, children, bgSize }) => {
   return (
     <View
       style={{
         backgroundColor: backgroundColor,
-        borderBottomStartRadius: 60,
-        borderBottomEndRadius: 60,
-        borderTopLeftRadius: 60,
-        width: width,
-        height: height,
+        borderBottomStartRadius: bgSize,
+        borderBottomEndRadius: bgSize,
+        borderTopLeftRadius: bgSize,
+        width: bgSize,
+        height: bgSize,
         borderWidth: 2,
-        borderColor: borderColor,
+        borderColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
         transform: [{ rotate: '135deg' }],

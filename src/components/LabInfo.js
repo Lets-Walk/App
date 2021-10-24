@@ -33,7 +33,7 @@ const LabInfo = ({ name, ingredient, setVisible }) => {
   return (
     <View style={styles.infoConatiner}>
       <View style={styles.header}>
-        <IconComponent name={name} />
+        <IconComponent name={name} text={false} size={35}/>
         <Text style={styles.title}>{name} 연구실</Text>
         <Pressable
           onPress={onClose}
@@ -63,7 +63,7 @@ const LabInfo = ({ name, ingredient, setVisible }) => {
           }}
         >
           {itemList.map((item, index) => (
-            <IconComponent key={index} name={item} bgSize="large" />
+            <IconComponent key={index} name={item} iconSize={38} bgSize={60} />
           ))}
         </View>
         <View style={styles.centerView}>

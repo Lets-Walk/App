@@ -39,7 +39,7 @@ const TabInventory = ({ toggleMenu }) => {
   const renderItem = ({ item }) => {
     return (
       <View style={styles.iconConatiner}>
-        <IconComponent name={item.type} size={30} bgSize="normal" />
+          <IconComponent name={item.type} iconSize={30} bgSize={50} />
       </View>
     )
   }

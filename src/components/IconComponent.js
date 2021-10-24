@@ -28,9 +28,9 @@ const maapingIcon = {
   약학대학: WhitePaper,
 }
 
-const IconComponent = ({ name, size, bgSize }) => {
-  const Icon = maapingIcon[name]
-  return <Icon key={name} size={size} bgSize={bgSize} />
+const IconComponent = (props) => {
+  const Icon = maapingIcon[props.name]
+  return <Icon {...props}/>
 }
 
 export default IconComponent
