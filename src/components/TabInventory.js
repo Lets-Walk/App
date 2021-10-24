@@ -7,31 +7,31 @@ import IconComponent from './IconComponent'
 const exampleItem = [
   {
     type: 'Pencil',
-    quantity: 2,
+    quantity: 1,
   },
   {
     type: 'Computer',
-    quantity: 2,
+    quantity: 5,
   },
   {
     type: 'Book',
-    quantity: 2,
+    quantity: 10,
   },
   {
     type: 'Microscope',
-    quantity: 2,
+    quantity: 3,
   },
   {
     type: 'Calculator',
-    quantity: 2,
+    quantity: 4,
   },
   {
     type: 'Stethoscope',
-    quantity: 2,
+    quantity: 4,
   },
   {
     type: 'Pill',
-    quantity: 2,
+    quantity: 7,
   },
 ]
 
@@ -39,7 +39,12 @@ const TabInventory = ({ toggleMenu }) => {
   const renderItem = ({ item }) => {
     return (
       <View style={styles.iconConatiner}>
-          <IconComponent name={item.type} iconSize={30} bgSize={50} />
+        <IconComponent
+          name={item.type}
+          badge={item.quantity}
+          iconSize={30}
+          bgSize={50}
+        />
       </View>
     )
   }

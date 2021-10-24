@@ -23,7 +23,7 @@ const IconContainer = ({ backgroundColor, children, bgSize }) => {
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-        elevation: 5,
+        elevation: 0,
       }}
     >
       {children}
