@@ -7,8 +7,10 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome'
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import { View, Text } from 'react-native'
+import IconBadge from '../components/IconBadge'
+import { COLORS, ICONS } from '../constants/walkingmode'
 
-const IconStyle = {
+const rotate = {
   transform: [{ rotate: '-135deg' }],
 }
 
@@ -28,89 +30,115 @@ const IconStyle = {
   <WhitePaper name="의학" />
 */
 
-export const Pencil = ({ bgSize = 'normal', size = 38 }) => {
+export const Pencil = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
-    <IconContainer backgroundColor="#F8EA8C" borderColor="black" size={bgSize}>
-      <AwesomeIcon
-        style={IconStyle}
-        name="pencil-alt"
-        size={size}
-        color="black"
-      />
-    </IconContainer>
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <IconContainer backgroundColor={COLORS.PENCIL} bgSize={bgSize}>
+        <AwesomeIcon
+          style={rotate}
+          name={ICONS.PENCIL}
+          size={iconSize}
+          color="black"
+        />
+      </IconContainer>
+    </>
   )
 }
 
-export const Computer = ({ bgSize = 'normal', size = 38 }) => {
+export const Computer = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
-    <IconContainer backgroundColor="#4CD7D0" borderColor="black" size={bgSize}>
-      <MaterialIcon
-        style={IconStyle}
-        name="computer"
-        size={size}
-        color="black"
-      />
-    </IconContainer>
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <IconContainer backgroundColor={COLORS.COMPUTER} bgSize={bgSize}>
+        <MaterialIcon
+          style={rotate}
+          name={ICONS.COMPUTER}
+          size={iconSize}
+          color="black"
+        />
+      </IconContainer>
+    </>
   )
 }
 
-export const Book = ({ bgSize = 'normal', size = 38 }) => {
+export const Book = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
-    <IconContainer backgroundColor="#E1C340" borderColor="black" size={bgSize}>
-      <EntypoIcon style={IconStyle} name="book" size={size} color="black" />
-    </IconContainer>
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <IconContainer backgroundColor={COLORS.BOOK} bgSize={bgSize}>
+        <EntypoIcon
+          style={rotate}
+          name={ICONS.BOOK}
+          size={iconSize}
+          color="black"
+        />
+      </IconContainer>
+    </>
   )
 }
 
-export const Calculator = ({ bgSize = 'normal', size = 38 }) => {
+export const Calculator = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
-    <IconContainer backgroundColor="#868B8E" borderColor="black" size={bgSize}>
-      <AwesomeIcon
-        style={IconStyle}
-        name="calculator"
-        size={size}
-        color="black"
-      />
-    </IconContainer>
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <IconContainer backgroundColor={COLORS.CALCULATOR} bgSize={bgSize}>
+        <AwesomeIcon
+          style={rotate}
+          name={ICONS.CALCULATOR}
+          size={iconSize}
+          color="black"
+        />
+      </IconContainer>
+    </>
   )
 }
 
-export const Stethoscope = ({ bgSize = 'normal', size = 38 }) => {
+export const Stethoscope = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
-    <IconContainer backgroundColor="#E7D2CC" borderColor="black" size={bgSize}>
-      <AwesomeIcon
-        style={IconStyle}
-        name="stethoscope"
-        size={size}
-        color="black"
-      />
-    </IconContainer>
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <IconContainer backgroundColor={COLORS.STETHOSCOPE} bgSize={bgSize}>
+        <AwesomeIcon
+          style={rotate}
+          name={ICONS.STETHOSCOPE}
+          size={iconSize}
+          color="black"
+        />
+      </IconContainer>
+    </>
   )
 }
 
-export const Pill = ({ bgSize = 'normal', size = 38 }) => {
+export const Pill = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
-    <IconContainer backgroundColor="#FFA384" borderColor="black" size={bgSize}>
-      <MaterialCommunityIcon
-        style={IconStyle}
-        name="pill"
-        size={size}
-        color="black"
-      />
-    </IconContainer>
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <IconContainer backgroundColor={COLORS.PILL} bgSize={bgSize}>
+        <MaterialCommunityIcon
+          style={rotate}
+          name={ICONS.PILL}
+          size={iconSize}
+          color="black"
+        />
+      </IconContainer>
+    </>
   )
 }
 
-export const Microscope = ({ bgSize = 'normal', size = 38 }) => {
+export const Microscope = ({ badge, bgSize = 50, iconSize = 38 }) => {
   return (
-    <IconContainer backgroundColor="#81B622" borderColor="black" size={bgSize}>
-      <AwesomeIcon
-        style={IconStyle}
-        name="microscope"
-        size={size}
-        color="black"
-      />
-    </IconContainer>
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <IconContainer backgroundColor={COLORS.MICROSCOPE} bgSize={bgSize}>
+        <AwesomeIcon
+          style={rotate}
+          name={ICONS.MICROSCOPE}
+          size={iconSize}
+          color="black"
+        />
+      </IconContainer>
+    </>
   )
 }
 
@@ -118,7 +146,7 @@ export const Lab = ({ size }) => {
   return (
     <View
       style={{
-        backgroundColor: '#122620',
+        backgroundColor: COLORS.LAB,
         borderBottomStartRadius: 100,
         borderBottomEndRadius: 100,
         borderTopLeftRadius: 100,
@@ -156,7 +184,7 @@ export const Lab = ({ size }) => {
           style={{
             transform: [{ rotate: '-135deg' }],
           }}
-          name="award"
+          name={ICONS.LAB}
           size={size}
           color="#122620"
         />
@@ -165,7 +193,8 @@ export const Lab = ({ size }) => {
   )
 }
 
-const PaperContainer = ({ color, size, name, width, height }) => {
+const PaperContainer = ({ color, iconSize, name, text, width, height }) => {
+  name = name.replace('대학', '')
   return (
     <View
       style={{
@@ -189,7 +218,7 @@ const PaperContainer = ({ color, size, name, width, height }) => {
     >
       <View
         style={{
-          borderRadius: 15,
+          borderRadius: 10,
           width: '90%',
           height: '90%',
           borderWidth: 2,
@@ -205,11 +234,11 @@ const PaperContainer = ({ color, size, name, width, height }) => {
             justifyContent: 'center',
           }}
         >
-          <AwesomeIcon name="scroll" size={size} color="white" />
-          {name ? (
+          <AwesomeIcon name={ICONS.PAPER} size={iconSize} color="white" />
+          {text ? (
             <Text
               style={{
-                fontSize: 14,
+                fontSize: 12,
                 color: 'white',
                 fontWeight: 'bold',
               }}
@@ -225,38 +254,62 @@ const PaperContainer = ({ color, size, name, width, height }) => {
   )
 }
 
-export const RedPaper = ({ name, size = 35, width = 70, height = 60 }) => {
+export const RedPaper = ({ badge, name, text, iconSize = 25, bgSize = 70 }) => {
   return (
-    <PaperContainer
-      color="#AA1945"
-      name={name}
-      size={size}
-      width={width}
-      height={height}
-    />
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <PaperContainer
+        color={COLORS.REDPAPER}
+        name={name}
+        iconSize={iconSize}
+        width={bgSize}
+        height={bgSize - 10}
+        text={text}
+      />
+    </>
   )
 }
 
-export const BluePaper = ({ name, size = 35, width = 70, height = 60 }) => {
+export const BluePaper = ({
+  badge,
+  name,
+  text,
+  iconSize = 25,
+  bgSize = 70,
+}) => {
   return (
-    <PaperContainer
-      color="#059DC0"
-      name={name}
-      size={size}
-      width={width}
-      height={height}
-    />
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <PaperContainer
+        color={COLORS.BLUEPAPER}
+        name={name}
+        iconSize={iconSize}
+        width={bgSize}
+        height={bgSize - 10}
+        text={text}
+      />
+    </>
   )
 }
 
-export const WhitePaper = ({ name, size = 35, width = 70, height = 60 }) => {
+export const WhitePaper = ({
+  badge,
+  name,
+  text,
+  iconSize = 25,
+  bgSize = 70,
+}) => {
   return (
-    <PaperContainer
-      color="#868B8E"
-      name={name}
-      size={size}
-      width={width}
-      height={height}
-    />
+    <>
+      {badge ? <IconBadge num={badge} /> : <></>}
+      <PaperContainer
+        color={COLORS.WHITEPAPER}
+        name={name}
+        iconSize={iconSize}
+        width={bgSize}
+        height={bgSize - 10}
+        text={text}
+      />
+    </>
   )
 }
