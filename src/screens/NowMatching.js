@@ -6,7 +6,6 @@ import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SERVER_URL } from '@env'
 import Walking from '../animations/Walking'
-import WaitingUserInfo from '../components/WaitingUserInfo'
 import WaitingUserList from '../components/WaitingUserList'
 
 const width = Dimensions.get('window').width
@@ -15,28 +14,7 @@ const height = Dimensions.get('window').height
 const NowMatching = ({ navigation }) => {
   const [ready, setReady] = useState(false)
   const [disabled, setDisabled] = useState(true)
-  const [waitingUsers, setWaitingUsers] = useState([
-    // {
-    //   id: 1,
-    //   nickname: 'aaa',
-    //   profileUrl: 'https://ifh.cc/g/wMqmJb.png',
-    // },
-    // {
-    //   id: 2,
-    //   nickname: 'bbb',
-    //   profileUrl: 'https://ifh.cc/g/wMqmJb.png',
-    // },
-    // {
-    //   id: 3,
-    //   nickname: 'ccc',
-    //   profileUrl: 'https://ifh.cc/g/wMqmJb.png',
-    // },
-    // {
-    //   id: 4,
-    //   nickname: 'ddd',
-    //   profileUrl: 'https://ifh.cc/g/wMqmJb.png',
-    // },
-  ])
+  const [waitingUsers, setWaitingUsers] = useState([])
 
   useEffect(async () => {
     try {
@@ -57,7 +35,6 @@ const NowMatching = ({ navigation }) => {
         profileUrl: 'https://ifh.cc/g/sSjFNC.png', //sample image(default) url
       }
       setWaitingUsers([user])
-      // console.log(waitingUsers)
     } catch (err) {
       console.log(err)
     }
@@ -84,10 +61,6 @@ const NowMatching = ({ navigation }) => {
         </Button>
       </View> */}
       <View style={styles.waitingContainer}>
-        {/* <WaitingUserInfo
-          nickname={waitingUsers[0].nickname}
-          profileUrl={waitingUsers[0].profileUrl}
-        /> */}
         <WaitingUserList waitingUsers={waitingUsers} />
       </View>
       <View style={{ flex: 1, alignItems: 'center' }}>

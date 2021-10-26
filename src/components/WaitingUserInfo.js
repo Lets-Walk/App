@@ -1,12 +1,5 @@
 import React from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Animated,
-  Image,
-} from 'react-native'
+import { Text, View, Image } from 'react-native'
 
 const WaitingUserInfo = ({ user }) => {
   const { id, nickname, profileUrl } = user

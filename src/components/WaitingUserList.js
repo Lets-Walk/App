@@ -1,6 +1,6 @@
 import React from 'react'
 import WaitingUserInfo from './WaitingUserInfo'
-import { View, Image, Text, Dimensions } from 'react-native'
+import { View, Dimensions } from 'react-native'
 
 const WaitingUserList = ({ waitingUsers }) => {
   const width = Dimensions.get('window').width
