@@ -10,9 +10,9 @@ const WaitingUserList = ({ waitingUsers }) => {
       style={{
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems: 'center',
+        paddingTop: 15,
         backgroundColor: '#D7EEFF',
-        height: 90,
+        height: 120,
         width: width * 0.9,
         borderRadius: 10,
       }}

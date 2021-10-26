@@ -15,6 +15,9 @@ const CrewMatching = ({ navigation }) => {
   const [logoURL, setLogoURL] = useState('')
   const [campusScore, setCampusScore] = useState('')
   const [campusRank, setCampusRank] = useState(1)
+  const [userId, setUserId] = useState()
+  const [nickname, setNickname] = useState()
+  const [profileUrl, setProfileUrl] = useState('https://ifh.cc/g/sSjFNC.png')
 
   // 로그인 된 사용자의 학교명 load
   useEffect(async () => {
@@ -29,6 +32,13 @@ const CrewMatching = ({ navigation }) => {
         timeout: 3000,
       })
       setCampus(result.data.user.Campus.name)
+      setUserId(result.data.user.id)
+      setNickname(result.data.user.nickname)
+      if (result.data.user.profileUrl == undefined) {
+        setProfileUrl('https://ifh.cc/g/sSjFNC.png')
+      } else {
+        setProfileUrl(result.data.user.profileUrl)
+      }
 
       const campusRes = await axios.get(
         SERVER_URL + '/api/campus?name=' + campus,
@@ -79,7 +89,11 @@ const CrewMatching = ({ navigation }) => {
             elevation: 5,
           }}
           onPress={() => {
-            navigation.navigate('매칭중')
+            navigation.navigate('매칭중', {
+              id: userId,
+              nickname: nickname,
+              profileUrl: profileUrl,
+            })
           }}
         >
           매칭시작

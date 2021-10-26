@@ -11,33 +11,20 @@ import WaitingUserList from '../components/WaitingUserList'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const NowMatching = ({ navigation }) => {
+const NowMatching = ({ route, navigation }) => {
+  const { id, nickname, profileUrl } = route.params
   const [ready, setReady] = useState(false)
   const [disabled, setDisabled] = useState(true)
   const [waitingUsers, setWaitingUsers] = useState([])
 
-  useEffect(async () => {
-    try {
-      const token = await AsyncStorage.getItem('token')
-      const result = await axios.get(SERVER_URL + '/api/auth/me', {
-        headers: {
-          authorization: 'Bearer ' + token,
-          'Content-type': 'application/json',
-          Accept: 'application/json',
-        },
-        timeout: 3000,
-      })
+  const me = {
+    id: id,
+    nickname: nickname + '(나)',
+    profileUrl: profileUrl,
+  }
 
-      const user = {
-        id: result.data.user.id,
-        nickname: result.data.user.nickname + '(나)',
-        // profileUrl: result.data.user.profileUrl,
-        profileUrl: 'https://ifh.cc/g/sSjFNC.png', //sample image(default) url
-      }
-      setWaitingUsers([user])
-    } catch (err) {
-      console.log(err)
-    }
+  useEffect(() => {
+    setWaitingUsers([me])
   }, [])
 
   return (
