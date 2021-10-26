@@ -1,8 +1,9 @@
 import React from 'react'
 import { Text, View, Image } from 'react-native'
+import ReadyTag from './ReadyTag'
 
 const WaitingUserInfo = ({ user }) => {
-  const { id, nickname, profileUrl } = user
+  const { id, nickname, profileUrl, isReady } = user
 
   return (
     <View style={{ alignItems: 'center' }}>
@@ -13,6 +14,7 @@ const WaitingUserInfo = ({ user }) => {
       <Text style={{ fontSize: 18, fontFamily: 'BMHANNAAir_ttf' }}>
         {nickname}
       </Text>
+      {isReady && <ReadyTag />}
     </View>
   )
 }

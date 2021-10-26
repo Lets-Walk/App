@@ -1,5 +1,5 @@
 import { Button } from '@ant-design/react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
 import ScreenName from '../components/ScreenName'
 import axios from 'axios'
@@ -16,16 +16,33 @@ const NowMatching = ({ route, navigation }) => {
   const [ready, setReady] = useState(false)
   const [disabled, setDisabled] = useState(true)
   const [waitingUsers, setWaitingUsers] = useState([])
+  const [changed, setChanged] = useState(false)
 
   const me = {
     id: id,
     nickname: nickname + '(나)',
     profileUrl: profileUrl,
+    isReady: false,
+  }
+
+  const _handleReady = () => {
+    // me.isReady = true
+    console.log(me.isReady)
+    setDisabled(!disabled)
+    setChanged(!changed)
+  }
+
+  const _handleCancel = () => {
+    // me.isReady = false
+    console.log(me.isReady)
+    setDisabled(!disabled)
+    setChanged(!changed)
   }
 
   useEffect(() => {
     setWaitingUsers([me])
-  }, [])
+    console.log(me)
+  }, [changed])
 
   return (
     <ScreenName name="매칭 중">
@@ -68,11 +85,7 @@ const NowMatching = ({ route, navigation }) => {
             elevation: 5,
             marginBottom: 5,
           }}
-          onPress={() => {
-            setReady(true)
-            setDisabled(false)
-            console.log('Ready to walking')
-          }}
+          onPress={_handleReady}
           disabled={!disabled}
         >
           준비
@@ -84,11 +97,7 @@ const NowMatching = ({ route, navigation }) => {
             width: width * 0.8,
             elevation: 5,
           }}
-          onPress={() => {
-            setReady(false)
-            setDisabled(true)
-            console.log('Cancel to Ready')
-          }}
+          onPress={_handleCancel}
           disabled={disabled}
         >
           취소
