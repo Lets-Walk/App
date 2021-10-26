@@ -16,26 +16,26 @@ const NowMatching = ({ navigation }) => {
   const [ready, setReady] = useState(false)
   const [disabled, setDisabled] = useState(true)
   const [waitingUsers, setWaitingUsers] = useState([
-    {
-      id: 1,
-      nickname: 'aaa',
-      profileUrl: 'https://ifh.cc/g/wMqmJb.png',
-    },
-    {
-      id: 2,
-      nickname: 'bbb',
-      profileUrl: 'https://ifh.cc/g/wMqmJb.png',
-    },
-    {
-      id: 3,
-      nickname: 'ccc',
-      profileUrl: 'https://ifh.cc/g/wMqmJb.png',
-    },
-    {
-      id: 4,
-      nickname: 'ddd',
-      profileUrl: 'https://ifh.cc/g/wMqmJb.png',
-    },
+    // {
+    //   id: 1,
+    //   nickname: 'aaa',
+    //   profileUrl: 'https://ifh.cc/g/wMqmJb.png',
+    // },
+    // {
+    //   id: 2,
+    //   nickname: 'bbb',
+    //   profileUrl: 'https://ifh.cc/g/wMqmJb.png',
+    // },
+    // {
+    //   id: 3,
+    //   nickname: 'ccc',
+    //   profileUrl: 'https://ifh.cc/g/wMqmJb.png',
+    // },
+    // {
+    //   id: 4,
+    //   nickname: 'ddd',
+    //   profileUrl: 'https://ifh.cc/g/wMqmJb.png',
+    // },
   ])
 
   useEffect(async () => {
@@ -50,13 +50,13 @@ const NowMatching = ({ navigation }) => {
         timeout: 3000,
       })
 
-      // const user = {
-      //   id: result.data.user.id,
-      //   nickname: result.data.user.nickname,
-      //   // profileUrl: result.data.user.profileUrl,
-      //   profileUrl: 'https://ifh.cc/i-wMqmJb', //sample image(default) url
-      // }
-      // setWaitingUsers([user])
+      const user = {
+        id: result.data.user.id,
+        nickname: result.data.user.nickname + '(나)',
+        // profileUrl: result.data.user.profileUrl,
+        profileUrl: 'https://ifh.cc/g/sSjFNC.png', //sample image(default) url
+      }
+      setWaitingUsers([user])
       // console.log(waitingUsers)
     } catch (err) {
       console.log(err)
@@ -83,7 +83,7 @@ const NowMatching = ({ navigation }) => {
           워킹모드(임시)
         </Button>
       </View> */}
-      <View>
+      <View style={styles.waitingContainer}>
         {/* <WaitingUserInfo
           nickname={waitingUsers[0].nickname}
           profileUrl={waitingUsers[0].profileUrl}
@@ -96,7 +96,7 @@ const NowMatching = ({ navigation }) => {
 
       <View style={styles.textContainer}>
         <Text style={styles.text}>
-          매칭된 크루가 모두 준비 완료되면{'\n'}워킹모드가 시작됩니다.
+          매칭된 크루가 모두 준비 완료되면{'\n'}워킹모드가 시작됩니다. (2~4인)
         </Text>
       </View>
       <View style={styles.buttonContainer}>
@@ -148,9 +148,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  waitingContainer: {
+    alignItems: 'center',
+  },
   buttonContainer: {
     alignItems: 'center',
-    paddingBottom: 30,
+    paddingBottom: 50,
   },
   container: { alignItems: 'center', marginTop: height * 0.2 },
   campusNameText: {

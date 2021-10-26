@@ -7,8 +7,6 @@ import {
   Animated,
   Image,
 } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import styled from 'styled-components'
 
 const WaitingUserInfo = ({ user }) => {
   const { id, nickname, profileUrl } = user
@@ -17,7 +15,7 @@ const WaitingUserInfo = ({ user }) => {
     <View style={{ alignItems: 'center' }}>
       <Image
         source={{ uri: profileUrl }}
-        style={{ width: 50, height: 50, marginTop: 10 }}
+        style={{ width: 50, height: 50, marginBottom: 5 }}
       />
       <Text style={{ fontSize: 18, fontFamily: 'BMHANNAAir_ttf' }}>
         {nickname}
