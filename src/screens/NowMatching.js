@@ -26,23 +26,20 @@ const NowMatching = ({ route, navigation }) => {
   }
 
   const _handleReady = () => {
-    // me.isReady = true
-    console.log(me.isReady)
+    me.isReady = true
+    console.log(me)
+    setWaitingUsers([me])
     setDisabled(!disabled)
     setChanged(!changed)
   }
 
   const _handleCancel = () => {
-    // me.isReady = false
-    console.log(me.isReady)
+    me.isReady = false
+    console.log(me)
+    setWaitingUsers([me])
     setDisabled(!disabled)
     setChanged(!changed)
   }
-
-  useEffect(() => {
-    setWaitingUsers([me])
-    console.log(me)
-  }, [changed])
 
   return (
     <ScreenName name="매칭 중">
