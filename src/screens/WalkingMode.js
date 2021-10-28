@@ -27,7 +27,7 @@ import requestPermission from '../utils/requestPermission'
 import LabInfo from '../components/LabInfo'
 import { SERVER_URL } from '@env'
 import WalkingTab from '../components/WalkingTab'
-import { Pencil } from '../../assets/icons'
+import ImageComponent from '../components/ImageComponent'
 
 const Container = styled.View`
   flex: 8;
@@ -43,6 +43,7 @@ const WalkingMode = ({ navigation }) => {
   const [loading, setLoading] = useState(true)
   const [walkingTime, setWalkingTime] = useState(130) //초기값 0으로 setting 필요
   const [steps, setSteps] = useState(1542) //초기값 0으로 setting 필요
+  const [labName, setLabName] = useState('')
 
   const toastRef = useRef()
   const ref = useRef(null)
@@ -108,7 +109,7 @@ const WalkingMode = ({ navigation }) => {
       },
     })
     const itemList = data.data
-    console.log(itemList)
+    // itemList.map((item) => console.log(item.type))
     setItemList(itemList)
     setLoading(false)
   }, [location])
@@ -116,31 +117,45 @@ const WalkingMode = ({ navigation }) => {
   return (
     <>
       <Container>
-        {/* <ActivityIndicator
+        <ActivityIndicator
           animating={loading}
           toast
           text="Loading..."
           size="large"
-        /> */}
+        />
         <NaverMapView
           style={{ width: '100%', height: '100%' }}
           showsMyLocationButton={true}
           center={{ ...location, zoom: 16 }}
           ref={ref}
         >
-          {itemList.map((item, index) => (
-            <Marker
-              coordinate={{ latitude: item.lat, longitude: item.lng }}
-              key={index}
-              image={Pencil}
-              width={65}
-              height={65}
-              onClick={() => {
-                console.log('marker click')
-                cameraChange(location)
-              }}
-            />
-          ))}
+          {itemList.map((item, index) => {
+            const coord = { latitude: item.lat, longitude: item.lng }
+            return (
+              <Marker
+                coordinate={coord}
+                key={index}
+                image={ImageComponent(item.type)}
+                width={65}
+                height={65}
+                onClick={(e) => {
+                  if (
+                    item.type === '공과' ||
+                    item.type === '자연과학' ||
+                    item.type === '인문' ||
+                    item.type === '경영' ||
+                    item.type === '약학' ||
+                    item.type === '의과'
+                  ) {
+                    setLabName(item.type + '대학')
+                    setInfoVisible(true)
+                  }
+                  console.log('marker click')
+                  cameraChange(coord)
+                }}
+              />
+            )
+          })}
         </NaverMapView>
         <WalkingInfo walkingTime={walkingTime} steps={steps} />
       </Container>
@@ -154,7 +169,7 @@ const WalkingMode = ({ navigation }) => {
         style={{ margin: 0 }}
       >
         <LabInfo
-          name="약학대학"
+          name={labName}
           ingredient={ingredient}
           setVisible={setInfoVisible}
         />
