@@ -27,7 +27,7 @@ const NowMatching = ({ route, navigation }) => {
     isReady: false,
   }
 
-  const _handleReady = () => {
+  const _handleReady = useCallback(() => {
     me.isReady = true
     setWaitingUsers([me])
     setReadyDisabled(true)
@@ -38,14 +38,14 @@ const NowMatching = ({ route, navigation }) => {
     setTimeout(() => {
       navigation.navigate('워킹모드')
     }, 3000)
-  }
+  }, [me])
 
-  const _handleCancel = () => {
+  const _handleCancel = useCallback(() => {
     me.isReady = false
     setWaitingUsers([me])
     setReadyDisabled(false)
     setCancelDisabled(true)
-  }
+  }, [me])
 
   useEffect(() => {
     setWaitingUsers([me])
