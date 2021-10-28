@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SERVER_URL } from '@env'
 import Walking from '../animations/Walking'
 import WaitingUserList from '../components/WaitingUserList'
+import { ActivityIndicator } from '@ant-design/react-native'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -14,9 +15,10 @@ const height = Dimensions.get('window').height
 const NowMatching = ({ route, navigation }) => {
   const { id, nickname, profileUrl } = route.params
   const [ready, setReady] = useState(false)
-  const [disabled, setDisabled] = useState(true)
   const [waitingUsers, setWaitingUsers] = useState([])
-  const [changed, setChanged] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [readyDisabled, setReadyDisabled] = useState(false)
+  const [cancelDisabled, setCancelDisabled] = useState(true)
 
   const me = {
     id: id,
@@ -27,19 +29,27 @@ const NowMatching = ({ route, navigation }) => {
 
   const _handleReady = () => {
     me.isReady = true
-    console.log(me)
     setWaitingUsers([me])
-    setDisabled(!disabled)
-    setChanged(!changed)
+    setReadyDisabled(true)
+    // 임시로 취소버튼을 disabled(3초 로딩 후 자동으로 워킹모드 진입)
+    // 나중에는 setCancelDisabled(false)로 변경-waitingUsers가 모두 ready 상태일 때만 true
+    setCancelDisabled(true)
+    setLoading(true) // 3초간 loading 후 워킹모드로 넘어감
+    setTimeout(() => {
+      navigation.navigate('워킹모드')
+    }, 3000)
   }
 
   const _handleCancel = () => {
     me.isReady = false
-    console.log(me)
     setWaitingUsers([me])
-    setDisabled(!disabled)
-    setChanged(!changed)
+    setReadyDisabled(false)
+    setCancelDisabled(true)
   }
+
+  useEffect(() => {
+    setWaitingUsers([me])
+  }, [])
 
   return (
     <ScreenName name="매칭 중">
@@ -65,6 +75,7 @@ const NowMatching = ({ route, navigation }) => {
         <WaitingUserList waitingUsers={waitingUsers} />
       </View>
       <View style={{ flex: 1, alignItems: 'center' }}>
+        <ActivityIndicator animating={loading} text="Loading..." size="large" />
         <Walking />
       </View>
 
@@ -83,7 +94,7 @@ const NowMatching = ({ route, navigation }) => {
             marginBottom: 5,
           }}
           onPress={_handleReady}
-          disabled={!disabled}
+          disabled={readyDisabled}
         >
           준비
         </Button>
@@ -95,7 +106,7 @@ const NowMatching = ({ route, navigation }) => {
             elevation: 5,
           }}
           onPress={_handleCancel}
-          disabled={disabled}
+          disabled={cancelDisabled}
         >
           취소
         </Button>
