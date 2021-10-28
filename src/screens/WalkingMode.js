@@ -20,12 +20,14 @@ import Geolocation from 'react-native-geolocation-service'
 import { useFocusEffect } from '@react-navigation/native'
 import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
+import { ActivityIndicator } from '@ant-design/react-native'
 
 import WalkingInfo from '../components/WalkingInfo'
 import requestPermission from '../utils/requestPermission'
 import LabInfo from '../components/LabInfo'
 import { SERVER_URL } from '@env'
 import WalkingTab from '../components/WalkingTab'
+import { Pencil } from '../../assets/icons'
 
 const Container = styled.View`
   flex: 8;
@@ -37,6 +39,8 @@ const WalkingMode = ({ navigation }) => {
   const [location, setLocation] = useState(initialLocation)
   const [infoVisible, setInfoVisible] = useState(false)
   const [ingredient, setIngredient] = useState(null)
+  const [itemList, setItemList] = useState([])
+  const [loading, setLoading] = useState(true)
   const [walkingTime, setWalkingTime] = useState(130) //초기값 0으로 setting 필요
   const [steps, setSteps] = useState(1542) //초기값 0으로 setting 필요
 
@@ -95,26 +99,48 @@ const WalkingMode = ({ navigation }) => {
     }
   }, [])
 
+  useEffect(async () => {
+    if (location === initialLocation) return
+    const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
+      params: {
+        lat: location.latitude,
+        lng: location.longitude,
+      },
+    })
+    const itemList = data.data
+    console.log(itemList)
+    setItemList(itemList)
+    setLoading(false)
+  }, [location])
+
   return (
     <>
       <Container>
+        {/* <ActivityIndicator
+          animating={loading}
+          toast
+          text="Loading..."
+          size="large"
+        /> */}
         <NaverMapView
           style={{ width: '100%', height: '100%' }}
           showsMyLocationButton={true}
           center={{ ...location, zoom: 16 }}
           ref={ref}
         >
-          <Marker
-            coordinate={location}
-            image={require('../../assets/icons/pencil.png')}
-            width={65}
-            height={65}
-            onClick={() => {
-              console.log('marker click')
-              setInfoVisible(true)
-              cameraChange(location)
-            }}
-          ></Marker>
+          {itemList.map((item, index) => (
+            <Marker
+              coordinate={{ latitude: item.lat, longitude: item.lng }}
+              key={index}
+              image={Pencil}
+              width={65}
+              height={65}
+              onClick={() => {
+                console.log('marker click')
+                cameraChange(location)
+              }}
+            />
+          ))}
         </NaverMapView>
         <WalkingInfo walkingTime={walkingTime} steps={steps} />
       </Container>
