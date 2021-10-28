@@ -28,6 +28,7 @@ import LabInfo from '../components/LabInfo'
 import { SERVER_URL } from '@env'
 import WalkingTab from '../components/WalkingTab'
 import ImageComponent from '../components/ImageComponent'
+import getDistance from '../utils/getDistance'
 
 const Container = styled.View`
   flex: 8;
@@ -46,6 +47,7 @@ const WalkingMode = ({ navigation }) => {
   const [labName, setLabName] = useState('')
 
   const toastRef = useRef()
+  const markerToastRef = useRef()
   const ref = useRef(null)
 
   const showBackButtonToast = useCallback(() => {
@@ -60,7 +62,6 @@ const WalkingMode = ({ navigation }) => {
     let result = null
     try {
       result = await axios.get(SERVER_URL + '/api/map/lab', { timeout: 3000 })
-      // console.log(result.data)
       setIngredient(result.data.data)
     } catch (err) {
       console.log(err)
@@ -109,7 +110,6 @@ const WalkingMode = ({ navigation }) => {
       },
     })
     const itemList = data.data
-    // itemList.map((item) => console.log(item.type))
     setItemList(itemList)
     setLoading(false)
   }, [location])
@@ -149,9 +149,27 @@ const WalkingMode = ({ navigation }) => {
                   ) {
                     setLabName(item.type + '대학')
                     setInfoVisible(true)
+                    cameraChange(coord)
+                  } else {
+                    const dist = getDistance(
+                      location.latitude,
+                      location.longitude,
+                      item.lat,
+                      item.lng,
+                    )
+                    if (dist > 0.05) {
+                      // 50m 이내의 아이템만 획득 가능.
+                      markerToastRef.current.show(
+                        '아이템을 획득하기에는 거리가 너무 멉니다.',
+                      )
+                    } else {
+                      const newItemList = itemList.filter(
+                        (elem) =>
+                          !(elem.lat === item.lat && elem.lng === item.lng),
+                      )
+                      setItemList(newItemList)
+                    }
                   }
-                  console.log('marker click')
-                  cameraChange(coord)
                 }}
               />
             )
@@ -177,6 +195,13 @@ const WalkingMode = ({ navigation }) => {
       <Toast
         ref={toastRef}
         positionValue={useWindowDimensions().height * 0.12}
+        fadeInDuration={300}
+        fadeOutDuration={2000}
+        style={{ borderRadius: 15, backgroundColor: 'rgba(47, 56, 66, 0.8)' }}
+      />
+      <Toast
+        ref={markerToastRef}
+        positionValue={useWindowDimensions().height * 0.98}
         fadeInDuration={300}
         fadeOutDuration={2000}
         style={{ borderRadius: 15, backgroundColor: 'rgba(47, 56, 66, 0.8)' }}
