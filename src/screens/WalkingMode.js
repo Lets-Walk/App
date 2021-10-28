@@ -45,10 +45,13 @@ const WalkingMode = ({ navigation }) => {
   const [walkingTime, setWalkingTime] = useState(130) //초기값 0으로 setting 필요
   const [steps, setSteps] = useState(1542) //초기값 0으로 setting 필요
   const [labName, setLabName] = useState('')
+  const [inventory, setInventory] = useState([])
 
   const toastRef = useRef()
   const markerToastRef = useRef()
+  const obtainItem = useRef()
   const ref = useRef(null)
+  const obtainMeter = 0.05 // 아이템 획득하기 위한 거리 0.1 = 100m
 
   const showBackButtonToast = useCallback(() => {
     toastRef.current.show("'종료' 버튼을 이용하세요.")
@@ -157,7 +160,7 @@ const WalkingMode = ({ navigation }) => {
                       item.lat,
                       item.lng,
                     )
-                    if (dist > 0.05) {
+                    if (dist > obtainMeter) {
                       // 50m 이내의 아이템만 획득 가능.
                       markerToastRef.current.show(
                         '아이템을 획득하기에는 거리가 너무 멉니다.',
@@ -167,6 +170,23 @@ const WalkingMode = ({ navigation }) => {
                         (elem) =>
                           !(elem.lat === item.lat && elem.lng === item.lng),
                       )
+                      obtainItem.current.show('아이템을 획득했습니다.')
+                      //아이템 추가
+                      let check = false
+                      inventory.map((inv) => {
+                        if (inv.type === item.type) {
+                          inv.quantity += 1
+                          check = true
+                        }
+                      })
+                      let newList = [...inventory]
+                      if (!check) {
+                        newList = [
+                          ...inventory,
+                          { type: item.type, quantity: 1 },
+                        ]
+                      }
+                      setInventory(newList)
                       setItemList(newItemList)
                     }
                   }
@@ -177,7 +197,7 @@ const WalkingMode = ({ navigation }) => {
         </NaverMapView>
         <WalkingInfo walkingTime={walkingTime} steps={steps} />
       </Container>
-      <WalkingTab />
+      <WalkingTab inventory={inventory} />
       <Modal
         backdropOpacity={0}
         onBackdropPress={() => {
@@ -205,6 +225,13 @@ const WalkingMode = ({ navigation }) => {
         fadeInDuration={300}
         fadeOutDuration={2000}
         style={{ borderRadius: 15, backgroundColor: 'rgba(47, 56, 66, 0.8)' }}
+      />
+      <Toast
+        ref={obtainItem}
+        positionValue={useWindowDimensions().height * 0.98}
+        fadeInDuration={300}
+        fadeOutDuration={1500}
+        style={{ borderRadius: 15, backgroundColor: 'rgba(37, 81, 125, 0.8)' }}
       />
     </>
   )

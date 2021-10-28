@@ -4,38 +4,38 @@ import { StyleSheet, Pressable, View, FlatList } from 'react-native'
 import { INVENTORY } from '../constants/walkingmode'
 import IconComponent from './IconComponent'
 
-const exampleItem = [
-  {
-    type: 'Pencil',
-    quantity: 1,
-  },
-  {
-    type: 'Computer',
-    quantity: 5,
-  },
-  {
-    type: 'Book',
-    quantity: 10,
-  },
-  {
-    type: 'Microscope',
-    quantity: 3,
-  },
-  {
-    type: 'Calculator',
-    quantity: 4,
-  },
-  {
-    type: 'Stethoscope',
-    quantity: 4,
-  },
-  {
-    type: 'Pill',
-    quantity: 7,
-  },
-]
+// const exampleItem = [
+//   {
+//     type: 'Pencil',
+//     quantity: 1,
+//   },
+//   {
+//     type: 'Computer',
+//     quantity: 5,
+//   },
+//   {
+//     type: 'Book',
+//     quantity: 10,
+//   },
+//   {
+//     type: 'Microscope',
+//     quantity: 3,
+//   },
+//   {
+//     type: 'Calculator',
+//     quantity: 4,
+//   },
+//   {
+//     type: 'Stethoscope',
+//     quantity: 4,
+//   },
+//   {
+//     type: 'Pill',
+//     quantity: 7,
+//   },
+// ]
 
-const TabInventory = ({ toggleMenu }) => {
+const TabInventory = ({ inventory, toggleMenu }) => {
   const renderItem = ({ item }) => {
     return (
       <View style={styles.iconConatiner}>
@@ -61,7 +61,7 @@ const TabInventory = ({ toggleMenu }) => {
         <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          data={exampleItem}
+          data={inventory}
           renderItem={renderItem}
           keyExtractor={(item) => item.type}
           contentContainerStyle={{ paddingRight: 35 }}

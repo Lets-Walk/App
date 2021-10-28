@@ -37,7 +37,7 @@ const ItemView = styled(Animated.View)`
   top: 100px;
 `
 
-const WalkingTab = () => {
+const WalkingTab = ({ inventory }) => {
   const [menuVisible, setMenuVisible] = useState(true)
   const [modalVisible, setModalVisible] = useState(false)
   const [type, setType] = useState('')
@@ -71,7 +71,7 @@ const WalkingTab = () => {
           transform: [{ translateY: type === INVENTORY ? animation : 0 }],
         }}
       >
-        <TabInventory toggleMenu={toggleMenu} />
+        <TabInventory inventory={inventory} toggleMenu={toggleMenu} />
       </ItemView>
       <ItemView
         style={{
