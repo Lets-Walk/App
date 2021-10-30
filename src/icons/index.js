@@ -67,7 +67,7 @@ export const Book = ({ badge, bgSize = 50, iconSize = 38 }) => {
     <>
       {badge ? <IconBadge num={badge} /> : <></>}
       <IconContainer backgroundColor={COLORS.BOOK} bgSize={bgSize}>
-        <EntypoIcon
+        <AwesomeIcon
           style={rotate}
           name={ICONS.BOOK}
           size={iconSize}

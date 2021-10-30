@@ -3,9 +3,9 @@ export const PAPER = 'paper'
 export const COLORS = {
   PENCIL: '#F8EA8C',
   COMPUTER: '#4CD7D0',
-  BOOK: '#E1C340',
-  CALCULATOR: '#868B8E',
-  STETHOSCOPE: '#E7D2CC',
+  BOOK: '#AF8DF5',
+  CALCULATOR: '#EB4C1A',
+  STETHOSCOPE: '#30ADF3',
   PILL: '#FFA384',
   MICROSCOPE: '#81B622',
   LAB: '#122620',

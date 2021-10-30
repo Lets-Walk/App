@@ -7,7 +7,9 @@ import {
   Calculator,
   Stethoscope,
   Pill,
-  Lab,
+  WLab,
+  BLab,
+  RLab,
 } from '../../assets/icons/index'
 
 const maapingIcon = {
@@ -18,12 +20,12 @@ const maapingIcon = {
   Calculator: Calculator,
   Stethoscope: Stethoscope,
   Pill: Pill,
-  공과: Lab,
-  자연과학: Lab,
-  인문: Lab,
-  경영: Lab,
-  의과: Lab,
-  약학: Lab,
+  공과: RLab,
+  자연과학: RLab,
+  인문: BLab,
+  경영: BLab,
+  의과: WLab,
+  약학: WLab,
 }
 
 const ImageComponent = (name) => {
