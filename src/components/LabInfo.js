@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useMemo } from 'react'
-import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { View, Text, Pressable, StyleSheet, Image } from 'react-native'
 import {
   Computer,
   Pencil,
@@ -15,6 +15,7 @@ import {
 import { Button } from '@ant-design/react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import IconComponent from './IconComponent'
+import ImageComponent from './ImageComponent'
 
 const LabInfo = ({ name, ingredient, setVisible }) => {
   if (!ingredient) return <></>
@@ -63,7 +64,14 @@ const LabInfo = ({ name, ingredient, setVisible }) => {
           }}
         >
           {itemList.map((item, index) => (
-            <IconComponent key={index} name={item} iconSize={38} bgSize={60} />
+            <Image
+              key={item}
+              style={{
+                width: 85,
+                height: 85,
+              }}
+              source={ImageComponent(item)}
+            />
           ))}
         </View>
         <View style={styles.centerView}>
@@ -123,8 +131,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
-    width: '40%',
-    height: '80%',
+    width: 200,
+    height: 60,
     borderRadius: 30,
     backgroundColor: '#332F2F',
     borderWidth: 0,
