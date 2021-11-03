@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator()
 
 const getTabBarVisibility = (route) => {
   const routeName = getFocusedRouteNameFromRoute(route)
-  const hideOnScreens = ['매칭중', '워킹모드'] //탭바 안보이게 하려는 Screen 이름
+  const hideOnScreens = ['CrewMatching', 'BattleMatching', 'WalkingMode'] //탭바 안보이게 하려는 Screen 이름
   if (hideOnScreens.indexOf(routeName) > -1) return false
   return true
 }
