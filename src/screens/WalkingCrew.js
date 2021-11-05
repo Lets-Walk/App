@@ -10,8 +10,7 @@ import ShapesBackground from '../animations/ShapesBackground'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const CrewMatching = ({ navigation, user }) => {
-  console.log(user)
+const WalkingCrew = ({ navigation, user }) => {
   const campus = user.Campus
   const userId = user.id
   const nickname = user.nickname
@@ -39,7 +38,6 @@ const CrewMatching = ({ navigation, user }) => {
       <ShapesBackground />
       <View style={styles.container}>
         <Text style={styles.campusNameText}>{campus.name}</Text>
-
         <Image
           source={{ uri: 'https://ifh.cc/g/oSrubm.png' }} // sample url
           style={styles.logoContainer}
@@ -47,7 +45,6 @@ const CrewMatching = ({ navigation, user }) => {
         {/* server에 학교별 logo 저장 완료 후, 나중에 위 Image tag는 삭제 후 아래 Image tag로 대체 */}
         {/* <Image source={{uri: logoURL}} style={styles.logoContainer} /> */}
       </View>
-
       <View style={styles.campusRankContainer}>
         <Text
           style={{
@@ -74,6 +71,7 @@ const CrewMatching = ({ navigation, user }) => {
             navigation.navigate('CrewMatching', {
               id: userId,
               nickname: nickname,
+              domain: campus.domain,
               profileUrl: profileUrl,
             })
           }}
@@ -105,4 +103,4 @@ const styles = StyleSheet.create({
   campusRankContainer: { alignItems: 'center', margin: 20 },
 })
 
-export default CrewMatching
+export default WalkingCrew

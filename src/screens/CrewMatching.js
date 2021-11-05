@@ -1,66 +1,53 @@
 import { Button } from '@ant-design/react-native'
 import React, { useState, useEffect, useCallback } from 'react'
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  BackHandler,
+} from 'react-native'
 import ScreenName from '../components/ScreenName'
-import axios from 'axios'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SERVER_URL } from '@env'
 import Walking from '../animations/Walking'
 import WaitingUserList from '../components/WaitingUserList'
-import { ActivityIndicator } from '@ant-design/react-native'
+import { useFocusEffect } from '@react-navigation/native'
 import io from 'socket.io-client'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const NowMatching = ({ route, navigation }) => {
-  const { id, nickname, profileUrl } = route.params
-  const [ready, setReady] = useState(false)
-  const [waitingUsers, setWaitingUsers] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [readyDisabled, setReadyDisabled] = useState(false)
-  const [cancelDisabled, setCancelDisabled] = useState(true)
+const socket = io.connect(SERVER_URL) //앱에 접속하자마자 소켓에 연결된다.
 
-  const me = {
-    id: id,
-    nickname: nickname + '(나)',
-    profileUrl: profileUrl,
-    isReady: false,
-  }
+const CrewMatching = ({ route, navigation }) => {
+  const userInfo = route.params
+  const [waitingUsers, setWaitingUsers] = useState([userInfo])
 
   const _handleBack = useCallback(() => {
-    //매칭 대기열 취소에 관한 로직 필요
+    //매칭 대기열 취소에 관한 로직
+    console.log('매칭 대기열 취소')
+    socket.emit('crewLeave', {
+      ...userInfo,
+      socketId: socket.id,
+    })
     navigation.goBack()
+    return true
   })
 
-  const _handleReady = useCallback(() => {
-    me.isReady = true
-    setWaitingUsers([me])
-    setReadyDisabled(true)
-    // 임시로 취소버튼을 disabled(3초 로딩 후 자동으로 워킹모드 진입)
-    // 나중에는 setCancelDisabled(false)로 변경-waitingUsers가 모두 ready 상태일 때만 true
-    setCancelDisabled(true)
-    setLoading(true) // 3초간 loading 후 워킹모드로 넘어감
-    setTimeout(() => {
-      navigation.navigate('WalkingMode')
-    }, 3000)
-  }, [me])
-
-  const _handleCancel = useCallback(() => {
-    me.isReady = false
-    setWaitingUsers([me])
-    setReadyDisabled(false)
-    setCancelDisabled(true)
-  }, [me])
+  useFocusEffect(
+    React.useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', _handleBack)
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', _handleBack)
+    }, []),
+  )
 
   useEffect(() => {
-    setWaitingUsers([me])
-  }, [])
-
-  useEffect(() => {
-    const socket = io.connect(SERVER_URL)
+    console.log('use effect : ' + socket.id)
 
     //소켓관련 로직
+    socket.emit('crewJoin', userInfo)
   }, [])
 
   return (
@@ -87,7 +74,6 @@ const NowMatching = ({ route, navigation }) => {
         <WaitingUserList waitingUsers={waitingUsers} />
       </View>
       <View style={{ flex: 1, alignItems: 'center' }}>
-        <ActivityIndicator animating={loading} text="Loading..." size="large" />
         <Walking />
       </View>
 
@@ -104,22 +90,9 @@ const NowMatching = ({ route, navigation }) => {
             marginBottom: 5,
           }}
           onPress={_handleBack}
-          disabled={readyDisabled}
         >
           취소
         </Button>
-        {/* <Button
-          type="default"
-          style={{
-            backgroundColor: '#f5f5f5',
-            width: width * 0.8,
-            elevation: 5,
-          }}
-          onPress={_handleCancel}
-          disabled={cancelDisabled}
-        >
-          취소
-        </Button> */}
       </View>
     </ScreenName>
   )
@@ -155,4 +128,4 @@ const styles = StyleSheet.create({
   campusRankContainer: { alignItems: 'center', margin: 20 },
 })
 
-export default NowMatching
+export default CrewMatching
