@@ -7,14 +7,15 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 const Stack = createStackNavigator()
 
-const CrewNavigation = () => {
+const CrewNavigation = ({ user }) => {
   return (
     <Stack.Navigator initialRouteName="WalkingCrew">
       <Stack.Screen
         name="WalkingCrew" //워킹크루 매칭 페이지
-        component={CrewMatching}
         options={{ headerShown: false }}
-      />
+      >
+        {(props) => <CrewMatching {...props} user={user} />}
+      </Stack.Screen>
       <Stack.Screen
         name="CrewMatching" //크루원 매칭 페이지(매칭 중)
         component={NowMatching}

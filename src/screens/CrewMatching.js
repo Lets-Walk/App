@@ -8,6 +8,7 @@ import { SERVER_URL } from '@env'
 import Walking from '../animations/Walking'
 import WaitingUserList from '../components/WaitingUserList'
 import { ActivityIndicator } from '@ant-design/react-native'
+import io from 'socket.io-client'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -26,6 +27,11 @@ const NowMatching = ({ route, navigation }) => {
     profileUrl: profileUrl,
     isReady: false,
   }
+
+  const _handleBack = useCallback(() => {
+    //매칭 대기열 취소에 관한 로직 필요
+    navigation.goBack()
+  })
 
   const _handleReady = useCallback(() => {
     me.isReady = true
@@ -51,8 +57,14 @@ const NowMatching = ({ route, navigation }) => {
     setWaitingUsers([me])
   }, [])
 
+  useEffect(() => {
+    const socket = io.connect(SERVER_URL)
+
+    //소켓관련 로직
+  }, [])
+
   return (
-    <ScreenName name="크루 매칭 중">
+    <ScreenName name="워킹크루 매칭">
       {/* 워킹모드 페이지로 가기위한 임시버튼(추후 삭제)
       개발 중에는 아래 버튼 코드를 주석 해제하여 사용,
       실제 앱에서는 waiting queue의 user들이 모두 준비되면 워킹모드 자동 진입 */}
@@ -80,9 +92,7 @@ const NowMatching = ({ route, navigation }) => {
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.text}>
-          매칭된 크루가 모두 준비 완료되면{'\n'}워킹모드가 시작됩니다. (2~4인)
-        </Text>
+        <Text style={styles.text}>크루원을 모집중입니다.</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Button
@@ -93,12 +103,12 @@ const NowMatching = ({ route, navigation }) => {
             elevation: 5,
             marginBottom: 5,
           }}
-          onPress={_handleReady}
+          onPress={_handleBack}
           disabled={readyDisabled}
         >
-          준비
+          취소
         </Button>
-        <Button
+        {/* <Button
           type="default"
           style={{
             backgroundColor: '#f5f5f5',
@@ -109,7 +119,7 @@ const NowMatching = ({ route, navigation }) => {
           disabled={cancelDisabled}
         >
           취소
-        </Button>
+        </Button> */}
       </View>
     </ScreenName>
   )
