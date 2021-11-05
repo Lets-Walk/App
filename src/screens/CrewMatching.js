@@ -14,6 +14,7 @@ import Walking from '../animations/Walking'
 import WaitingUserList from '../components/WaitingUserList'
 import { useFocusEffect } from '@react-navigation/native'
 import io from 'socket.io-client'
+import { LongPressGestureHandler } from 'react-native-gesture-handler'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -23,14 +24,24 @@ const socket = io.connect(SERVER_URL) //앱에 접속하자마자 소켓에 연�
 const CrewMatching = ({ route, navigation }) => {
   const userInfo = route.params
   const [waitingUsers, setWaitingUsers] = useState([userInfo])
+  const [status, setStatus] = useState('beforeMatching')
+  const [crewId, setCrewId] = useState(null)
 
   const _handleBack = useCallback(() => {
     //매칭 대기열 취소에 관한 로직
-    console.log('매칭 대기열 취소')
-    socket.emit('crewLeave', {
-      ...userInfo,
-      socketId: socket.id,
-    })
+    if (!crewId) {
+      socket.emit('crewLeave', {
+        ...userInfo,
+        socketId: socket.id,
+      })
+      console.log('크루 매칭 대기열 취소')
+    } else {
+      socket.emit('battleLeave', {
+        ...userInfo,
+        crewId,
+      })
+      console.log('배틀 매칭 대기열 취소')
+    }
     navigation.goBack()
     return true
   })
@@ -42,6 +53,20 @@ const CrewMatching = ({ route, navigation }) => {
         BackHandler.removeEventListener('hardwareBackPress', _handleBack)
     }, []),
   )
+
+  //매칭완료
+  socket.on('matching', (data) => {
+    console.log(data)
+    setCrewId(data.roomId)
+  })
+
+  //TODO : navigate로 이동시켜도 문제없는지 확인.
+  //TODO : battleLeave후에 다시 크루매칭할 때 문제
+  socket.on('battleLeave', () => {
+    alert('유저가 나가서 크루 매칭 다시 해야함')
+    navigation.navigate('WalkingCrew')
+    return true
+  })
 
   useEffect(() => {
     console.log('use effect : ' + socket.id)
