@@ -35,7 +35,7 @@ const Login = ({ navigation, setUser }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
-  const [disabled, setDisabled] = useState(false)
+  const [disabled, setDisabled] = useState(true)
   const [loading, setLoading] = useState(false)
   const [modalVisible, setModalVisible] = useState(false)
 
@@ -150,7 +150,7 @@ const Login = ({ navigation, setUser }) => {
                 paddingBottom: 10,
                 marginBottom: 5,
                 borderRadius: 10,
-                backgroundColor: '#00b9a8',
+                backgroundColor: '#008cad',
                 elevation: 10,
                 borderWidth: 0,
               }}

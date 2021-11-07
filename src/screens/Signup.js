@@ -369,7 +369,7 @@ const Signup = ({ navigation }) => {
                 paddingTop: 10,
                 paddingBottom: 10,
                 borderRadius: 10,
-                backgroundColor: '#00b9a8',
+                backgroundColor: '#008cad',
               }}
               onPress={_handleSignupButtonPress} // here
               disabled={disabled}
