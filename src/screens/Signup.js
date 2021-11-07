@@ -21,9 +21,10 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import axios from 'axios'
 import { SERVER_URL } from '@env'
 import ConfirmModal from '../components/ConfirmModal'
+import LinearGradient from 'react-native-linear-gradient'
+import GradientColor from '../components/styles/GradientColor'
 
 const Container = styled.View`
-  background-color: ${({ theme }) => theme.background};
   justify-content: center;
   align-items: center;
   padding: 0 25px;
@@ -200,188 +201,194 @@ const Signup = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAwareScrollView extraScrollHeight={40}>
-      <ConfirmModal
-        isVisible={modalVisible}
-        setVisible={setModalVisible}
-        texts={modalMessages}
-        onConfirm={
-          disabled
-            ? null
-            : () => {
-                navigation.goBack()
-              }
-        }
-      />
-      <ActivityIndicator
-        animating={loading}
-        toast
-        text="Loading..."
-        size="large"
-      />
-      <Container
-        style={{
-          height: useWindowDimensions().height - 60,
-          width: useWindowDimensions().width,
-        }}
-      >
-        <AuthInput
-          value={user.name}
-          onChangeText={(text) => setUser({ ...user, name: text.trim() })}
-          placeholder="이름"
+    <LinearGradient colors={GradientColor} style={{ flex: 1 }}>
+      <KeyboardAwareScrollView extraScrollHeight={40}>
+        <ConfirmModal
+          isVisible={modalVisible}
+          setVisible={setModalVisible}
+          texts={modalMessages}
+          onConfirm={
+            disabled
+              ? null
+              : () => {
+                  navigation.goBack()
+                }
+          }
         />
-        <AuthInput
-          value={user.nickname}
-          onChangeText={(text) => setUser({ ...user, nickname: text.trim() })}
-          placeholder="닉네임"
+        <ActivityIndicator
+          animating={loading}
+          toast
+          text="Loading..."
+          size="large"
         />
-
-        <SelectDropDown
-          data={college}
-          onSelect={(selectedItem, index) => {
-            setCampus(selectedItem)
+        <Container
+          style={{
+            height: useWindowDimensions().height - 60,
+            width: useWindowDimensions().width,
           }}
-          defaultButtonText={'---------- 학교명을 선택하세요 ----------'}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            return selectedItem.name
-          }}
-          rowTextForSelection={(item, index) => {
-            return item.name
-          }}
-          renderDropdownIcon={() => {
-            return <Icon name="down" />
-          }}
-          buttonStyle={styles.dropdownButtonStyle}
-          buttonTextStyle={styles.dropdownButtonTextStyle}
-          dropdownStyle={styles.dropdownDropdownStyle}
-          rowStyle={styles.dropdownRowStyle}
-          rowTextStyle={styles.dropdownRowTextStyle}
-        />
-
-        <ButtonContainer>
-          <View style={styles.row}>
-            <View style={styles.inputWrap}>
-              <TextInput
-                style={styles.inputEmailId}
-                onChangeText={(text) => setEmailId(text.trim())}
-                placeholder="학교 이메일"
-                fontSize={15}
-                value={emailId}
-              />
-            </View>
-
-            <View style={styles.inputWrap}>
-              <TextInput
-                style={styles.inputDomain}
-                editable={false}
-                placeholder={campus.domain}
-                placeholderTextColor={'#000000'}
-                fontSize={15}
-              />
-            </View>
-          </View>
-
-          <Button
-            type="primary"
-            style={{
-              paddingLeft: 15,
-              paddingRight: 15,
-              paddingTop: 5,
-              paddingBottom: 5,
-              borderRadius: 10,
-              backgroundColor: 'powderblue',
-            }}
-            onPress={_handleVerificationReqButtonPress} // here
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                color: 'black',
-                fontFamily: 'BMHANNAAir_ttf',
-              }}
-            >
-              인증{'\n'}요청
-            </Text>
-          </Button>
-        </ButtonContainer>
-        <ButtonContainer>
+        >
           <AuthInput
-            value={verificationCode}
-            onChangeText={(text) => setVerificationCode(text.trim())}
-            placeholder="인증번호"
+            value={user.name}
+            onChangeText={(text) => setUser({ ...user, name: text.trim() })}
+            placeholder="이름"
           />
-          <Button
-            type="primary"
-            style={{
-              paddingLeft: 15,
-              paddingRight: 15,
-              paddingTop: 5,
-              paddingBottom: 5,
-              borderRadius: 10,
-              backgroundColor: 'powderblue',
+          <AuthInput
+            value={user.nickname}
+            onChangeText={(text) => setUser({ ...user, nickname: text.trim() })}
+            placeholder="닉네임"
+          />
+
+          <SelectDropDown
+            data={college}
+            onSelect={(selectedItem, index) => {
+              setCampus(selectedItem)
             }}
-            onPress={_handleVerificationButtonPress} // here
-            disabled={isVerify}
-          >
-            {isVerify ? (
-              <Icon name="check" color="green" size={30} />
-            ) : (
+            defaultButtonText={'---------- 학교명을 선택하세요 ----------'}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem.name
+            }}
+            rowTextForSelection={(item, index) => {
+              return item.name
+            }}
+            renderDropdownIcon={() => {
+              return <Icon name="down" />
+            }}
+            buttonStyle={styles.dropdownButtonStyle}
+            buttonTextStyle={styles.dropdownButtonTextStyle}
+            dropdownStyle={styles.dropdownDropdownStyle}
+            rowStyle={styles.dropdownRowStyle}
+            rowTextStyle={styles.dropdownRowTextStyle}
+          />
+
+          <ButtonContainer>
+            <View style={styles.row}>
+              <View style={styles.inputWrap}>
+                <TextInput
+                  style={styles.inputEmailId}
+                  onChangeText={(text) => setEmailId(text.trim())}
+                  placeholder="학교 이메일"
+                  fontSize={15}
+                  value={emailId}
+                />
+              </View>
+
+              <View style={styles.inputWrap}>
+                <TextInput
+                  style={styles.inputDomain}
+                  editable={false}
+                  placeholder={campus.domain}
+                  placeholderTextColor={'#000000'}
+                  fontSize={15}
+                />
+              </View>
+            </View>
+
+            <Button
+              type="primary"
+              style={{
+                paddingLeft: 15,
+                paddingRight: 15,
+                paddingTop: 5,
+                paddingBottom: 5,
+                borderRadius: 10,
+                backgroundColor: 'powderblue',
+                borderWidth: 0,
+                marginLeft: 2,
+              }}
+              onPress={_handleVerificationReqButtonPress} // here
+            >
               <Text
                 style={{
-                  fontSize: 18,
+                  fontSize: 16,
                   color: 'black',
                   fontFamily: 'BMHANNAAir_ttf',
                 }}
               >
-                인증
+                인증{'\n'}요청
               </Text>
-            )}
-          </Button>
-        </ButtonContainer>
-
-        <AuthInput
-          value={user.password}
-          onChangeText={(text) => setUser({ ...user, password: text.trim() })}
-          placeholder="비밀번호(6자리 이상)"
-          isPassword
-        />
-        <ErrorText>{passwordLengthError}</ErrorText>
-        <AuthInput
-          value={passwordConfirm}
-          onChangeText={(text) => setPasswordConfirm(text.trim())}
-          placeholder="비밀번호 확인"
-          isPassword
-        />
-        <ErrorText>{passwordConfirmError}</ErrorText>
-        <WingBlank>
-          <WhiteSpace />
-          <Button
-            type="primary"
-            style={{
-              paddingLeft: 100,
-              paddingRight: 100,
-              paddingTop: 10,
-              paddingBottom: 10,
-              borderRadius: 10,
-              backgroundColor: '#121212',
-            }}
-            onPress={_handleSignupButtonPress} // here
-            disabled={disabled}
-          >
-            <Text
+            </Button>
+          </ButtonContainer>
+          <ButtonContainer>
+            <AuthInput
+              value={verificationCode}
+              onChangeText={(text) => setVerificationCode(text.trim())}
+              placeholder="인증번호"
+            />
+            <Button
+              type="primary"
               style={{
-                fontSize: 25,
-                color: 'white',
-                fontFamily: 'BMHANNAAir_ttf',
+                paddingLeft: 15,
+                paddingRight: 15,
+                paddingTop: 5,
+                paddingBottom: 5,
+                borderRadius: 10,
+                backgroundColor: 'powderblue',
+                borderWidth: 0,
+                marginLeft: 2,
               }}
+              onPress={_handleVerificationButtonPress} // here
+              disabled={isVerify}
             >
-              회원가입
-            </Text>
-          </Button>
-          <WhiteSpace />
-        </WingBlank>
-      </Container>
-    </KeyboardAwareScrollView>
+              {isVerify ? (
+                <Icon name="check" color="green" size={30} />
+              ) : (
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: 'black',
+                    fontFamily: 'BMHANNAAir_ttf',
+                  }}
+                >
+                  인증
+                </Text>
+              )}
+            </Button>
+          </ButtonContainer>
+
+          <AuthInput
+            value={user.password}
+            onChangeText={(text) => setUser({ ...user, password: text.trim() })}
+            placeholder="비밀번호(6자리 이상)"
+            isPassword
+          />
+          <ErrorText>{passwordLengthError}</ErrorText>
+          <AuthInput
+            value={passwordConfirm}
+            onChangeText={(text) => setPasswordConfirm(text.trim())}
+            placeholder="비밀번호 확인"
+            isPassword
+          />
+          <ErrorText>{passwordConfirmError}</ErrorText>
+          <WingBlank>
+            <WhiteSpace />
+            <Button
+              type="primary"
+              style={{
+                paddingLeft: 100,
+                paddingRight: 100,
+                paddingTop: 10,
+                paddingBottom: 10,
+                borderRadius: 10,
+                backgroundColor: '#00b9a8',
+              }}
+              onPress={_handleSignupButtonPress} // here
+              disabled={disabled}
+            >
+              <Text
+                style={{
+                  fontSize: 25,
+                  color: 'white',
+                  fontFamily: 'BMHANNAAir_ttf',
+                }}
+              >
+                회원가입
+              </Text>
+            </Button>
+            <WhiteSpace />
+          </WingBlank>
+        </Container>
+      </KeyboardAwareScrollView>
+    </LinearGradient>
   )
 }
 

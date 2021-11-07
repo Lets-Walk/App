@@ -11,7 +11,8 @@ const AuthNavigation = ({ setUser }) => {
       screenOptions={{
         headerStyle: {
           height: 60,
-          backgroundColor: '#4895D0',
+          backgroundColor: '#00193c',
+          borderWidth: 0,
         },
         headerTitleStyle: {
           color: '#ffffff',
