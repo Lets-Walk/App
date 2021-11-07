@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/native'
-import { Text, Pressable, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, Pressable } from 'react-native'
 import AuthInput from '../components/AuthInput'
 import { validateEmail, removeWhitespace } from '../utils/common'
 import { Button, WhiteSpace, WingBlank } from '@ant-design/react-native'
@@ -10,7 +10,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import auth from '../utils/auth'
 import { ActivityIndicator, Toast } from '@ant-design/react-native'
 import ConfirmModal from '../components/ConfirmModal'
-import Modal from 'react-native-modal'
 import LinearGradient from 'react-native-linear-gradient'
 import GradientColor from '../components/styles/GradientColor'
 
@@ -53,12 +52,6 @@ const Login = ({ navigation, setUser }) => {
   const _handlePasswordChange = (password) => {
     setPassword(removeWhitespace(password))
   }
-
-  const styles = StyleSheet.create({
-    gradient: {
-      flex: 1,
-    },
-  })
 
   const login = async () => {
     setLoading(true)
