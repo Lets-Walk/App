@@ -71,8 +71,12 @@ const CrewMatching = ({ route, navigation }) => {
     })
 
     socket.on('matching', (data) => {
-      console.log(data)
+      const { users } = data
+      console.log('users', users)
+      const userList = users.filter((user) => user.userId !== userInfo.id)
+      console.log('userList', userList)
       setCrewId(data.roomId)
+      setWaitingUsers([...waitingUsers, ...userList])
     })
   }, [socket])
 
@@ -104,7 +108,9 @@ const CrewMatching = ({ route, navigation }) => {
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.text}>크루원을 모집중입니다.</Text>
+        <Text style={styles.text}>
+          {crewId ? '상대 크루를 찾고 있습니다.' : '크루원을 모집 중 입니다.'}
+        </Text>
       </View>
       <View style={styles.buttonContainer}>
         <Button
