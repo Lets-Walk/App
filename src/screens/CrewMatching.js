@@ -7,6 +7,7 @@ import {
   Dimensions,
   Image,
   BackHandler,
+  Alert,
 } from 'react-native'
 import ScreenName from '../components/ScreenName'
 import { SERVER_URL } from '@env'
@@ -62,9 +63,9 @@ const CrewMatching = ({ route, navigation }) => {
     //소켓관련 로직
     socket.emit('crewJoin', userInfo)
 
-    socket.on('connect', () => console.log('connect'))
+    socket.on('connect', () => console.log('socket 연결됨'))
     socket.on('battleLeave', () => {
-      alert('유저가 나가서 크루 매칭 다시 해야함')
+      Alert.alert('배틀 매칭 실패', '크루원 중 한명이 나가서 매칭을 다시해야함')
       console.log('유저가 나가서 크루 매칭 다시 해야함')
       socket.disconnect()
       navigation.goBack()
@@ -72,11 +73,14 @@ const CrewMatching = ({ route, navigation }) => {
 
     socket.on('matching', (data) => {
       const { users } = data
-      console.log('users', users)
       const userList = users.filter((user) => user.userId !== userInfo.id)
-      console.log('userList', userList)
       setCrewId(data.roomId)
       setWaitingUsers([...waitingUsers, ...userList])
+      Alert.alert('크루 매칭 성공', '크루매칭이 완료되었습니다.')
+    })
+
+    socket.on('battleMatching', (data) => {
+      console.log(data)
     })
   }, [socket])
 
