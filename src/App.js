@@ -9,6 +9,7 @@ import MainNavigation from './navigations/MainNavigation'
 import auth from './utils/auth'
 import { ActivityIndicator } from '@ant-design/react-native'
 import requestPermission from './utils/requestPermission'
+import './log'
 
 const App = () => {
   const [user, setUser] = useState(null)
