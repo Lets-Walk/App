@@ -19,7 +19,7 @@ const AuthNavigation = ({ setUser }) => {
           headerTitleStyle: {
             color: '#ffffff',
             fontWeight: '200',
-            fontFamily: 'BMHANNAAir_ttf',
+            fontFamily: 'Cafe24Shiningstar.ttf',
             fontSize: 25,
           },
           headerTitleAlign: 'center',

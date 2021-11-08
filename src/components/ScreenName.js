@@ -12,10 +12,10 @@ const ScreenName = ({ name, children }) => {
     <Container>
       <Text
         style={{
-          fontSize: 30,
-          fontFamily: 'BMHANNAAir_ttf',
-          paddingTop: '5%',
-          paddingLeft: '5%',
+          fontSize: 40,
+          fontFamily: 'Cafe24Shiningstar',
+          paddingTop: '3%',
+          paddingLeft: '7%',
           paddingBottom: '3%',
           textShadowColor: 'gray',
           textShadowRadius: 2,
