@@ -71,6 +71,7 @@ const WalkingMode = ({ route, navigation }) => {
   }, [])
 
   useEffect(async () => {
+    //필요없음
     let result = null
     try {
       result = await axios.get(SERVER_URL + '/api/map/lab', { timeout: 3000 })
@@ -151,53 +152,37 @@ const WalkingMode = ({ route, navigation }) => {
                 width={65}
                 height={65}
                 onClick={(e) => {
-                  if (
-                    item.type === '공과' ||
-                    item.type === '자연과학' ||
-                    item.type === '인문' ||
-                    item.type === '경영' ||
-                    item.type === '약학' ||
-                    item.type === '의과'
-                  ) {
-                    setLabName(item.type + '대학')
-                    setInfoVisible(true)
-                    cameraChange(coord)
-                  } else {
-                    const dist = getDistance(
-                      location.latitude,
-                      location.longitude,
-                      item.lat,
-                      item.lng,
+                  const dist = getDistance(
+                    location.latitude,
+                    location.longitude,
+                    item.lat,
+                    item.lng,
+                  )
+                  if (dist > obtainMeter) {
+                    // 50m 이내의 아이템만 획득 가능.
+                    markerToastRef.current.show(
+                      '아이템을 획득하기에는 거리가 너무 멉니다.',
                     )
-                    if (dist > obtainMeter) {
-                      // 50m 이내의 아이템만 획득 가능.
-                      markerToastRef.current.show(
-                        '아이템을 획득하기에는 거리가 너무 멉니다.',
-                      )
-                    } else {
-                      const newItemList = itemList.filter(
-                        (elem) =>
-                          !(elem.lat === item.lat && elem.lng === item.lng),
-                      )
-                      obtainItem.current.show('아이템을 획득했습니다.')
-                      //아이템 추가
-                      let check = false
-                      inventory.map((inv) => {
-                        if (inv.type === item.type) {
-                          inv.quantity += 1
-                          check = true
-                        }
-                      })
-                      let newList = [...inventory]
-                      if (!check) {
-                        newList = [
-                          ...inventory,
-                          { type: item.type, quantity: 1 },
-                        ]
+                  } else {
+                    const newItemList = itemList.filter(
+                      (elem) =>
+                        !(elem.lat === item.lat && elem.lng === item.lng),
+                    )
+                    obtainItem.current.show('아이템을 획득했습니다.')
+                    //아이템 추가
+                    let check = false
+                    inventory.map((inv) => {
+                      if (inv.type === item.type) {
+                        inv.quantity += 1
+                        check = true
                       }
-                      setInventory(newList)
-                      setItemList(newItemList)
+                    })
+                    let newList = [...inventory]
+                    if (!check) {
+                      newList = [...inventory, { type: item.type, quantity: 1 }]
                     }
+                    setInventory(newList)
+                    setItemList(newItemList)
                   }
                 }}
               />
