@@ -1,58 +1,100 @@
 import { Button } from '@ant-design/react-native'
 import React, { useState, useEffect, useCallback } from 'react'
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  BackHandler,
+  Alert,
+} from 'react-native'
 import ScreenName from '../components/ScreenName'
-import axios from 'axios'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SERVER_URL } from '@env'
 import Walking from '../animations/Walking'
 import WaitingUserList from '../components/WaitingUserList'
-import { ActivityIndicator } from '@ant-design/react-native'
+import { useFocusEffect } from '@react-navigation/native'
+import io from 'socket.io-client'
+import { LongPressGestureHandler } from 'react-native-gesture-handler'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const NowMatching = ({ route, navigation }) => {
-  const { id, nickname, profileUrl } = route.params
-  const [ready, setReady] = useState(false)
-  const [waitingUsers, setWaitingUsers] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [readyDisabled, setReadyDisabled] = useState(false)
-  const [cancelDisabled, setCancelDisabled] = useState(true)
+const CrewMatching = ({ route, navigation }) => {
+  const userInfo = route.params
+  const [waitingUsers, setWaitingUsers] = useState([userInfo])
+  const [status, setStatus] = useState('beforeMatching')
+  const [crewId, setCrewId] = useState(null)
+  const [socket, setSocket] = useState(null)
 
-  const me = {
-    id: id,
-    nickname: nickname + '(나)',
-    profileUrl: profileUrl,
-    isReady: false,
-  }
+  const _handleBack = useCallback(() => {
+    //매칭 대기열 취소에 관한 로직
+    if (!crewId) {
+      socket.emit('crewLeave', {
+        ...userInfo,
+        socketId: socket.id,
+      })
+      console.log('크루 매칭 대기열 취소')
+    } else {
+      socket.emit('battleLeave', {
+        ...userInfo,
+        crewId,
+      })
+      console.log('배틀 매칭 대기열 취소 crewId : ', crewId)
+    }
+    socket.disconnect()
+    navigation.goBack()
+    return true
+  })
 
-  const _handleReady = useCallback(() => {
-    me.isReady = true
-    setWaitingUsers([me])
-    setReadyDisabled(true)
-    // 임시로 취소버튼을 disabled(3초 로딩 후 자동으로 워킹모드 진입)
-    // 나중에는 setCancelDisabled(false)로 변경-waitingUsers가 모두 ready 상태일 때만 true
-    setCancelDisabled(true)
-    setLoading(true) // 3초간 loading 후 워킹모드로 넘어감
-    setTimeout(() => {
-      navigation.navigate('WalkingMode')
-    }, 3000)
-  }, [me])
-
-  const _handleCancel = useCallback(() => {
-    me.isReady = false
-    setWaitingUsers([me])
-    setReadyDisabled(false)
-    setCancelDisabled(true)
-  }, [me])
+  useFocusEffect(
+    React.useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', _handleBack)
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', _handleBack)
+    }, []),
+  )
 
   useEffect(() => {
-    setWaitingUsers([me])
-  }, [])
+    if (!socket) {
+      setSocket(io.connect(SERVER_URL))
+      return
+    }
+    //소켓관련 로직
+    socket.emit('crewJoin', userInfo)
+
+    socket.on('connect', () => console.log('socket 연결됨'))
+    socket.on('battleLeave', () => {
+      Alert.alert('배틀 매칭 실패', '크루원 중 한명이 나가서 매칭을 다시해야함')
+      console.log('유저가 나가서 크루 매칭 다시 해야함')
+      socket.disconnect()
+      navigation.goBack()
+    })
+
+    socket.on('matching', (data) => {
+      const { users } = data
+      const userList = users.filter((user) => user.userId !== userInfo.id)
+      setCrewId(data.roomId)
+      setWaitingUsers([...waitingUsers, ...userList])
+      Alert.alert('크루 매칭 성공', '크루매칭이 완료되었습니다.')
+    })
+
+    //TODO : 배틀매칭 이벤트가 오면, 배틀정보에 대한 요소 출력 후 워킹모드로 넘어가야 한다.
+    socket.on('battleMatching', (data) => {
+      console.log('배틀 매칭 완료')
+      console.log(data)
+      Alert.alert('배틀매칭이 완료되었습니다. 3초후 워킹모드로 이동합니다.')
+      setTimeout(() => {
+        navigation.navigate('WalkingMode', {
+          test: 'test',
+          socket: socket,
+        })
+      }, 3000)
+    })
+  }, [socket])
 
   return (
-    <ScreenName name="크루 매칭 중">
+    <ScreenName name="워킹크루 매칭">
       {/* 워킹모드 페이지로 가기위한 임시버튼(추후 삭제)
       개발 중에는 아래 버튼 코드를 주석 해제하여 사용,
       실제 앱에서는 waiting queue의 user들이 모두 준비되면 워킹모드 자동 진입 */}
@@ -75,13 +117,12 @@ const NowMatching = ({ route, navigation }) => {
         <WaitingUserList waitingUsers={waitingUsers} />
       </View>
       <View style={{ flex: 1, alignItems: 'center' }}>
-        <ActivityIndicator animating={loading} text="Loading..." size="large" />
         <Walking />
       </View>
 
       <View style={styles.textContainer}>
         <Text style={styles.text}>
-          매칭된 크루가 모두 준비 완료되면{'\n'}워킹모드가 시작됩니다. (2~4인)
+          {crewId ? '상대 크루를 찾고 있습니다.' : '크루원을 모집 중 입니다.'}
         </Text>
       </View>
       <View style={styles.buttonContainer}>
@@ -93,20 +134,7 @@ const NowMatching = ({ route, navigation }) => {
             elevation: 5,
             marginBottom: 5,
           }}
-          onPress={_handleReady}
-          disabled={readyDisabled}
-        >
-          준비
-        </Button>
-        <Button
-          type="default"
-          style={{
-            backgroundColor: '#f5f5f5',
-            width: width * 0.8,
-            elevation: 5,
-          }}
-          onPress={_handleCancel}
-          disabled={cancelDisabled}
+          onPress={_handleBack}
         >
           취소
         </Button>
@@ -145,4 +173,4 @@ const styles = StyleSheet.create({
   campusRankContainer: { alignItems: 'center', margin: 20 },
 })
 
-export default NowMatching
+export default CrewMatching

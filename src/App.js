@@ -9,6 +9,7 @@ import MainNavigation from './navigations/MainNavigation'
 import auth from './utils/auth'
 import { ActivityIndicator } from '@ant-design/react-native'
 import requestPermission from './utils/requestPermission'
+import './log'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -30,7 +31,7 @@ const App = () => {
         {user ? (
           <>
             <StatusBar barStyle="dark-content" backgroundColor="#f6f6f9" />
-            <MainNavigation />
+            <MainNavigation user={user} />
           </>
         ) : (
           <>

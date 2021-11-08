@@ -10,54 +10,34 @@ import ShapesBackground from '../animations/ShapesBackground'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const CrewMatching = ({ navigation }) => {
-  const [campus, setCampus] = useState('')
+const WalkingCrew = ({ navigation, user }) => {
+  const campus = user.Campus
+  const userId = user.id
+  const nickname = user.nickname
   const [logoURL, setLogoURL] = useState('')
   const [campusScore, setCampusScore] = useState('')
   const [campusRank, setCampusRank] = useState(1)
-  const [userId, setUserId] = useState()
-  const [nickname, setNickname] = useState()
   const [profileUrl, setProfileUrl] = useState('https://ifh.cc/g/sSjFNC.png')
 
   // 로그인 된 사용자의 학교명 load
   useEffect(async () => {
     try {
-      const token = await AsyncStorage.getItem('token')
-      const result = await axios.get(SERVER_URL + '/api/auth/me', {
-        headers: {
-          authorization: 'Bearer ' + token,
-          'Content-type': 'application/json',
-          Accept: 'application/json',
-        },
-        timeout: 3000,
-      })
-      setCampus(result.data.user.Campus.name)
-      setUserId(result.data.user.id)
-      setNickname(result.data.user.nickname)
-      if (result.data.user.profileUrl == undefined) {
-        setProfileUrl('https://ifh.cc/g/sSjFNC.png')
-      } else {
-        setProfileUrl(result.data.user.profileUrl)
-      }
-
       const campusRes = await axios.get(
-        SERVER_URL + '/api/campus?name=' + campus,
+        SERVER_URL + '/api/campus?name=' + campus.name,
         { timeout: 3000 },
       )
-      setLogoURL(campusRes.data.data.image)
       setCampusScore(campusRes.data.data.score)
-      // setCampusRank(campusRes.data.data.rank) // api에 rank 추가 완료 후 주석 해제
     } catch (err) {
       console.log(err)
     }
+    // setCampusRank(campusRes.data.data.rank) // api에 rank 추가 완료 후 주석 해제
   }, [campus])
 
   return (
     <ScreenName name="워킹크루 매칭">
       <ShapesBackground />
       <View style={styles.container}>
-        <Text style={styles.campusNameText}>{campus}</Text>
-
+        <Text style={styles.campusNameText}>{campus.name}</Text>
         <Image
           source={{ uri: 'https://ifh.cc/g/oSrubm.png' }} // sample url
           style={styles.logoContainer}
@@ -65,7 +45,6 @@ const CrewMatching = ({ navigation }) => {
         {/* server에 학교별 logo 저장 완료 후, 나중에 위 Image tag는 삭제 후 아래 Image tag로 대체 */}
         {/* <Image source={{uri: logoURL}} style={styles.logoContainer} /> */}
       </View>
-
       <View style={styles.campusRankContainer}>
         <Text
           style={{
@@ -92,6 +71,7 @@ const CrewMatching = ({ navigation }) => {
             navigation.navigate('CrewMatching', {
               id: userId,
               nickname: nickname,
+              domain: campus.domain,
               profileUrl: profileUrl,
             })
           }}
@@ -123,4 +103,4 @@ const styles = StyleSheet.create({
   campusRankContainer: { alignItems: 'center', margin: 20 },
 })
 
-export default CrewMatching
+export default WalkingCrew

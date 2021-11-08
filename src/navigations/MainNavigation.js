@@ -19,7 +19,7 @@ const getTabBarVisibility = (route) => {
   return true
 }
 
-const MainNavigation = () => {
+const MainNavigation = ({ user }) => {
   return (
     <Tab.Navigator
       initialRouteName="Home" //initial screen
@@ -46,7 +46,6 @@ const MainNavigation = () => {
       />
       <Tab.Screen
         name="CrewNavigation"
-        component={CrewNavigation}
         options={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -54,7 +53,9 @@ const MainNavigation = () => {
           ),
           tabBarVisible: getTabBarVisibility(route),
         })}
-      />
+      >
+        {(props) => <CrewNavigation {...props} user={user} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Ranking"
         component={Ranking}
