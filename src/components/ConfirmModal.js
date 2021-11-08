@@ -13,8 +13,8 @@ const CenterView = styled.View`
 const Container = styled.View`
   width: 90%;
   height: 35%;
-  background-color: #145da0;
-  border-radius: 5px;
+  background-color: #125680;
+  border-radius: 15px;
 `
 
 const ConfirmModal = ({ isVisible, setVisible, texts, onConfirm = null }) => {
@@ -43,7 +43,7 @@ const ConfirmModal = ({ isVisible, setVisible, texts, onConfirm = null }) => {
               <Text
                 style={{
                   fontSize: 25,
-                  color: 'white',
+                  color: 'black',
                   fontFamily: 'BMHANNAAir_ttf',
                 }}
               >
@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '80%',
     borderRadius: 10,
-    backgroundColor: '#121212',
+    backgroundColor: '#93c5f6',
+    borderWidth: 0,
   },
   text: {
     color: 'white',
