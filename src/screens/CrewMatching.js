@@ -79,8 +79,17 @@ const CrewMatching = ({ route, navigation }) => {
       Alert.alert('크루 매칭 성공', '크루매칭이 완료되었습니다.')
     })
 
+    //TODO : 배틀매칭 이벤트가 오면, 배틀정보에 대한 요소 출력 후 워킹모드로 넘어가야 한다.
     socket.on('battleMatching', (data) => {
+      console.log('배틀 매칭 완료')
       console.log(data)
+      Alert.alert('배틀매칭이 완료되었습니다. 3초후 워킹모드로 이동합니다.')
+      setTimeout(() => {
+        navigation.navigate('WalkingMode', {
+          test: 'test',
+          socket: socket,
+        })
+      }, 3000)
     })
   }, [socket])
 

@@ -35,8 +35,9 @@ const Container = styled.View`
   align-items: center;
 `
 
-const WalkingMode = ({ navigation }) => {
+const WalkingMode = ({ route, navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
+  const socket = route.params.socket
   const [location, setLocation] = useState(initialLocation)
   const [infoVisible, setInfoVisible] = useState(false)
   const [ingredient, setIngredient] = useState(null)
