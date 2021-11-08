@@ -62,6 +62,14 @@ const WalkingMode = ({ route, navigation }) => {
     ref.current.animateToCoordinate(location) //마커 좌표로 이동
   }
 
+  useEffect(() => {
+    //워킹모드에서 나갈시(unmount) socket연결 끊어줌.
+    return () => {
+      console.log('walking mode unmount')
+      socket.disconnect()
+    }
+  }, [])
+
   useEffect(async () => {
     let result = null
     try {
