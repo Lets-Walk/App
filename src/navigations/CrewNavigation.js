@@ -1,6 +1,6 @@
 import React from 'react'
-import CrewMatching from '../screens/WalkingCrew'
-import NowMatching from '../screens/CrewMatching'
+import WalkingCrew from '../screens/WalkingCrew'
+import CrewMatching from '../screens/CrewMatching'
 import WalkingMode from '../screens/WalkingMode'
 import BattleMatching from '../screens/BattleMatching'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -14,11 +14,11 @@ const CrewNavigation = ({ user }) => {
         name="WalkingCrew" //워킹크루 매칭 페이지
         options={{ headerShown: false }}
       >
-        {(props) => <CrewMatching {...props} user={user} />}
+        {(props) => <WalkingCrew {...props} user={user} />}
       </Stack.Screen>
       <Stack.Screen
         name="CrewMatching" //크루원 매칭 페이지(매칭 중)
-        component={NowMatching}
+        component={CrewMatching}
         options={{ headerShown: false }}
       />
       <Stack.Screen
