@@ -10,7 +10,7 @@ import ShapesBackground from '../animations/ShapesBackground'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const WalkingCrew = ({ navigation, user }) => {
+const StartMatching = ({ navigation, user }) => {
   const campus = user.Campus
   const userId = user.id
   const nickname = user.nickname
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
   campusRankContainer: { alignItems: 'center', margin: 20 },
 })
 
-export default WalkingCrew
+export default StartMatching
