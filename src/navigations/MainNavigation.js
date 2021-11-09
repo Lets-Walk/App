@@ -29,8 +29,11 @@ const MainNavigation = ({ user }) => {
         style: {
           // 탭 스타일
           position: 'absolute',
-          width: '100%',
           height: '10%',
+          borderRadius: 15,
+          bottom: 15,
+          left: 15,
+          right: 15,
         },
       }}
     >
