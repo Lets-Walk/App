@@ -35,7 +35,7 @@ const StartMatching = ({ navigation, user }) => {
 
   return (
     <ScreenName name="워킹크루 매칭">
-      <ShapesBackground />
+      <ShapesBackground style={{ width: '100%' }} />
       <View style={styles.container}>
         <Text style={styles.campusNameText}>{campus.name}</Text>
         <Image
@@ -44,20 +44,21 @@ const StartMatching = ({ navigation, user }) => {
         />
         {/* server에 학교별 logo 저장 완료 후, 나중에 위 Image tag는 삭제 후 아래 Image tag로 대체 */}
         {/* <Image source={{uri: logoURL}} style={styles.logoContainer} /> */}
-      </View>
-      <View style={styles.campusRankContainer}>
-        <Text
-          style={{
-            fontSize: 23,
-            fontFamily: 'BMHANNAAir_ttf',
-            marginBottom: 5,
-          }}
-        >
-          현재 순위
-        </Text>
-        <Text style={{ fontSize: 20, fontFamily: 'BMHANNAAir_ttf' }}>
-          {campusRank}위 ({campusScore}점)
-        </Text>
+
+        <View style={styles.campusRankContainer}>
+          <Text
+            style={{
+              fontSize: 35,
+              fontFamily: 'Cafe24Shiningstar',
+              marginBottom: 0,
+            }}
+          >
+            현재 순위
+          </Text>
+          <Text style={{ fontSize: 30, fontFamily: 'Cafe24Shiningstar' }}>
+            {campusRank}위 ({campusScore}점)
+          </Text>
+        </View>
       </View>
       <View style={styles.buttonContainer}>
         <Button
@@ -90,17 +91,25 @@ const styles = StyleSheet.create({
     left: (width - width * 0.8) / 2,
     alignItems: 'center',
   },
-  container: { alignItems: 'center', marginTop: height * 0.2 },
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   campusNameText: {
-    fontFamily: 'BMHANNAAir_ttf',
-    fontSize: 35,
+    fontFamily: 'Cafe24Shiningstar',
+    fontSize: 45,
   },
   logoContainer: {
     width: 150,
     height: 150,
     marginTop: 10,
   },
-  campusRankContainer: { alignItems: 'center', margin: 20 },
+  campusRankContainer: { alignItems: 'center', margin: 10 },
 })
 
 export default StartMatching
