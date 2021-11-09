@@ -15,6 +15,7 @@ const ScreenName = ({ name, children }) => {
           justifyContent: 'center',
           alignItems: 'center',
           height: '8%',
+          marginTop: 5,
         }}
       >
         <Image

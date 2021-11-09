@@ -30,7 +30,7 @@ const App = () => {
       <NavigationContainer>
         {user ? (
           <>
-            <StatusBar barStyle="dark-content" backgroundColor="#f6f6f9" />
+            <StatusBar hidden />
             <MainNavigation user={user} />
           </>
         ) : (
