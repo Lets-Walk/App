@@ -1,16 +1,16 @@
-import { Button } from '@ant-design/react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
 import ScreenName from '../components/ScreenName'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SERVER_URL } from '@env'
 import ShapesBackground from '../animations/ShapesBackground'
+import BasicButton from '../components/BasicButton'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const WalkingCrew = ({ navigation, user }) => {
+const StartMatching = ({ navigation, user }) => {
   const campus = user.Campus
   const userId = user.id
   const nickname = user.nickname
@@ -33,9 +33,18 @@ const WalkingCrew = ({ navigation, user }) => {
     // setCampusRank(campusRes.data.data.rank) // api에 rank 추가 완료 후 주석 해제
   }, [campus])
 
+  const _handleStartButton = useCallback(() => {
+    navigation.navigate('CrewMatching', {
+      id: userId,
+      nickname: nickname,
+      domain: campus.domain,
+      profileUrl: profileUrl,
+    })
+  }, [campus, userId, nickname, profileUrl])
+
   return (
     <ScreenName name="워킹크루 매칭">
-      <ShapesBackground />
+      <ShapesBackground style={{ width: '100%' }} />
       <View style={styles.container}>
         <Text style={styles.campusNameText}>{campus.name}</Text>
         <Image
@@ -44,40 +53,25 @@ const WalkingCrew = ({ navigation, user }) => {
         />
         {/* server에 학교별 logo 저장 완료 후, 나중에 위 Image tag는 삭제 후 아래 Image tag로 대체 */}
         {/* <Image source={{uri: logoURL}} style={styles.logoContainer} /> */}
-      </View>
-      <View style={styles.campusRankContainer}>
-        <Text
-          style={{
-            fontSize: 23,
-            fontFamily: 'BMHANNAAir_ttf',
-            marginBottom: 5,
-          }}
-        >
-          현재 순위
-        </Text>
-        <Text style={{ fontSize: 20, fontFamily: 'BMHANNAAir_ttf' }}>
-          {campusRank}위 ({campusScore}점)
-        </Text>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          type="primary"
-          style={{
-            backgroundColor: '#4495D0',
-            width: width * 0.8,
-            elevation: 5,
-          }}
-          onPress={() => {
-            navigation.navigate('CrewMatching', {
-              id: userId,
-              nickname: nickname,
-              domain: campus.domain,
-              profileUrl: profileUrl,
-            })
-          }}
-        >
-          매칭시작
-        </Button>
+
+        <View style={styles.campusRankContainer}>
+          <Text
+            style={{
+              fontSize: 35,
+              fontFamily: 'Cafe24Shiningstar',
+              marginBottom: 0,
+            }}
+          >
+            현재 순위
+          </Text>
+          <Text style={{ fontSize: 30, fontFamily: 'Cafe24Shiningstar' }}>
+            {campusRank}위 ({campusScore}점)
+          </Text>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <BasicButton text="START" pressFunction={_handleStartButton} />
+        </View>
       </View>
     </ScreenName>
   )
@@ -85,22 +79,28 @@ const WalkingCrew = ({ navigation, user }) => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
+    justifyContent: 'center',
+    marginTop: 30,
+  },
+  container: {
     position: 'absolute',
-    bottom: height * 0.1 + 50,
-    left: (width - width * 0.8) / 2,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  container: { alignItems: 'center', marginTop: height * 0.2 },
   campusNameText: {
-    fontFamily: 'BMHANNAAir_ttf',
-    fontSize: 35,
+    fontFamily: 'Cafe24Shiningstar',
+    fontSize: 45,
   },
   logoContainer: {
     width: 150,
     height: 150,
     marginTop: 10,
   },
-  campusRankContainer: { alignItems: 'center', margin: 20 },
+  campusRankContainer: { alignItems: 'center', margin: 10 },
 })
 
-export default WalkingCrew
+export default StartMatching
