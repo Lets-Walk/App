@@ -20,6 +20,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import io from 'socket.io-client'
 import { LongPressGestureHandler } from 'react-native-gesture-handler'
 import BasicButton from '../components/BasicButton'
+import ConfirmModal from '../components/ConfirmModal'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -30,6 +31,11 @@ const CrewMatching = ({ route, navigation }) => {
   const [status, setStatus] = useState('beforeMatching')
   const [crewId, setCrewId] = useState(null)
   const [socket, setSocket] = useState(null)
+  const [modalVisible, setModalVisible] = useState(false)
+
+  const _handleConfirm = useCallback(() => {
+    navigation.goBack()
+  }, [])
 
   const _handleBack = useCallback(() => {
     //매칭 대기열 취소에 관한 로직
@@ -69,10 +75,9 @@ const CrewMatching = ({ route, navigation }) => {
 
     socket.on('connect', () => console.log('socket 연결됨'))
     socket.on('battleLeave', () => {
-      Alert.alert('배틀 매칭 실패', '크루원 중 한명이 나가서 매칭을 다시해야함')
+      setModalVisible(true)
       console.log('유저가 나가서 크루 매칭 다시 해야함')
       socket.disconnect()
-      navigation.goBack()
     })
 
     socket.on('matching', (data) => {
@@ -100,6 +105,15 @@ const CrewMatching = ({ route, navigation }) => {
   if (crewId) {
     return (
       <View style={styles.container}>
+        <ConfirmModal
+          isVisible={modalVisible}
+          setVisible={setModalVisible}
+          texts={[
+            '크루원이 크루를 나갔습니다.',
+            '크루원 매칭을 다시 진행해주세요.',
+          ]}
+          onConfirm={_handleConfirm}
+        />
         {/* 워킹모드 페이지로 가기위한 임시버튼(추후 삭제)
       개발 중에는 아래 버튼 코드를 주석 해제하여 사용,
       실제 앱에서는 waiting queue의 user들이 모두 준비되면 워킹모드 자동 진입 */}
@@ -188,7 +202,7 @@ const styles = StyleSheet.create({
   },
   campusRankContainer: { alignItems: 'center', margin: 20 },
   animationContainer: {
-    marginTop: 20,
+    marginTop: 50,
     alignItems: 'center',
     justifyContent: 'center',
     height: 300,
