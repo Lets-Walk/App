@@ -9,7 +9,7 @@ const WaitingUserInfo = ({ user }) => {
     <View style={{ alignItems: 'center' }}>
       <Image
         source={{ uri: profileUrl }}
-        style={{ width: 50, height: 50, marginBottom: 5 }}
+        style={{ width: 50, height: 50, marginBottom: 5, borderRadius: 30 }}
       />
       <Text style={{ fontSize: 18, fontFamily: 'BMHANNAAir_ttf' }}>
         {nickname}
