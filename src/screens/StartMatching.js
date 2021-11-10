@@ -1,6 +1,12 @@
-import { Button } from '@ant-design/react-native'
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  TouchableOpacity,
+} from 'react-native'
 import ScreenName from '../components/ScreenName'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -59,26 +65,41 @@ const StartMatching = ({ navigation, user }) => {
             {campusRank}위 ({campusScore}점)
           </Text>
         </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          type="primary"
-          style={{
-            backgroundColor: '#4495D0',
-            width: width * 0.8,
-            elevation: 5,
-          }}
-          onPress={() => {
-            navigation.navigate('CrewMatching', {
-              id: userId,
-              nickname: nickname,
-              domain: campus.domain,
-              profileUrl: profileUrl,
-            })
-          }}
-        >
-          매칭시작
-        </Button>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={{
+              paddingLeft: 100,
+              paddingRight: 100,
+              paddingTop: 10,
+              paddingBottom: 10,
+              marginBottom: 5,
+              borderRadius: 10,
+              backgroundColor: '#008cad',
+              elevation: 10,
+              borderWidth: 0,
+              fontFamily: 'BMHANNAAir_ttf',
+            }}
+            onPress={() => {
+              navigation.navigate('CrewMatching', {
+                id: userId,
+                nickname: nickname,
+                domain: campus.domain,
+                profileUrl: profileUrl,
+              })
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 25,
+                color: 'white',
+                fontFamily: 'BMHANNAAir_ttf',
+              }}
+            >
+              START
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScreenName>
   )
@@ -86,10 +107,8 @@ const StartMatching = ({ navigation, user }) => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    position: 'absolute',
-    bottom: height * 0.1 + 50,
-    left: (width - width * 0.8) / 2,
-    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 30,
   },
   container: {
     position: 'absolute',
