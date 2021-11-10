@@ -24,6 +24,7 @@ import { ActivityIndicator } from '@ant-design/react-native'
 
 import WalkingInfo from '../components/WalkingInfo'
 import requestPermission from '../utils/requestPermission'
+import MissionTimer from '../components/MissionTimer'
 import LabInfo from '../components/LabInfo'
 import { SERVER_URL } from '@env'
 import WalkingTab from '../components/WalkingTab'
@@ -31,7 +32,7 @@ import ImageComponent from '../components/ImageComponent'
 import getDistance from '../utils/getDistance'
 
 const Container = styled.View`
-  flex: 8;
+  flex: 1;
   align-items: center;
 `
 
@@ -48,6 +49,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [labName, setLabName] = useState('')
   const [inventory, setInventory] = useState([])
   const [missionCount, setMissionCount] = useState(null)
+  const [showTimer, setShowTimer] = useState(false)
 
   const toastRef = useRef()
   const markerToastRef = useRef()
@@ -117,6 +119,11 @@ const WalkingMode = ({ route, navigation }) => {
       setMissionCount(count)
 
       console.log('waiting Mission')
+      setShowTimer(true)
+    })
+
+    socket.on('startWalkingMode', () => {
+      setShowTimer(false)
     })
   }, [])
 
@@ -195,7 +202,8 @@ const WalkingMode = ({ route, navigation }) => {
             )
           })}
         </NaverMapView>
-        <WalkingInfo walkingTime={walkingTime} steps={missionCount} />
+        <WalkingInfo walkingTime={walkingTime} steps={steps} />
+        {showTimer ? <MissionTimer count={missionCount} /> : <></>}
       </Container>
       {/* <WalkingTab inventory={inventory} /> */}
       <Modal
