@@ -86,8 +86,8 @@ const CrewMatching = ({ route, navigation }) => {
       Alert.alert('배틀매칭이 완료되었습니다. 3초후 워킹모드로 이동합니다.')
       setTimeout(() => {
         navigation.navigate('WalkingMode', {
-          test: 'test',
           socket: socket,
+          battleRoomId: data.battleRoomId,
         })
       }, 3000)
     })

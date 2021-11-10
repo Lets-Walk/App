@@ -37,7 +37,7 @@ const Container = styled.View`
 
 const WalkingMode = ({ route, navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
-  const socket = route.params.socket
+  const { socket, battleRoomId } = route.params
   const [location, setLocation] = useState(initialLocation)
   const [infoVisible, setInfoVisible] = useState(false)
   const [ingredient, setIngredient] = useState(null)
@@ -47,6 +47,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [steps, setSteps] = useState(1542) //초기값 0으로 setting 필요
   const [labName, setLabName] = useState('')
   const [inventory, setInventory] = useState([])
+  const [missionCount, setMissionCount] = useState(null)
 
   const toastRef = useRef()
   const markerToastRef = useRef()
@@ -67,18 +68,6 @@ const WalkingMode = ({ route, navigation }) => {
     return () => {
       console.log('walking mode unmount')
       socket.disconnect()
-    }
-  }, [])
-
-  useEffect(async () => {
-    //필요없음
-    let result = null
-    try {
-      result = await axios.get(SERVER_URL + '/api/map/lab', { timeout: 3000 })
-      setIngredient(result.data.data)
-    } catch (err) {
-      console.log(err)
-      if (err.response) console.log(err.response.data)
     }
   }, [])
 
@@ -114,28 +103,45 @@ const WalkingMode = ({ route, navigation }) => {
     }
   }, [])
 
-  useEffect(async () => {
-    if (location === initialLocation) return
-    const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
-      params: {
-        lat: location.latitude,
-        lng: location.longitude,
-      },
+  useEffect(() => {
+    socket.on('missonCount', (count) => {
+      setMissionCount(count)
     })
-    const itemList = data.data
-    setItemList(itemList)
-    setLoading(false)
-  }, [location])
+  }, [missionCount])
+
+  useEffect(() => {
+    socket.emit('readyWalkingMode', { battleRoomId })
+
+    socket.on('waitingMission', ({ count }) => {
+      //미션을 기다리는 중입니다. 창 필요함.
+      setMissionCount(count)
+
+      console.log('waiting Mission')
+    })
+  }, [])
+
+  // useEffect(async () => {
+  //   if (location === initialLocation) return
+  //   const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
+  //     params: {
+  //       lat: location.latitude,
+  //       lng: location.longitude,
+  //     },
+  //   })
+  //   const itemList = data.data
+  //   setItemList(itemList)
+  //   setLoading(false)
+  // }, [location])
 
   return (
     <>
       <Container>
-        <ActivityIndicator
+        {/* <ActivityIndicator
           animating={loading}
           toast
           text="Loading..."
           size="large"
-        />
+        /> */}
         <NaverMapView
           style={{ width: '100%', height: '100%' }}
           showsMyLocationButton={true}
@@ -189,9 +195,9 @@ const WalkingMode = ({ route, navigation }) => {
             )
           })}
         </NaverMapView>
-        <WalkingInfo walkingTime={walkingTime} steps={steps} />
+        <WalkingInfo walkingTime={walkingTime} steps={missionCount} />
       </Container>
-      <WalkingTab inventory={inventory} />
+      {/* <WalkingTab inventory={inventory} /> */}
       <Modal
         backdropOpacity={0}
         onBackdropPress={() => {
