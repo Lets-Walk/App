@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  Image,
-  TouchableOpacity,
-} from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
 import ScreenName from '../components/ScreenName'
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SERVER_URL } from '@env'
 import ShapesBackground from '../animations/ShapesBackground'
+import BasicButton from '../components/BasicButton'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -38,6 +32,15 @@ const StartMatching = ({ navigation, user }) => {
     }
     // setCampusRank(campusRes.data.data.rank) // api에 rank 추가 완료 후 주석 해제
   }, [campus])
+
+  const _handleStartButton = useCallback(() => {
+    navigation.navigate('CrewMatching', {
+      id: userId,
+      nickname: nickname,
+      domain: campus.domain,
+      profileUrl: profileUrl,
+    })
+  }, [campus, userId, nickname, profileUrl])
 
   return (
     <ScreenName name="워킹크루 매칭">
@@ -67,38 +70,7 @@ const StartMatching = ({ navigation, user }) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={{
-              paddingLeft: 100,
-              paddingRight: 100,
-              paddingTop: 10,
-              paddingBottom: 10,
-              marginBottom: 5,
-              borderRadius: 10,
-              backgroundColor: '#008cad',
-              elevation: 10,
-              borderWidth: 0,
-              fontFamily: 'BMHANNAAir_ttf',
-            }}
-            onPress={() => {
-              navigation.navigate('CrewMatching', {
-                id: userId,
-                nickname: nickname,
-                domain: campus.domain,
-                profileUrl: profileUrl,
-              })
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 25,
-                color: 'white',
-                fontFamily: 'BMHANNAAir_ttf',
-              }}
-            >
-              START
-            </Text>
-          </TouchableOpacity>
+          <BasicButton text="START" pressFunction={_handleStartButton} />
         </View>
       </View>
     </ScreenName>
