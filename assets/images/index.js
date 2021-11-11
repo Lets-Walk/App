@@ -5,7 +5,7 @@ import Fourcard from '../../assets/images/Fourcard.svg'
 import Flush from '../../assets/images/Flush.svg'
 import Straight from '../../assets/images/Straight.svg'
 import Fullhouse from '../../assets/images/Fullhouse.svg'
-import Misson from '../../assets/images/Misson.svg'
+import Mission from '../../assets/images/Mission.svg'
 
 export {
   Onepair,
@@ -15,5 +15,5 @@ export {
   Flush,
   Straight,
   Fullhouse,
-  Misson,
+  Mission,
 }

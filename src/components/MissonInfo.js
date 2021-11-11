@@ -2,10 +2,10 @@ import React from 'react'
 import { View, Text, Pressable, StyleSheet, Image } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SvgXml } from 'react-native-svg'
-import { Misson, Straight } from '../../assets/images/index'
+import { Mission } from '../../assets/images/index'
 import getMissonImage from '../utils/getMissonImage'
 
-const missonDesc = {
+const missionDesc = {
   Onepair: ['무늬와 색에 상관 없이', '숫자가 일치하는 아이템을 2개 모으세요.'],
   Twopair: ['숫자가 일치하는 아이템 2개인', '원페어를 2쌍 모으세요.'],
   Triple: ['무늬와 색에 상관 없이', '숫자가 일치하는 아이템을 3개 모으세요.'],
@@ -22,7 +22,7 @@ const MissonInfo = ({ setVisible, name }) => {
   }
 
   if (!name) return <></>
-  const desc = missonDesc[name]
+  const desc = missionDesc[name]
 
   return (
     <View style={styles.infoConatiner}>
@@ -33,7 +33,7 @@ const MissonInfo = ({ setVisible, name }) => {
         >
           <Ionicons name="close-outline" size={38} color="gray" />
         </Pressable>
-        <SvgXml xml={Misson} width={200} height={200} />
+        <SvgXml xml={Mission} width={200} height={200} />
       </View>
       <View style={styles.content}>
         <SvgXml xml={getMissonImage(name)} style={styles.title} />
