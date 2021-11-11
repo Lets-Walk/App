@@ -5,7 +5,7 @@ import { SvgXml } from 'react-native-svg'
 import { Misson, Straight } from '../../assets/images/index'
 import getMissonImage from '../utils/getMissonImage'
 
-const LabInfo = ({ setVisible }) => {
+const MissonInfo = ({ setVisible }) => {
   const onClose = () => {
     console.log('close button click')
     setVisible(false)
@@ -63,4 +63,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default LabInfo
+export default MissonInfo

@@ -25,7 +25,7 @@ import { ActivityIndicator } from '@ant-design/react-native'
 import WalkingInfo from '../components/WalkingInfo'
 import requestPermission from '../utils/requestPermission'
 import MissionTimer from '../components/MissionTimer'
-import LabInfo from '../components/LabInfo'
+import MissonInfo from '../components/MissonInfo'
 import { SERVER_URL } from '@env'
 import WalkingTab from '../components/WalkingTab'
 import GetMarkerImage from '../utils/getMarkerImage'
@@ -218,7 +218,7 @@ const WalkingMode = ({ route, navigation }) => {
         isVisible={infoVisible}
         style={{ margin: 0 }}
       > */}
-      <LabInfo
+      <MissonInfo
         name={labName}
         ingredient={ingredient}
         setVisible={setInfoVisible}
