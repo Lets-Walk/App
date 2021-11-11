@@ -126,6 +126,7 @@ const WalkingMode = ({ route, navigation }) => {
       setShowTimer(false)
       console.log(`미션 : ${misson}`)
 
+      setInfoVisible(true)
       //미션에 따른 모달 1회 필요.
       //그 이후부터는 배너를 통해 미션 이용 가능.
     })
@@ -210,20 +211,16 @@ const WalkingMode = ({ route, navigation }) => {
         {showTimer ? <MissionTimer count={missionCount} /> : <></>}
       </Container>
       {/* <WalkingTab inventory={inventory} /> */}
-      {/* <Modal
+      <Modal
         backdropOpacity={0}
         onBackdropPress={() => {
           setInfoVisible(false)
         }}
         isVisible={infoVisible}
         style={{ margin: 0 }}
-      > */}
-      <MissonInfo
-        name={labName}
-        ingredient={ingredient}
-        setVisible={setInfoVisible}
-      />
-      {/* </Modal> */}
+      >
+        <MissonInfo name={'Onepair'} setVisible={setInfoVisible} />
+      </Modal>
       <Toast
         ref={toastRef}
         positionValue={useWindowDimensions().height * 0.12}

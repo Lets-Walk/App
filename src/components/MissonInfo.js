@@ -5,7 +5,7 @@ import { SvgXml } from 'react-native-svg'
 import { Misson, Straight } from '../../assets/images/index'
 import getMissonImage from '../utils/getMissonImage'
 
-const MissonInfo = ({ setVisible }) => {
+const MissonInfo = ({ setVisible, name }) => {
   const onClose = () => {
     console.log('close button click')
     setVisible(false)
@@ -23,7 +23,7 @@ const MissonInfo = ({ setVisible }) => {
         <SvgXml xml={Misson} width={200} height={200} />
       </View>
       <View style={styles.content}>
-        <SvgXml xml={getMissonImage('Onepair')} style={styles.title} />
+        <SvgXml xml={getMissonImage(name)} style={styles.title} />
         <Text style={styles.desc}>무늬와 색에 상관 없이</Text>
         <Text style={styles.desc}>숫자가 일치하는 아이템을 2개 모으세요.</Text>
       </View>
