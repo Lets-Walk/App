@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Pressable, View, FlatList } from 'react-native'
 import { PAPER } from '../constants/walkingmode'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import IconComponent from './IconComponent'
+// import IconComponent from './IconComponent'
 
 const examplePaper = [
   {
