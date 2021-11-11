@@ -5,11 +5,24 @@ import { SvgXml } from 'react-native-svg'
 import { Misson, Straight } from '../../assets/images/index'
 import getMissonImage from '../utils/getMissonImage'
 
+const missonDesc = {
+  Onepair: ['무늬와 색에 상관 없이', '숫자가 일치하는 아이템을 2개 모으세요.'],
+  Twopair: ['숫자가 일치하는 아이템 2개인', '원페어를 2쌍 모으세요.'],
+  Triple: ['무늬와 색에 상관 없이', '숫자가 일치하는 아이템을 3개 모으세요.'],
+  Fourcard: ['무늬와 색에 상관 없이', '숫자가 일치하는 아이템을 4개 모으세요.'],
+  Flush: ['숫자와 상관 없이', '같은 무늬의 아이템을 5개 모으세요'],
+  Straight: ['무늬와 색에 상관 없이', '연속되는 숫자 아이템 5개를 모으세요.'],
+  Fullhouse: ['무늬와 색에 상관 없이', '같은 숫자 3개와 2개를 각각 모으세요.'],
+}
+
 const MissonInfo = ({ setVisible, name }) => {
   const onClose = () => {
     console.log('close button click')
     setVisible(false)
   }
+
+  if (!name) return <></>
+  const desc = missonDesc[name]
 
   return (
     <View style={styles.infoConatiner}>
@@ -24,8 +37,11 @@ const MissonInfo = ({ setVisible, name }) => {
       </View>
       <View style={styles.content}>
         <SvgXml xml={getMissonImage(name)} style={styles.title} />
-        <Text style={styles.desc}>무늬와 색에 상관 없이</Text>
-        <Text style={styles.desc}>숫자가 일치하는 아이템을 2개 모으세요.</Text>
+        {desc.map((text, index) => (
+          <Text key={index} style={styles.desc}>
+            {text}
+          </Text>
+        ))}
       </View>
     </View>
   )
@@ -41,7 +57,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     backgroundColor: '#ffffff',
     shadowColor: '#000000',
-    elevation: 30,
+    elevation: 5,
   },
   header: {
     flex: 1,

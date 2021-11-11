@@ -6,6 +6,7 @@ import {
   BackHandler,
   useWindowDimensions,
   Animated,
+  TouchableOpacity,
 } from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
@@ -50,6 +51,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [inventory, setInventory] = useState([])
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
+  const [misson, setMisson] = useState(null)
 
   const toastRef = useRef()
   const markerToastRef = useRef()
@@ -125,7 +127,7 @@ const WalkingMode = ({ route, navigation }) => {
     socket.on('startWalkingMode', ({ misson }) => {
       setShowTimer(false)
       console.log(`미션 : ${misson}`)
-
+      setMisson(misson)
       setInfoVisible(true)
       //미션에 따른 모달 1회 필요.
       //그 이후부터는 배너를 통해 미션 이용 가능.
@@ -209,18 +211,36 @@ const WalkingMode = ({ route, navigation }) => {
         </NaverMapView>
         <WalkingInfo walkingTime={walkingTime} steps={steps} />
         {showTimer ? <MissionTimer count={missionCount} /> : <></>}
+        <TouchableOpacity
+          onPress={() => {
+            setInfoVisible(!infoVisible)
+          }}
+          style={{
+            width: 60,
+            height: 60,
+            position: 'absolute',
+            // borderColor: 'red',
+            // borderWidth: 2,
+            backgroundColor: '#ffffff',
+            borderRadius: 60,
+            left: 0,
+            elevation: 5,
+          }}
+        >
+          <View style={{}}></View>
+        </TouchableOpacity>
+        <Modal
+          backdropOpacity={0}
+          onBackdropPress={() => {
+            setInfoVisible(false)
+          }}
+          isVisible={infoVisible}
+          style={{ margin: 0 }}
+        >
+          <MissonInfo name={misson} setVisible={setInfoVisible} />
+        </Modal>
       </Container>
       {/* <WalkingTab inventory={inventory} /> */}
-      <Modal
-        backdropOpacity={0}
-        onBackdropPress={() => {
-          setInfoVisible(false)
-        }}
-        isVisible={infoVisible}
-        style={{ margin: 0 }}
-      >
-        <MissonInfo name={'Onepair'} setVisible={setInfoVisible} />
-      </Modal>
       <Toast
         ref={toastRef}
         positionValue={useWindowDimensions().height * 0.12}
