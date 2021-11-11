@@ -28,7 +28,7 @@ import MissionTimer from '../components/MissionTimer'
 import LabInfo from '../components/LabInfo'
 import { SERVER_URL } from '@env'
 import WalkingTab from '../components/WalkingTab'
-import ImageComponent from '../components/ImageComponent'
+import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
 
 const Container = styled.View`
@@ -122,23 +122,27 @@ const WalkingMode = ({ route, navigation }) => {
       setShowTimer(true)
     })
 
-    socket.on('startWalkingMode', () => {
+    socket.on('startWalkingMode', ({ misson }) => {
       setShowTimer(false)
+      console.log(`미션 : ${misson}`)
+
+      //미션에 따른 모달 1회 필요.
+      //그 이후부터는 배너를 통해 미션 이용 가능.
     })
   }, [])
 
-  // useEffect(async () => {
-  //   if (location === initialLocation) return
-  //   const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
-  //     params: {
-  //       lat: location.latitude,
-  //       lng: location.longitude,
-  //     },
-  //   })
-  //   const itemList = data.data
-  //   setItemList(itemList)
-  //   setLoading(false)
-  // }, [location])
+  useEffect(async () => {
+    if (location === initialLocation) return
+    const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
+      params: {
+        lat: location.latitude,
+        lng: location.longitude,
+      },
+    })
+    const itemList = data.data
+    setItemList(itemList)
+    setLoading(false)
+  }, [location])
 
   return (
     <>
@@ -161,7 +165,7 @@ const WalkingMode = ({ route, navigation }) => {
               <Marker
                 coordinate={coord}
                 key={index}
-                image={ImageComponent(item.type)}
+                image={GetMarkerImage(item.type)}
                 width={65}
                 height={65}
                 onClick={(e) => {
@@ -206,20 +210,20 @@ const WalkingMode = ({ route, navigation }) => {
         {showTimer ? <MissionTimer count={missionCount} /> : <></>}
       </Container>
       {/* <WalkingTab inventory={inventory} /> */}
-      <Modal
+      {/* <Modal
         backdropOpacity={0}
         onBackdropPress={() => {
           setInfoVisible(false)
         }}
         isVisible={infoVisible}
         style={{ margin: 0 }}
-      >
-        <LabInfo
-          name={labName}
-          ingredient={ingredient}
-          setVisible={setInfoVisible}
-        />
-      </Modal>
+      > */}
+      <LabInfo
+        name={labName}
+        ingredient={ingredient}
+        setVisible={setInfoVisible}
+      />
+      {/* </Modal> */}
       <Toast
         ref={toastRef}
         positionValue={useWindowDimensions().height * 0.12}
