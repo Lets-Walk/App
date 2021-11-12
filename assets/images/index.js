@@ -8,6 +8,7 @@ import Fullhouse from '../../assets/images/Fullhouse.svg'
 import Mission from '../../assets/images/Mission.svg'
 import Life from '../../assets/images/Life.svg'
 import Life_empty from '../../assets/images/Life_empty.svg'
+import Medal from '../../assets/images/Medal.png'
 
 export {
   Onepair,
@@ -20,4 +21,5 @@ export {
   Mission,
   Life,
   Life_empty,
+  Medal,
 }

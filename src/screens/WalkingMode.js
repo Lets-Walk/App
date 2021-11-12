@@ -7,6 +7,8 @@ import {
   useWindowDimensions,
   Animated,
   TouchableOpacity,
+  Image,
+  StyleSheet,
 } from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
@@ -31,6 +33,8 @@ import { SERVER_URL } from '@env'
 import WalkingTab from '../components/WalkingTab'
 import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
+import { Medal } from '../../assets/images'
+import { ServerStyleSheet } from 'styled-components'
 
 const Container = styled.View`
   flex: 1;
@@ -209,26 +213,16 @@ const WalkingMode = ({ route, navigation }) => {
             )
           })}
         </NaverMapView>
-        <WalkingInfo walkingTime={walkingTime} steps={steps} />
+        <WalkingInfo />
         {showTimer ? <MissionTimer count={missionCount} /> : <></>}
-        <TouchableOpacity
+        <Pressable
           onPress={() => {
             setInfoVisible(!infoVisible)
           }}
-          style={{
-            width: 60,
-            height: 60,
-            position: 'absolute',
-            // borderColor: 'red',
-            // borderWidth: 2,
-            backgroundColor: '#ffffff',
-            borderRadius: 60,
-            left: 0,
-            elevation: 5,
-          }}
+          style={styles.missionButton}
         >
-          <View style={{}}></View>
-        </TouchableOpacity>
+          <Image source={Medal} style={styles.missionIcon} />
+        </Pressable>
         <Modal
           backdropOpacity={0}
           onBackdropPress={() => {
@@ -267,3 +261,22 @@ const WalkingMode = ({ route, navigation }) => {
 }
 
 export default WalkingMode
+
+const styles = StyleSheet.create({
+  missionButton: {
+    width: 60,
+    height: 60,
+    position: 'absolute',
+    backgroundColor: '#ffffff',
+    borderRadius: 60,
+    right: '4%',
+    top: '13%',
+    elevation: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  missionIcon: {
+    width: 40,
+    height: 40,
+  },
+})
