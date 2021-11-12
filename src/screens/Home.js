@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, Fragments } from 'react-native'
 import ScreenName from '../components/ScreenName'
 
 /*
@@ -35,7 +35,10 @@ const Home = ({ user }) => {
           <Text style={styles.UserInfoText}>{nickname}</Text>
           <Text>{userEmail}</Text>
         </View>
-        <View>
+        <View style={styles.CountContainer}>
+          <Text>{stepCount}</Text>
+        </View>
+        <View style={styles.CountContainer}>
           <Text>{stepCount}</Text>
         </View>
         <Text>{campus}</Text>
@@ -66,6 +69,18 @@ const styles = StyleSheet.create({
   UserInfoText: {
     fontSize: 20,
     fontFamily: 'ONEMobileRegular',
+  },
+  CountContainer: {
+    marginTop: 20,
+    marginLeft: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    elevation: 5,
+    height: 120,
+    width: (Dimensions.get('window').width - 40) / 2 - 10,
+    height: 120,
+    borderRadius: 10,
   },
 })
 
