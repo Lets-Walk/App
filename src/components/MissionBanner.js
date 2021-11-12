@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
-import { Medal } from '../../assets/images'
+import { Medal } from '../../assets/icons'
 
 const MissionBanner = ({ missionBannerToggle }) => {
   return (
