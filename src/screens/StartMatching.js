@@ -57,7 +57,7 @@ const StartMatching = ({ navigation, user }) => {
         <View style={styles.campusRankContainer}>
           <Text
             style={{
-              fontSize: 35,
+              fontSize: 32,
               fontFamily: 'Cafe24Shiningstar',
               marginBottom: 0,
             }}
