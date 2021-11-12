@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import { useEffect, useState } from 'react/cjs/react.development'
 import { Life, Life_empty } from '../../assets/images'
+import { SERVER_URL } from '@env'
 
 const CampusLife = ({ campusName, life }) => {
-  const logoUrl = 'https://ifh.cc/g/oSrubm.png'
+  const logoUrl = `${SERVER_URL}/static/logos/cau.png`
   const LIFE = 3
   const [lifeXml, setLifeXml] = useState([])
 
@@ -48,7 +49,7 @@ const CampusLife = ({ campusName, life }) => {
   )
 }
 
-export default CampusLife
+export default React.memo(CampusLife)
 
 const styles = StyleSheet.create({
   infoBox: {
