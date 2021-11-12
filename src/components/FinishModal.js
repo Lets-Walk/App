@@ -1,7 +1,12 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  BackHandler,
+} from 'react-native'
 import Modal from 'react-native-modal'
-import { useNavigation } from '@react-navigation/native'
 import styled from 'styled-components'
 
 const FinishConfirmText = styled.Text`
@@ -20,17 +25,9 @@ const FinishConfirmButtonText = styled.Text`
 `
 
 const FinishModal = ({ modalVisible, toggleModal }) => {
-  const usedNavigation = useNavigation()
-
   const finishWalkingMode = () => {
-    // 워킹 모드 종료 후 워킹 데이터 처리, 결과 출력
-    // 종료 후 이동화면은 추후 변경
-
-    // navigation stack clear
-    usedNavigation.reset({
-      index: 0,
-      routes: [{ name: 'Home' }],
-    })
+    BackHandler.exitApp() //앱 종료
+    return
   }
 
   return (
