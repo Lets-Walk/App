@@ -15,6 +15,7 @@ import Walking from '../animations/Walking'
 import ShoesLoading from '../animations/ShoesLoading'
 import ColorBackground from '../animations/ColorBackground'
 import Checking from '../animations/Checking'
+import CountDown from '../animations/CountDown'
 import WaitingUserList from '../components/WaitingUserList'
 import { useFocusEffect } from '@react-navigation/native'
 import io from 'socket.io-client'
@@ -32,6 +33,7 @@ const CrewMatching = ({ route, navigation }) => {
   const [crewId, setCrewId] = useState(null)
   const [socket, setSocket] = useState(null)
   const [modalVisible, setModalVisible] = useState(false)
+  const [isMatching, setIsMatching] = useState(false)
 
   const _handleConfirm = useCallback(() => {
     navigation.goBack()
@@ -92,13 +94,13 @@ const CrewMatching = ({ route, navigation }) => {
     socket.on('battleMatching', (data) => {
       console.log('배틀 매칭 완료')
       console.log(data)
-      Alert.alert('배틀매칭이 완료되었습니다. 3초후 워킹모드로 이동합니다.')
+      setIsMatching(true)
       setTimeout(() => {
         navigation.navigate('WalkingMode', {
           test: 'test',
           socket: socket,
         })
-      }, 3000)
+      }, 400000)
     })
   }, [socket])
 
@@ -114,37 +116,22 @@ const CrewMatching = ({ route, navigation }) => {
           ]}
           onConfirm={_handleConfirm}
         />
-        {/* 워킹모드 페이지로 가기위한 임시버튼(추후 삭제)
-      개발 중에는 아래 버튼 코드를 주석 해제하여 사용,
-      실제 앱에서는 waiting queue의 user들이 모두 준비되면 워킹모드 자동 진입 */}
-        {/* <View>
-        <Button
-          type="primary"
-          style={{
-            backgroundColor: '#4495D0',
-            width: width * 0.4,
-            elevation: 5,
-          }}
-          onPress={() => {
-            navigation.navigate('WalkingMode')
-          }}
-        >
-          워킹모드(임시)
-        </Button>
-      </View> */}
 
         <View style={styles.waitingContainer}>
           <WaitingUserList waitingUsers={waitingUsers} />
           <Checking />
         </View>
         <View style={styles.animationContainer}>
-          <ShoesLoading />
+          {isMatching ? <CountDown /> : <ShoesLoading />}
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.text}>
-            상대 크루를 찾고 있습니다.{'\n'}잠시만 기다려주세요.
+            {isMatching
+              ? '매칭이 완료되었습니다.\n배틀을 시작합니다.'
+              : '상대 크루를 찾고 있습니다.\n잠시만 기다려주세요.'}
           </Text>
         </View>
+
         <View style={styles.buttonContainer}>
           <BasicButton text="나가기" pressFunction={_handleBack} />
         </View>
