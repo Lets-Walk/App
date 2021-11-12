@@ -43,15 +43,11 @@ const Container = styled.View`
 
 const WalkingMode = ({ route, navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
-  const { socket, battleRoomId } = route.params
+  const { socket, battleRoomId, allUsers } = route.params
   const [location, setLocation] = useState(initialLocation)
   const [infoVisible, setInfoVisible] = useState(false)
-  const [ingredient, setIngredient] = useState(null)
   const [itemList, setItemList] = useState([])
   const [loading, setLoading] = useState(true)
-  const [walkingTime, setWalkingTime] = useState(130) //초기값 0으로 setting 필요
-  const [steps, setSteps] = useState(1542) //초기값 0으로 setting 필요
-  const [labName, setLabName] = useState('')
   const [inventory, setInventory] = useState([])
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
@@ -133,8 +129,6 @@ const WalkingMode = ({ route, navigation }) => {
       console.log(`미션 : ${mission}`)
       setMission(mission)
       setInfoVisible(true)
-      //미션에 따른 모달 1회 필요.
-      //그 이후부터는 배너를 통해 미션 이용 가능.
     })
   }, [])
 
@@ -214,7 +208,7 @@ const WalkingMode = ({ route, navigation }) => {
           })}
         </NaverMapView>
         <BattleInfo />
-        {showTimer ? <MissionTimer count={missionCount} /> : <></>}
+        <MissionTimer show={showTimer} count={missionCount} />
         <Pressable
           onPress={() => {
             if (mission) setInfoVisible(!infoVisible)

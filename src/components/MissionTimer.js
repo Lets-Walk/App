@@ -10,7 +10,8 @@ const Container = styled.View`
   position: absolute;
 `
 
-const MissionTimer = ({ count }) => {
+const MissionTimer = ({ show, count }) => {
+  if (!show) return <></>
   return (
     <Container>
       <View style={styles.blackBox}>
