@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     backgroundColor: '#ffffff',
     shadowColor: '#000000',
-    elevation: 5,
+    elevation: 15,
   },
   header: {
     flex: 1,
