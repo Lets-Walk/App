@@ -28,7 +28,7 @@ import { ActivityIndicator } from '@ant-design/react-native'
 import BattleInfo from '../components/BattleInfo'
 import requestPermission from '../utils/requestPermission'
 import MissionTimer from '../components/MissionTimer'
-import MissonInfo from '../components/MissonInfo'
+import MissionInfo from '../components/MissionInfo'
 import { SERVER_URL } from '@env'
 import WalkingTab from '../components/WalkingTab'
 import GetMarkerImage from '../utils/getMarkerImage'
@@ -55,7 +55,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [inventory, setInventory] = useState([])
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
-  const [misson, setMisson] = useState(null)
+  const [mission, setMission] = useState(null)
 
   const toastRef = useRef()
   const markerToastRef = useRef()
@@ -112,7 +112,7 @@ const WalkingMode = ({ route, navigation }) => {
   }, [])
 
   useEffect(() => {
-    socket.on('missonCount', (count) => {
+    socket.on('missionCount', (count) => {
       setMissionCount(count)
     })
   }, [missionCount])
@@ -128,10 +128,10 @@ const WalkingMode = ({ route, navigation }) => {
       setShowTimer(true)
     })
 
-    socket.on('startWalkingMode', ({ misson }) => {
+    socket.on('startWalkingMode', ({ mission }) => {
       setShowTimer(false)
-      console.log(`미션 : ${misson}`)
-      setMisson(misson)
+      console.log(`미션 : ${mission}`)
+      setMission(mission)
       setInfoVisible(true)
       //미션에 따른 모달 1회 필요.
       //그 이후부터는 배너를 통해 미션 이용 가능.
@@ -217,7 +217,7 @@ const WalkingMode = ({ route, navigation }) => {
         {showTimer ? <MissionTimer count={missionCount} /> : <></>}
         <Pressable
           onPress={() => {
-            setInfoVisible(!infoVisible)
+            if (mission) setInfoVisible(!infoVisible)
           }}
           style={styles.missionButton}
         >
@@ -231,7 +231,7 @@ const WalkingMode = ({ route, navigation }) => {
           isVisible={infoVisible}
           style={{ margin: 0 }}
         >
-          <MissonInfo name={misson} setVisible={setInfoVisible} />
+          <MissionInfo name={mission} setVisible={setInfoVisible} />
         </Modal>
       </Container>
       {/* <WalkingTab inventory={inventory} /> */}

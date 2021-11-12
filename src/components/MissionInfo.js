@@ -3,7 +3,7 @@ import { View, Text, Pressable, StyleSheet, Image } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SvgXml } from 'react-native-svg'
 import { Mission } from '../../assets/images/index'
-import getMissonImage from '../utils/getMissonImage'
+import getMissionImage from '../utils/getMissionImage'
 
 const missionDesc = {
   Onepair: ['무늬와 색에 상관 없이', '숫자가 일치하는 아이템을 2개 모으세요.'],
@@ -15,7 +15,7 @@ const missionDesc = {
   Fullhouse: ['무늬와 색에 상관 없이', '같은 숫자 3개와 2개를 각각 모으세요.'],
 }
 
-const MissonInfo = ({ setVisible, name }) => {
+const MissionInfo = ({ setVisible, name }) => {
   const onClose = () => {
     console.log('close button click')
     setVisible(false)
@@ -36,7 +36,7 @@ const MissonInfo = ({ setVisible, name }) => {
         <SvgXml xml={Mission} width={200} height={200} />
       </View>
       <View style={styles.content}>
-        <SvgXml xml={getMissonImage(name)} style={styles.title} />
+        <SvgXml xml={getMissionImage(name)} style={styles.title} />
         {desc.map((text, index) => (
           <Text key={index} style={styles.desc}>
             {text}
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default MissonInfo
+export default MissionInfo

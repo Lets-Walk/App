@@ -7,7 +7,7 @@ import {
   Flush,
   Straight,
   Fullhose,
-  Misson,
+  Mission,
 } from '../../assets/images'
 
 const maapingImage = {
@@ -18,11 +18,11 @@ const maapingImage = {
   Flush,
   Straight,
   Fullhose,
-  Misson,
+  Mission,
 }
 
-const getMissonImage = (name) => {
+const getMissionImage = (name) => {
   return maapingImage[name]
 }
 
-export default getMissonImage
+export default getMissionImage
