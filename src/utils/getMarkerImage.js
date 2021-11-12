@@ -48,6 +48,7 @@ import {
   CloverQ,
   CloverK,
   CloverA,
+  Joker,
 } from '../../assets/icons'
 
 const maapingIcon = {
@@ -99,6 +100,7 @@ const maapingIcon = {
   CloverQ,
   CloverK,
   CloverA,
+  Joker,
 }
 
 const GetMarkerImage = (name) => {
