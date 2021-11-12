@@ -14,10 +14,11 @@ const StartMatching = ({ navigation, user }) => {
   const campus = user.Campus
   const userId = user.id
   const nickname = user.nickname
-  const [logoURL, setLogoURL] = useState('')
   const [campusScore, setCampusScore] = useState('')
   const [campusRank, setCampusRank] = useState(1)
   const [profileUrl, setProfileUrl] = useState('https://ifh.cc/g/sSjFNC.png')
+
+  const campusLogoUrl = SERVER_URL + '/static/logos/' + campus.image
 
   // 로그인 된 사용자의 학교명 load
   useEffect(async () => {
@@ -37,23 +38,17 @@ const StartMatching = ({ navigation, user }) => {
     navigation.navigate('CrewMatching', {
       id: userId,
       nickname: nickname,
-      domain: campus.domain,
       profileUrl: profileUrl,
+      campus: campus,
     })
-  }, [campus, userId, nickname, profileUrl])
+  }, [user])
 
   return (
     <ScreenName name="워킹크루 매칭">
       <ShapesBackground style={{ width: '100%' }} />
       <View style={styles.container}>
         <Text style={styles.campusNameText}>{campus.name}</Text>
-        <Image
-          source={{ uri: 'https://ifh.cc/g/oSrubm.png' }} // sample url
-          style={styles.logoContainer}
-        />
-        {/* server에 학교별 logo 저장 완료 후, 나중에 위 Image tag는 삭제 후 아래 Image tag로 대체 */}
-        {/* <Image source={{uri: logoURL}} style={styles.logoContainer} /> */}
-
+        <Image source={{ uri: campusLogoUrl }} style={styles.logoContainer} />
         <View style={styles.campusRankContainer}>
           <Text
             style={{
