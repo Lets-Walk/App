@@ -7,6 +7,7 @@ import Straight from '../../assets/images/Straight.svg'
 import Fullhouse from '../../assets/images/Fullhouse.svg'
 import Mission from '../../assets/images/Mission.svg'
 import Life from '../../assets/images/Life.svg'
+import Life_empty from '../../assets/images/Life_empty.svg'
 
 export {
   Onepair,
@@ -18,4 +19,5 @@ export {
   Fullhouse,
   Mission,
   Life,
+  Life_empty,
 }
