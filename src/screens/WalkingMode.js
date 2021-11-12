@@ -34,6 +34,7 @@ import WalkingTab from '../components/WalkingTab'
 import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
 import { Medal } from '../../assets/images'
+import MissionBanner from '../components/MissionBanner'
 
 const Container = styled.View`
   flex: 1;
@@ -145,6 +146,10 @@ const WalkingMode = ({ route, navigation }) => {
     setLoading(false)
   }, [location])
 
+  const missionBannerToggle = () => {
+    if (mission) setInfoVisible(!infoVisible)
+  }
+
   return (
     <>
       <Container>
@@ -209,14 +214,7 @@ const WalkingMode = ({ route, navigation }) => {
         </NaverMapView>
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionTimer show={showTimer} count={missionCount} />
-        <Pressable
-          onPress={() => {
-            if (mission) setInfoVisible(!infoVisible)
-          }}
-          style={styles.missionButton}
-        >
-          <Image source={Medal} style={styles.missionIcon} />
-        </Pressable>
+        <MissionBanner missionBannerToggle={missionBannerToggle} />
         <Modal
           backdropOpacity={0}
           onBackdropPress={() => {
@@ -256,21 +254,4 @@ const WalkingMode = ({ route, navigation }) => {
 
 export default WalkingMode
 
-const styles = StyleSheet.create({
-  missionButton: {
-    width: 60,
-    height: 60,
-    position: 'absolute',
-    backgroundColor: '#ffffff',
-    borderRadius: 60,
-    right: '4%',
-    top: '13%',
-    elevation: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  missionIcon: {
-    width: 40,
-    height: 40,
-  },
-})
+const styles = StyleSheet.create({})
