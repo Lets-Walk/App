@@ -37,14 +37,15 @@ const MainNavigation = ({ user }) => {
     >
       <Tab.Screen
         name="Home"
-        component={Home}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <EntypoIcon name="home" color={color} size={size} />
           ),
         }}
-      />
+      >
+        {(props) => <Home {...props} user={user} />}
+      </Tab.Screen>
       <Tab.Screen
         name="CrewNavigation"
         options={({ route }) => ({
