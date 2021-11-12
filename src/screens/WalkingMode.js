@@ -35,6 +35,7 @@ import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
 import { Medal } from '../../assets/images'
 import MissionBanner from '../components/MissionBanner'
+import Banner from '../components/Banner'
 
 const Container = styled.View`
   flex: 1;
@@ -215,6 +216,7 @@ const WalkingMode = ({ route, navigation }) => {
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
+        <Banner />
         <Modal
           backdropOpacity={0}
           onBackdropPress={() => {
