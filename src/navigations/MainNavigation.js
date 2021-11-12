@@ -25,25 +25,27 @@ const MainNavigation = ({ user }) => {
       initialRouteName="Home" //initial screen
       tabBarOptions={{
         showLabel: false, //탭 아이콘 라벨
-        activeTintColor: '#1B97E2', //탭 focus 색깔
+        activeTintColor: '#001d40', //탭 focus 색깔
+        activeBackgroundColor: '#c8eef9',
+        inactiveBackgroundColor: '#001d40',
         style: {
           // 탭 스타일
           position: 'absolute',
-          width: '100%',
-          height: '10%',
+          height: '8%',
         },
       }}
     >
       <Tab.Screen
         name="Home"
-        component={Home}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <EntypoIcon name="home" color={color} size={size} />
           ),
         }}
-      />
+      >
+        {(props) => <Home {...props} user={user} />}
+      </Tab.Screen>
       <Tab.Screen
         name="CrewNavigation"
         options={({ route }) => ({

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text } from 'react-native'
+import { Text, Image, View } from 'react-native'
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -8,25 +8,31 @@ const Container = styled.SafeAreaView`
 `
 
 const ScreenName = ({ name, children }) => {
-  return (
-    <Container>
-      <Text
-        style={{
-          fontSize: 40,
-          fontFamily: 'Cafe24Shiningstar',
-          paddingTop: '3%',
-          paddingLeft: '7%',
-          paddingBottom: '3%',
-          textShadowColor: 'gray',
-          textShadowRadius: 2,
-          color: '#1B97E2',
-        }}
-      >
-        {name}
-      </Text>
-      {children}
-    </Container>
-  )
+  if (name !== '워킹크루 매칭') {
+    return (
+      <Container>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '8%',
+            marginTop: 5,
+          }}
+        >
+          <Image
+            source={require('../utils/screen_top.png')}
+            style={{
+              aspectRatio: 2846 / 759,
+              flex: 1,
+            }}
+          />
+        </View>
+        {children}
+      </Container>
+    )
+  } else {
+    return <Container>{children}</Container>
+  }
 }
 
 export default ScreenName

@@ -7,6 +7,7 @@ const Walking = () => {
       source={require('../../assets/animations/walking.json')}
       autoPlay
       loop
+      style={{ flex: 1, marginBottom: 10, marginTop: 30 }}
     />
   )
 }
