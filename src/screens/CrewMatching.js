@@ -91,6 +91,7 @@ const CrewMatching = ({ route, navigation }) => {
     })
 
     //TODO : 배틀매칭 이벤트가 오면, 배틀정보에 대한 요소 출력 후 워킹모드로 넘어가야 한다.
+    // ***** 상대 크루의 학교 정보 수신해서 정보 출력
     socket.on('battleMatching', (data) => {
       console.log('배틀 매칭 완료')
       console.log(data)
@@ -100,7 +101,7 @@ const CrewMatching = ({ route, navigation }) => {
           test: 'test',
           socket: socket,
         })
-      }, 400000)
+      }, 4000)
     })
   }, [socket])
 
@@ -133,7 +134,9 @@ const CrewMatching = ({ route, navigation }) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <BasicButton text="나가기" pressFunction={_handleBack} />
+          {isMatching ? null : (
+            <BasicButton text="나가기" pressFunction={_handleBack} />
+          )}
         </View>
       </View>
     )
@@ -161,7 +164,7 @@ const CrewMatching = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 30,
+    fontSize: 35,
     fontFamily: 'Cafe24Shiningstar',
     textAlign: 'center',
   },
