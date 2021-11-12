@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -6,9 +6,11 @@ import {
   Dimensions,
   Fragments,
   Image,
+  ScrollView,
 } from 'react-native'
 import ScreenName from '../components/ScreenName'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
+import { List } from '@ant-design/react-native'
 /*
     하단 네비게이션 바 아이콘, 색상 변경
     배경색 조정
@@ -19,23 +21,31 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 const Home = ({ user }) => {
   const name = user.name // 사용자 이름
   const campus = user.Campus.name // 소속 대학명
-  const stepCount = user.Walk.stepcount // 걸음수
-  const wmCount = user.Walk.wmcount // 워킹모드 참여 횟수
+  const [stepCount, setStepCount] = useState(1512) // 걸음수 mockup data(user.Walk.stepcount)
   const userEmail = user.email // 사용자 이메일
   const nickname = user.nickname // 사용자 닉네임
   const profileMessage = user.profilemessage // 사용자 프로필 메세지
-  const winNum = 5 // mockup data (user.win)
-  const loseNum = 2 // mockup data (user.lose)
+  const [winNum, setWinNum] = useState(5) // mockup data (user.win)
+  const [loseNum, setLoseNum] = useState(2) // mockup data (user.lose)
   const winningRate = parseFloat((winNum / (winNum + loseNum)) * 100).toFixed(2) // 승률
-  const profileUrl = 'https://ifh.cc/g/sSjFNC.png' // 프로필 사진 url (user.profileUrl)
+  const [profileUrl, setProfileUrl] = useState('https://ifh.cc/g/sSjFNC.png') // 프로필 사진 url (user.profileUrl)
   const campusImageUrl = 'https://ifh.cc/g/oSrubm.png' // 학교 logo url (user.Campus.image)
+  const [results, setResults] = useState([
+    { date: '21.12.26', startTime: '10:23', endTime: '10:55' },
+    { date: '21.12.28', startTime: '09:11', endTime: '09:42' },
+    { date: '21.12.28', startTime: '14:48', endTime: '15:01' },
+    { date: '21.12.29', startTime: '11:11', endTime: '11:35' },
+    { date: '21.12.30', startTime: '17:55', endTime: '18:05' },
+  ]) // mockup data
+
+  let key = 1
 
   return (
     <ScreenName name="홈">
       <Text
         style={{
           fontSize: 23,
-          marginLeft: 20,
+          marginLeft: 22,
           marginTop: 20,
           fontFamily: 'ONEMobileBold',
         }}
@@ -122,6 +132,39 @@ const Home = ({ user }) => {
           </View>
         </View>
       </View>
+
+      <View style={{ flex: 1 }}>
+        <Text
+          style={[
+            styles.BasicText,
+            { marginLeft: 22, marginTop: 30, fontFamily: 'ONEMobileRegular' },
+          ]}
+        >
+          지난 배틀 결과
+        </Text>
+        <View style={styles.ResultContainer}>
+          <ScrollView>
+            <List>
+              {results.map((result) => (
+                <List.Item key={key++}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginRight: 5,
+                    }}
+                  >
+                    <Text style={[styles.BasicText, { fontSize: 15 }]}>
+                      {result.date} ({result.startTime} ~ {result.endTime})
+                    </Text>
+                    <FontAwesomeIcon name="search" color="#001d40" size={15} />
+                  </View>
+                </List.Item>
+              ))}
+            </List>
+          </ScrollView>
+        </View>
+      </View>
     </ScreenName>
   )
 }
@@ -142,7 +185,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     height: 120,
     width: Dimensions.get('window').width - 40,
-    height: 120,
     borderRadius: 10,
   },
   UserInfoText: {
@@ -170,6 +212,14 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
+  },
+  ResultContainer: {
+    marginTop: 8,
+    marginLeft: 20,
+    backgroundColor: '#F4F4F4',
+    elevation: 5,
+    width: Dimensions.get('window').width - 40,
+    height: 200,
   },
 })
 
