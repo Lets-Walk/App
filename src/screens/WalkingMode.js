@@ -6,6 +6,9 @@ import {
   BackHandler,
   useWindowDimensions,
   Animated,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
 } from 'react-native'
 import styled from 'styled-components/native'
 import NaverMapView, {
@@ -22,22 +25,25 @@ import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
 import { ActivityIndicator } from '@ant-design/react-native'
 
-import WalkingInfo from '../components/WalkingInfo'
+import BattleInfo from '../components/BattleInfo'
 import requestPermission from '../utils/requestPermission'
-import LabInfo from '../components/LabInfo'
+import MissionTimer from '../components/MissionTimer'
+import MissonInfo from '../components/MissonInfo'
 import { SERVER_URL } from '@env'
 import WalkingTab from '../components/WalkingTab'
-import ImageComponent from '../components/ImageComponent'
+import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
+import { Medal } from '../../assets/images'
+import { ServerStyleSheet } from 'styled-components'
 
 const Container = styled.View`
-  flex: 8;
+  flex: 1;
   align-items: center;
 `
 
 const WalkingMode = ({ route, navigation }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
-  const socket = route.params.socket
+  const { socket, battleRoomId } = route.params
   const [location, setLocation] = useState(initialLocation)
   const [infoVisible, setInfoVisible] = useState(false)
   const [ingredient, setIngredient] = useState(null)
@@ -47,6 +53,9 @@ const WalkingMode = ({ route, navigation }) => {
   const [steps, setSteps] = useState(1542) //초기값 0으로 setting 필요
   const [labName, setLabName] = useState('')
   const [inventory, setInventory] = useState([])
+  const [missionCount, setMissionCount] = useState(null)
+  const [showTimer, setShowTimer] = useState(false)
+  const [misson, setMisson] = useState(null)
 
   const toastRef = useRef()
   const markerToastRef = useRef()
@@ -67,18 +76,6 @@ const WalkingMode = ({ route, navigation }) => {
     return () => {
       console.log('walking mode unmount')
       socket.disconnect()
-    }
-  }, [])
-
-  useEffect(async () => {
-    //필요없음
-    let result = null
-    try {
-      result = await axios.get(SERVER_URL + '/api/map/lab', { timeout: 3000 })
-      setIngredient(result.data.data)
-    } catch (err) {
-      console.log(err)
-      if (err.response) console.log(err.response.data)
     }
   }, [])
 
@@ -114,6 +111,33 @@ const WalkingMode = ({ route, navigation }) => {
     }
   }, [])
 
+  useEffect(() => {
+    socket.on('missonCount', (count) => {
+      setMissionCount(count)
+    })
+  }, [missionCount])
+
+  useEffect(() => {
+    socket.emit('readyWalkingMode', { battleRoomId })
+
+    socket.on('waitingMission', ({ count }) => {
+      //미션을 기다리는 중입니다. 창 필요함.
+      setMissionCount(count)
+
+      console.log('waiting Mission')
+      setShowTimer(true)
+    })
+
+    socket.on('startWalkingMode', ({ misson }) => {
+      setShowTimer(false)
+      console.log(`미션 : ${misson}`)
+      setMisson(misson)
+      setInfoVisible(true)
+      //미션에 따른 모달 1회 필요.
+      //그 이후부터는 배너를 통해 미션 이용 가능.
+    })
+  }, [])
+
   useEffect(async () => {
     if (location === initialLocation) return
     const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
@@ -130,12 +154,12 @@ const WalkingMode = ({ route, navigation }) => {
   return (
     <>
       <Container>
-        <ActivityIndicator
+        {/* <ActivityIndicator
           animating={loading}
           toast
           text="Loading..."
           size="large"
-        />
+        /> */}
         <NaverMapView
           style={{ width: '100%', height: '100%' }}
           showsMyLocationButton={true}
@@ -148,7 +172,7 @@ const WalkingMode = ({ route, navigation }) => {
               <Marker
                 coordinate={coord}
                 key={index}
-                image={ImageComponent(item.type)}
+                image={GetMarkerImage(item.type)}
                 width={65}
                 height={65}
                 onClick={(e) => {
@@ -189,23 +213,28 @@ const WalkingMode = ({ route, navigation }) => {
             )
           })}
         </NaverMapView>
-        <WalkingInfo walkingTime={walkingTime} steps={steps} />
+        <BattleInfo />
+        {showTimer ? <MissionTimer count={missionCount} /> : <></>}
+        <Pressable
+          onPress={() => {
+            setInfoVisible(!infoVisible)
+          }}
+          style={styles.missionButton}
+        >
+          <Image source={Medal} style={styles.missionIcon} />
+        </Pressable>
+        <Modal
+          backdropOpacity={0}
+          onBackdropPress={() => {
+            setInfoVisible(false)
+          }}
+          isVisible={infoVisible}
+          style={{ margin: 0 }}
+        >
+          <MissonInfo name={misson} setVisible={setInfoVisible} />
+        </Modal>
       </Container>
-      <WalkingTab inventory={inventory} />
-      <Modal
-        backdropOpacity={0}
-        onBackdropPress={() => {
-          setInfoVisible(false)
-        }}
-        isVisible={infoVisible}
-        style={{ margin: 0 }}
-      >
-        <LabInfo
-          name={labName}
-          ingredient={ingredient}
-          setVisible={setInfoVisible}
-        />
-      </Modal>
+      {/* <WalkingTab inventory={inventory} /> */}
       <Toast
         ref={toastRef}
         positionValue={useWindowDimensions().height * 0.12}
@@ -232,3 +261,22 @@ const WalkingMode = ({ route, navigation }) => {
 }
 
 export default WalkingMode
+
+const styles = StyleSheet.create({
+  missionButton: {
+    width: 60,
+    height: 60,
+    position: 'absolute',
+    backgroundColor: '#ffffff',
+    borderRadius: 60,
+    right: '4%',
+    top: '13%',
+    elevation: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  missionIcon: {
+    width: 40,
+    height: 40,
+  },
+})

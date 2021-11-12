@@ -2,7 +2,7 @@ import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { StyleSheet, Pressable, View, FlatList } from 'react-native'
 import { INVENTORY } from '../constants/walkingmode'
-import IconComponent from './IconComponent'
+// import IconComponent from './IconComponent'
 
 // const exampleItem = [
 //   {
@@ -39,12 +39,12 @@ const TabInventory = ({ inventory, toggleMenu }) => {
   const renderItem = ({ item }) => {
     return (
       <View style={styles.iconConatiner}>
-        <IconComponent
+        {/* <IconComponent
           name={item.type}
           badge={item.quantity}
           iconSize={30}
           bgSize={50}
-        />
+        /> */}
       </View>
     )
   }

@@ -48,7 +48,8 @@ import {
   CloverQ,
   CloverK,
   CloverA,
-} from '../../assets/icons/index'
+  Joker,
+} from '../../assets/icons'
 
 const maapingIcon = {
   Heart2,
@@ -99,10 +100,11 @@ const maapingIcon = {
   CloverQ,
   CloverK,
   CloverA,
+  Joker,
 }
 
-const ImageComponent = (name) => {
+const GetMarkerImage = (name) => {
   return maapingIcon[name]
 }
 
-export default ImageComponent
+export default GetMarkerImage

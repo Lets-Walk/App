@@ -53,3 +53,5 @@ export const SpadeJ = require('../../assets/icons/SpadeJ.png')
 export const SpadeQ = require('../../assets/icons/SpadeQ.png')
 export const SpadeK = require('../../assets/icons/SpadeK.png')
 export const SpadeA = require('../../assets/icons/SpadeA.png')
+
+export const Joker = require('../../assets/icons/Joker.png')

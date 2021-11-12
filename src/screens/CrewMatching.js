@@ -98,8 +98,8 @@ const CrewMatching = ({ route, navigation }) => {
       setIsMatching(true)
       setTimeout(() => {
         navigation.navigate('WalkingMode', {
-          test: 'test',
           socket: socket,
+          battleRoomId: data.battleRoomId,
         })
       }, 4000)
     })
