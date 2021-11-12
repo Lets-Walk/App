@@ -22,7 +22,7 @@ const ScreenName = ({ name, children }) => {
           <Image
             source={require('../utils/screen_top.png')}
             style={{
-              aspectRatio: 3353 / 744,
+              aspectRatio: 2846 / 759,
               flex: 1,
             }}
           />
