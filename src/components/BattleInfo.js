@@ -1,10 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
-import styled, { ServerStyleSheet } from 'styled-components'
-import { SvgXml } from 'react-native-svg'
-import { Life } from '../../assets/images'
-import MaterialCmIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
+import { StyleSheet, Text, View } from 'react-native'
+import styled from 'styled-components'
 import CampusLife from './CampusLife'
 
 const InfoContainer = styled.View`
@@ -18,8 +14,9 @@ const InfoContainer = styled.View`
   flex: 1;
 `
 
-const WalkingInfo = ({ walkingTime, steps }) => {
-  console.log('walking info render')
+const BattleInfo = () => {
+  //TODO : campusName과 life 받아서 CampusLife로 넘기기
+
   return (
     <View style={styles.container}>
       <InfoContainer
@@ -41,7 +38,7 @@ const WalkingInfo = ({ walkingTime, steps }) => {
   )
 }
 
-export default React.memo(WalkingInfo)
+export default React.memo(BattleInfo)
 
 const styles = StyleSheet.create({
   container: {

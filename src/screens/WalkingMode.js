@@ -25,7 +25,7 @@ import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
 import { ActivityIndicator } from '@ant-design/react-native'
 
-import WalkingInfo from '../components/WalkingInfo'
+import BattleInfo from '../components/BattleInfo'
 import requestPermission from '../utils/requestPermission'
 import MissionTimer from '../components/MissionTimer'
 import MissonInfo from '../components/MissonInfo'
@@ -213,7 +213,7 @@ const WalkingMode = ({ route, navigation }) => {
             )
           })}
         </NaverMapView>
-        <WalkingInfo />
+        <BattleInfo />
         {showTimer ? <MissionTimer count={missionCount} /> : <></>}
         <Pressable
           onPress={() => {
