@@ -34,7 +34,6 @@ import WalkingTab from '../components/WalkingTab'
 import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
 import { Medal } from '../../assets/images'
-import { ServerStyleSheet } from 'styled-components'
 
 const Container = styled.View`
   flex: 1;
@@ -42,8 +41,8 @@ const Container = styled.View`
 `
 
 const WalkingMode = ({ route, navigation }) => {
+  const { socket, battleRoomId, userInfo } = route.params
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
-  const { socket, battleRoomId, allUsers } = route.params
   const [location, setLocation] = useState(initialLocation)
   const [infoVisible, setInfoVisible] = useState(false)
   const [itemList, setItemList] = useState([])
@@ -52,6 +51,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
   const [mission, setMission] = useState(null)
+  const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
 
   const toastRef = useRef()
   const markerToastRef = useRef()
@@ -207,7 +207,7 @@ const WalkingMode = ({ route, navigation }) => {
             )
           })}
         </NaverMapView>
-        <BattleInfo />
+        <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionTimer show={showTimer} count={missionCount} />
         <Pressable
           onPress={() => {

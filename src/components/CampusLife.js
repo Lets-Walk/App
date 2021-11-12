@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react/cjs/react.development'
 import { Life, Life_empty } from '../../assets/images'
 import { SERVER_URL } from '@env'
 
-const CampusLife = ({ campusName, life }) => {
-  const logoUrl = `${SERVER_URL}/static/logos/cau.png`
-  const LIFE = 3
+const CampusLife = ({ crew }) => {
+  if (!crew) return <></>
+  const { campus, life } = crew
   const [lifeXml, setLifeXml] = useState([])
+  const LIFE = 3
+  const logoUrl = `${SERVER_URL}/static/logos/${campus.image}`
 
   useEffect(() => {
     const xml = []
@@ -30,7 +32,7 @@ const CampusLife = ({ campusName, life }) => {
       <View style={styles.nameLife}>
         <View style={styles.textBox}>
           <Text style={styles.campusName} numberOfLines={1}>
-            {campusName}
+            {campus.name}
           </Text>
         </View>
         <View style={styles.lifeStyle}>

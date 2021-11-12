@@ -94,12 +94,14 @@ const CrewMatching = ({ route, navigation }) => {
     // ***** 상대 크루의 학교 정보 수신해서 정보 출력
     socket.on('battleMatching', (data) => {
       console.log('배틀 매칭 완료')
-      console.log(data)
+      console.log(data) //매칭완료 데이터 allUsers 안에 두개의 학교에 대한 학교 정보와 유저 정보가 담겨있음.
       setIsMatching(true)
       setTimeout(() => {
         navigation.navigate('WalkingMode', {
           socket: socket,
           battleRoomId: data.battleRoomId,
+          crewInfo: data.crewInfo,
+          userInfo: userInfo,
         })
       }, 4000)
     })
