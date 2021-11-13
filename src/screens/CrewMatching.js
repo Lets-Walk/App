@@ -102,6 +102,7 @@ const CrewMatching = ({ route, navigation }) => {
           battleRoomId: data.battleRoomId,
           crewInfo: data.crewInfo,
           userInfo: userInfo,
+          crewId: crewId,
         })
       }, 4000)
     })

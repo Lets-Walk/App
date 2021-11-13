@@ -20,7 +20,7 @@ const Container = styled.View`
 `
 
 const WalkingMode = ({ route, navigation }) => {
-  const { socket, battleRoomId, userInfo } = route.params
+  const { socket, battleRoomId, userInfo, crewId } = route.params
   const [infoVisible, setInfoVisible] = useState(false)
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
@@ -32,7 +32,6 @@ const WalkingMode = ({ route, navigation }) => {
 
   const toastRef = useRef()
   const markerToastRef = useRef()
-  const obtainItem = useRef()
 
   const showBackButtonToast = useCallback(() => {
     toastRef.current.show("'종료' 버튼을 이용하세요.")
@@ -83,7 +82,27 @@ const WalkingMode = ({ route, navigation }) => {
       setMission(mission)
       setInfoVisible(true)
     })
+
+    //아이템을 획득했을 때의 처리
+    //크루원이 아이템을 획득한것이므로 인벤토리의 동기화가 일어나야 한다.
+    socket.on('obtainItem', (data) => {
+      console.log(data)
+    })
   }, [])
+
+  useEffect(() => {
+    console.log('inventory : ', inventory)
+  }, [inventory])
+
+  const obatinItemEmit = useCallback(() => {
+    //아이템을 획득할때 전체와 크루에게 이벤트를 발생시키는 함수
+    //크루에게는 broadcast로 처리가 되어 가방 동기화가 일어나야 하고
+    //전체에게는 io.emit 으로 처리가 되어 획득 로그가 출력되어야 한다.
+    //Inventory데이터를 전달하는 식으로 처리해야 할듯 (비동기로 인해 값이 제대로 안들어갈시 변경 필요)
+    //클라이언트에는 아이템 획들을 on하는 함수도 추가되어야함.
+    console.log('앱에서 유저가 emit을 함.')
+    socket.emit('obtainItem', { battleRoomId, crewId, userInfo, inventory })
+  }, [userInfo, crewId, battleRoomId, inventory])
 
   const missionBannerToggle = () => {
     if (mission) setInfoVisible(!infoVisible)
@@ -102,11 +121,15 @@ const WalkingMode = ({ route, navigation }) => {
           text="Loading..."
           size="large"
         /> */}
-        <NaverMap />
+        <NaverMap
+          inventory={inventory}
+          setInventory={setInventory}
+          obatinItemEmit={obatinItemEmit}
+        />
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
-        <Banner />
+        <Banner inventory={inventory} />
         <Modal
           backdropOpacity={0}
           onBackdropPress={() => {
@@ -137,13 +160,13 @@ const WalkingMode = ({ route, navigation }) => {
         fadeOutDuration={2000}
         style={{ borderRadius: 15, backgroundColor: 'rgba(47, 56, 66, 0.8)' }}
       />
-      <Toast
+      {/* <Toast
         ref={obtainItem}
         positionValue={useWindowDimensions().height * 0.98}
         fadeInDuration={300}
         fadeOutDuration={1500}
         style={{ borderRadius: 15, backgroundColor: 'rgba(37, 81, 125, 0.8)' }}
-      />
+      /> */}
     </>
   )
 }
