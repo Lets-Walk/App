@@ -9,7 +9,7 @@ import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
 import { useCallback } from 'react/cjs/react.development'
 
-const NaverMap = ({ inventory, setInventory, obatinItemEmit }) => {
+const NaverMap = ({ inventory, setInventory, obtainItemEmit }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
   const [itemList, setItemList] = useState([])
@@ -82,13 +82,14 @@ const NaverMap = ({ inventory, setInventory, obatinItemEmit }) => {
             ieExist = true
           }
         })
+        let newInventory = null
         if (isExist) {
-          setInventory(inventory)
+          newInventory = [...inventory]
         } else {
-          setInventory([...inventory, { type: item.type, quantity: 1 }])
+          newInventory = [...inventory, { type: item.type, quantity: 1 }]
         }
         setItemList(filterItemList)
-        obatinItemEmit()
+        obtainItemEmit({ item, newInventory })
       }
     },
     [location, itemList, inventory],

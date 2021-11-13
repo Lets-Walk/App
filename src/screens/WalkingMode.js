@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { BackHandler, useWindowDimensions, StyleSheet } from 'react-native'
+import {
+  BackHandler,
+  useWindowDimensions,
+  StyleSheet,
+  Alert,
+} from 'react-native'
 import styled from 'styled-components/native'
 import { useFocusEffect } from '@react-navigation/native'
 import Toast from 'react-native-easy-toast'
@@ -83,26 +88,37 @@ const WalkingMode = ({ route, navigation }) => {
       setInfoVisible(true)
     })
 
-    //아이템을 획득했을 때의 처리
-    //크루원이 아이템을 획득한것이므로 인벤토리의 동기화가 일어나야 한다.
-    socket.on('obtainItem', (data) => {
-      console.log(data)
+    socket.on('obtainItem', ({ userInfo, item }) => {
+      const { nickname } = userInfo
+      Alert.alert(`${nickname}이 ${item.type}을 획득했습니다.`)
     })
   }, [])
 
+  //TODO :: 인벤토리 똑같은 아이템이 2개이상 생기는 문제
   useEffect(() => {
-    console.log('inventory : ', inventory)
-  }, [inventory])
+    //아이템을 획득했을 때의 처리
+    //크루원이 아이템을 획득한것이므로 인벤토리의 동기화가 일어나야 한다.
+    socket.on('inventorySync', ({ newInventory }) => {
+      console.log('inventorySync')
+      setInventory(newInventory)
+    })
 
-  const obatinItemEmit = useCallback(() => {
-    //아이템을 획득할때 전체와 크루에게 이벤트를 발생시키는 함수
-    //크루에게는 broadcast로 처리가 되어 가방 동기화가 일어나야 하고
-    //전체에게는 io.emit 으로 처리가 되어 획득 로그가 출력되어야 한다.
-    //Inventory데이터를 전달하는 식으로 처리해야 할듯 (비동기로 인해 값이 제대로 안들어갈시 변경 필요)
-    //클라이언트에는 아이템 획들을 on하는 함수도 추가되어야함.
-    console.log('앱에서 유저가 emit을 함.')
-    socket.emit('obtainItem', { battleRoomId, crewId, userInfo, inventory })
-  }, [userInfo, crewId, battleRoomId, inventory])
+    //아이템획득 전체 메세지
+  }, [])
+
+  const obtainItemEmit = useCallback(
+    ({ item, newInventory }) => {
+      //아이템을 획득할때 전체와 크루에게 이벤트를 발생시키는 함수
+      //크루에게는 broadcast로 처리가 되어 가방 동기화가 일어나야 하고
+      //전체에게는 io.emit 으로 처리가 되어 획득 로그가 출력되어야 한다.
+      //Inventory데이터를 전달하는 식으로 처리해야 할듯 (비동기로 인해 값이 제대로 안들어갈시 변경 필요)
+      //클라이언트에는 아이템 획들을 on하는 함수도 추가되어야함.
+      console.log('obtainItemEmit')
+      socket.emit('inventorySync', { crewId, newInventory })
+      socket.emit('obtainItem', { battleRoomId, userInfo, item })
+    },
+    [inventory, crewId, battleRoomId],
+  )
 
   const missionBannerToggle = () => {
     if (mission) setInfoVisible(!infoVisible)
@@ -124,7 +140,7 @@ const WalkingMode = ({ route, navigation }) => {
         <NaverMap
           inventory={inventory}
           setInventory={setInventory}
-          obatinItemEmit={obatinItemEmit}
+          obtainItemEmit={obtainItemEmit}
         />
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionTimer show={showTimer} count={missionCount} />
