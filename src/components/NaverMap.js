@@ -79,7 +79,7 @@ const NaverMap = ({ inventory, setInventory, obtainItemEmit }) => {
         inventory.map((inv) => {
           if (inv.type === item.type) {
             inv.quantity += 1
-            ieExist = true
+            isExist = true
           }
         })
         let newInventory = null
