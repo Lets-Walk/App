@@ -71,8 +71,10 @@ const WalkingMode = ({ route, navigation }) => {
   }, [missionCount])
 
   useEffect(() => {
-    socket.emit('readyWalkingMode', { battleRoomId })
+    console.log('walking mode useEffect')
+    emitReadyWalkingMode()
 
+    //이 부분 로그 여러개뜨는거 확인해보기.
     socket.on('waitingMission', ({ count }) => {
       //미션을 기다리는 중입니다. 창 필요함.
       setMissionCount(count)
@@ -81,6 +83,7 @@ const WalkingMode = ({ route, navigation }) => {
       setShowTimer(true)
     })
 
+    //이부분 로그 여러개뜨는거 확인해보기.
     socket.on('startWalkingMode', ({ mission }) => {
       setShowTimer(false)
       console.log(`미션 : ${mission}`)
@@ -98,13 +101,23 @@ const WalkingMode = ({ route, navigation }) => {
       setInventory(newInventory)
     })
 
-    socket.on('missionSuccess', ({ crewInfo, mission, campusName }) => {
-      console.log('미션 success해서 받은 crewInfo')
-      console.log(crewInfo)
+    socket.on('missionSuccess', ({ crewInfo, mission, campusName, isEnd }) => {
+      console.log('missionSuccess')
       setCrewInfo(crewInfo)
+      setMission(null) //미션 초기화
+      //맵의 마커를 초기화 하는 작업 필요.
       Alert.alert(`${campusName}크루가 ${mission}미션을 완료했습니다.`)
+      if (isEnd) return //isEnd면 더 이상 진행하지 않고 return
+      //미션완료 팝업 후 잠깐 대기한 다음 다음 미션에 대한 준비완료를 알림
+      setTimeout(() => {
+        emitReadyWalkingMode()
+      }, 3000)
     })
   }, [])
+
+  const emitReadyWalkingMode = useCallback(() => {
+    socket.emit('readyWalkingMode', { battleRoomId })
+  }, [battleRoomId])
 
   const obtainItemEmit = useCallback(
     ({ item, newInventory }) => {
@@ -113,8 +126,6 @@ const WalkingMode = ({ route, navigation }) => {
       //전체에게는 io.emit 으로 처리가 되어 획득 로그가 출력되어야 한다.
       //Inventory데이터를 전달하는 식으로 처리해야 할듯 (비동기로 인해 값이 제대로 안들어갈시 변경 필요)
       //클라이언트에는 아이템 획들을 on하는 함수도 추가되어야함.
-      console.log('emit하기 전 crewInfo')
-      console.log(crewInfo)
       console.log('obtainItemEmit')
       socket.emit('inventorySync', { crewId, newInventory })
       socket.emit('obtainItem', { battleRoomId, userInfo, item })
