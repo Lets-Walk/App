@@ -90,20 +90,20 @@ const WalkingMode = ({ route, navigation }) => {
 
     socket.on('obtainItem', ({ userInfo, item }) => {
       const { nickname } = userInfo
-      Alert.alert(`${nickname}이 ${item.type}을 획득했습니다.`)
+      // Alert.alert(`${nickname}이 ${item.type}을 획득했습니다.`)
     })
-  }, [])
 
-  //TODO :: 인벤토리 똑같은 아이템이 2개이상 생기는 문제
-  useEffect(() => {
-    //아이템을 획득했을 때의 처리
-    //크루원이 아이템을 획득한것이므로 인벤토리의 동기화가 일어나야 한다.
     socket.on('inventorySync', ({ newInventory }) => {
       console.log('inventorySync')
       setInventory(newInventory)
     })
 
-    //아이템획득 전체 메세지
+    socket.on('missionSuccess', ({ crewInfo, mission, campusName }) => {
+      console.log('미션 success해서 받은 crewInfo')
+      console.log(crewInfo)
+      setCrewInfo(crewInfo)
+      Alert.alert(`${campusName}크루가 ${mission}미션을 완료했습니다.`)
+    })
   }, [])
 
   const obtainItemEmit = useCallback(
@@ -113,11 +113,20 @@ const WalkingMode = ({ route, navigation }) => {
       //전체에게는 io.emit 으로 처리가 되어 획득 로그가 출력되어야 한다.
       //Inventory데이터를 전달하는 식으로 처리해야 할듯 (비동기로 인해 값이 제대로 안들어갈시 변경 필요)
       //클라이언트에는 아이템 획들을 on하는 함수도 추가되어야함.
+      console.log('emit하기 전 crewInfo')
+      console.log(crewInfo)
       console.log('obtainItemEmit')
       socket.emit('inventorySync', { crewId, newInventory })
       socket.emit('obtainItem', { battleRoomId, userInfo, item })
+      socket.emit('missionValidation', {
+        mission,
+        newInventory,
+        battleRoomId,
+        crewInfo,
+        campusName: userInfo.campus.name,
+      })
     },
-    [inventory, crewId, battleRoomId],
+    [crewInfo, mission],
   )
 
   const missionBannerToggle = () => {
@@ -139,7 +148,7 @@ const WalkingMode = ({ route, navigation }) => {
         /> */}
         <NaverMap
           inventory={inventory}
-          setInventory={setInventory}
+          mission={mission}
           obtainItemEmit={obtainItemEmit}
         />
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
