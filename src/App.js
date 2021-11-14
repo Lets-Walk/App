@@ -9,6 +9,8 @@ import MainNavigation from './navigations/MainNavigation'
 import auth from './utils/auth'
 import { ActivityIndicator } from '@ant-design/react-native'
 import requestPermission from './utils/requestPermission'
+import Toast from 'react-native-toast-message'
+import toastConfig from './utils/toastConfig'
 import './log'
 import { changeBarColors } from 'react-native-immersive-bars'
 
@@ -41,6 +43,7 @@ const App = () => {
           </>
         )}
       </NavigationContainer>
+      <Toast config={toastConfig} />
     </ThemeProvider>
   )
 }
