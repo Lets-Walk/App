@@ -13,6 +13,7 @@ import ScreenName from '../components/ScreenName'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 import { List } from '@ant-design/react-native'
 import HomeResultModal from '../components/HomeResultModal'
+import { SERVER_URL } from '@env'
 
 const Home = ({ user }) => {
   const name = user.name // 사용자 이름
@@ -25,7 +26,9 @@ const Home = ({ user }) => {
   const [loseNum, setLoseNum] = useState(2) // mockup data (user.lose)
   const winningRate = parseFloat((winNum / (winNum + loseNum)) * 100).toFixed(2) // 승률
   const [profileUrl, setProfileUrl] = useState('https://ifh.cc/g/sSjFNC.png') // 프로필 사진 url (user.profileUrl)
-  const campusImageUrl = 'https://ifh.cc/g/oSrubm.png' // 학교 logo url (user.Campus.image)
+  const campusLogoUrl = SERVER_URL + '/static/logos/' + user.Campus.image
+  //const campusImageUrl = 'https://ifh.cc/g/oSrubm.png' // 학교 logo url (user.Campus.image)
+  console.log(campusLogoUrl)
   const [results, setResults] = useState([
     {
       no: 1,
@@ -168,7 +171,7 @@ const Home = ({ user }) => {
             }}
           >
             <Image
-              source={{ uri: campusImageUrl }}
+              source={{ uri: campusLogoUrl }}
               style={styles.ProfileContainer}
             />
             <Text
