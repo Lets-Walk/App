@@ -65,12 +65,6 @@ const WalkingMode = ({ route, navigation }) => {
   )
 
   useEffect(() => {
-    socket.on('missionCount', (count) => {
-      setMissionCount(count)
-    })
-  }, [missionCount])
-
-  useEffect(() => {
     console.log('walking mode useEffect')
     emitReadyWalkingMode()
 
@@ -81,6 +75,10 @@ const WalkingMode = ({ route, navigation }) => {
 
       console.log('waiting Mission')
       setShowTimer(true)
+    })
+
+    socket.on('missionCount', (count) => {
+      setMissionCount(count)
     })
 
     //이부분 로그 여러개뜨는거 확인해보기.
