@@ -99,16 +99,36 @@ const Home = ({ user }) => {
         steps={results[modalNum].steps}
         onConfirm={_handleConfirm}
       />
+
       <Text
         style={{
           fontSize: 20,
           marginLeft: 22,
-          marginTop: 20,
+          marginTop: 12,
           fontFamily: 'ONEMobileBold',
         }}
       >
         {name}님, 안녕하세요!
       </Text>
+      <View
+        style={{
+          marginRight: 22,
+          marginTop: 2,
+          marginBottom: 0,
+          alignItems: 'flex-end',
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: 'OneMobileRegular',
+            fontSize: 14,
+            color: 'gray',
+          }}
+        >
+          당신의 건강한 내일을 응원합니다.
+        </Text>
+      </View>
+
       <View style={styles.Container}>
         <View
           style={[
@@ -283,7 +303,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   UserInfoContainer: {
-    marginTop: 15,
+    marginTop: 7,
     marginLeft: 20,
     paddingLeft: 20,
     alignItems: 'center',
