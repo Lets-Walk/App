@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  Fragments,
   Image,
   ScrollView,
   TouchableOpacity,
@@ -27,8 +26,6 @@ const Home = ({ user }) => {
   const winningRate = parseFloat((winNum / (winNum + loseNum)) * 100).toFixed(2) // 승률
   const [profileUrl, setProfileUrl] = useState('https://ifh.cc/g/sSjFNC.png') // 프로필 사진 url (user.profileUrl)
   const campusLogoUrl = SERVER_URL + '/static/logos/' + user.Campus.image
-  //const campusImageUrl = 'https://ifh.cc/g/oSrubm.png' // 학교 logo url (user.Campus.image)
-  console.log(campusLogoUrl)
   const [results, setResults] = useState([
     {
       no: 1,
