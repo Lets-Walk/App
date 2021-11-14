@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   View,
   Text,
@@ -7,16 +7,12 @@ import {
   Fragments,
   Image,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native'
 import ScreenName from '../components/ScreenName'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 import { List } from '@ant-design/react-native'
-/*
-    하단 네비게이션 바 아이콘, 색상 변경
-    배경색 조정
-    상단 페이지 제목 
-    
-*/
+import HomeResultModal from '../components/HomeResultModal'
 
 const Home = ({ user }) => {
   const name = user.name // 사용자 이름
@@ -25,26 +21,87 @@ const Home = ({ user }) => {
   const userEmail = user.email // 사용자 이메일
   const nickname = user.nickname // 사용자 닉네임
   const profileMessage = user.profilemessage // 사용자 프로필 메세지
-  const [winNum, setWinNum] = useState(5) // mockup data (user.win)
+  const [winNum, setWinNum] = useState(3) // mockup data (user.win)
   const [loseNum, setLoseNum] = useState(2) // mockup data (user.lose)
   const winningRate = parseFloat((winNum / (winNum + loseNum)) * 100).toFixed(2) // 승률
   const [profileUrl, setProfileUrl] = useState('https://ifh.cc/g/sSjFNC.png') // 프로필 사진 url (user.profileUrl)
   const campusImageUrl = 'https://ifh.cc/g/oSrubm.png' // 학교 logo url (user.Campus.image)
   const [results, setResults] = useState([
-    { date: '21.12.26', startTime: '10:23', endTime: '10:55' },
-    { date: '21.12.28', startTime: '09:11', endTime: '09:42' },
-    { date: '21.12.28', startTime: '14:48', endTime: '15:01' },
-    { date: '21.12.29', startTime: '11:11', endTime: '11:35' },
-    { date: '21.12.30', startTime: '17:55', endTime: '18:05' },
+    {
+      no: 1,
+      date: '21.12.26',
+      startTime: '10:23',
+      endTime: '10:55',
+      outcome: 'win',
+      opponent: '숭실대학교',
+      steps: 328,
+    },
+    {
+      no: 2,
+      date: '21.12.28',
+      startTime: '09:11',
+      endTime: '09:42',
+      outcome: 'win',
+      opponent: '서울대학교',
+      steps: 277,
+    },
+    {
+      no: 3,
+      date: '21.12.28',
+      startTime: '14:48',
+      endTime: '15:01',
+      outcome: 'lose',
+      opponent: '건국대학교',
+      steps: 302,
+    },
+    {
+      no: 4,
+      date: '21.12.29',
+      startTime: '11:11',
+      endTime: '11:35',
+      outcome: 'lose',
+      opponent: '가야대학교',
+      steps: 411,
+    },
+    {
+      no: 5,
+      date: '21.12.30',
+      startTime: '17:55',
+      endTime: '18:05',
+      outcome: 'win',
+      opponent: '연세대학교',
+      steps: 194,
+    },
   ]) // mockup data
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalNum, setModalNum] = useState(0)
 
-  let key = 1
+  const _handleSee = (num) => {
+    console.log(num)
+    setModalNum(num - 1)
+    setModalVisible(true)
+  }
+
+  const _handleConfirm = useCallback(() => {
+    setModalVisible(false)
+  }, [])
 
   return (
     <ScreenName name="홈">
+      <HomeResultModal
+        isVisible={modalVisible}
+        setVisible={setModalVisible}
+        date={results[modalNum].date}
+        startTime={results[modalNum].startTime}
+        endTime={results[modalNum].endTime}
+        opponent={results[modalNum].opponent}
+        outcome={results[modalNum].outcome}
+        steps={results[modalNum].steps}
+        onConfirm={_handleConfirm}
+      />
       <Text
         style={{
-          fontSize: 23,
+          fontSize: 20,
           marginLeft: 22,
           marginTop: 20,
           fontFamily: 'ONEMobileBold',
@@ -146,7 +203,7 @@ const Home = ({ user }) => {
           <ScrollView>
             <List>
               {results.map((result) => (
-                <List.Item key={key++}>
+                <List.Item key={result.no}>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -157,7 +214,56 @@ const Home = ({ user }) => {
                     <Text style={[styles.BasicText, { fontSize: 15 }]}>
                       {result.date} ({result.startTime} ~ {result.endTime})
                     </Text>
-                    <FontAwesomeIcon name="search" color="#001d40" size={15} />
+                    {result.outcome == 'win' ? (
+                      <View
+                        style={{
+                          width: 20,
+                          height: 20,
+                          borderRadius: 10,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderColor: '#BB0808',
+                          backgroundColor: '#BB0808',
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.BasicText,
+                            { fontSize: 15, color: 'white' },
+                          ]}
+                        >
+                          승
+                        </Text>
+                      </View>
+                    ) : (
+                      <View
+                        style={{
+                          width: 20,
+                          height: 20,
+                          borderRadius: 10,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderColor: '#00248B',
+                          backgroundColor: '#00248B',
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.BasicText,
+                            { fontSize: 15, color: 'blue', color: 'white' },
+                          ]}
+                        >
+                          패
+                        </Text>
+                      </View>
+                    )}
+                    <TouchableOpacity onPress={() => _handleSee(result.no)}>
+                      <FontAwesomeIcon
+                        name="search"
+                        color="#001d40"
+                        size={15}
+                      />
+                    </TouchableOpacity>
                   </View>
                 </List.Item>
               ))}
@@ -177,7 +283,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   UserInfoContainer: {
-    marginTop: 20,
+    marginTop: 15,
     marginLeft: 20,
     paddingLeft: 20,
     alignItems: 'center',
