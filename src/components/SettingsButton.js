@@ -13,7 +13,7 @@ const SettingsButton = ({ text, pressFunction }) => {
         paddingBottom: 10,
         marginBottom: 5,
         borderRadius: 4,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#D1E5FF',
         borderColor: 'gray',
       }}
       onPress={pressFunction}
