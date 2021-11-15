@@ -164,7 +164,7 @@ const CrewMatching = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 35,
+    fontSize: 30,
     fontFamily: 'Cafe24Shiningstar',
     textAlign: 'center',
   },
