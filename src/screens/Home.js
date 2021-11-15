@@ -169,7 +169,7 @@ const Home = ({ user }) => {
           >
             <Image
               source={{ uri: campusLogoUrl }}
-              style={styles.ProfileContainer}
+              style={styles.LogoContainer}
             />
             <Text
               style={[styles.UserInfoText, { fontSize: 12, paddingTop: 5 }]}
@@ -335,6 +335,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   ProfileContainer: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+    borderRadius: 50,
+  },
+  LogoContainer: {
     width: 50,
     height: 50,
     resizeMode: 'contain',
