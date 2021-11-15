@@ -18,6 +18,8 @@ import MissionInfo from '../components/MissionInfo'
 import MissionBanner from '../components/MissionBanner'
 import Banner from '../components/Banner'
 import FinishModal from '../components/FinishModal'
+import showToast from '../utils/showToast'
+import { SERVER_URL } from '@env'
 
 const Container = styled.View`
   flex: 1;
@@ -91,7 +93,15 @@ const WalkingMode = ({ route, navigation }) => {
 
     socket.on('obtainItem', ({ userInfo, item }) => {
       const { nickname } = userInfo
+      const campusLogoUrl =
+        SERVER_URL + '/static/logos/' + userInfo.campus.image
       // Alert.alert(`${nickname}이 ${item.type}을 획득했습니다.`)
+      showToast({
+        type: 'obtainItem',
+        logo: campusLogoUrl,
+        userName: nickname,
+        item: item.type,
+      })
     })
 
     socket.on('inventorySync', ({ newInventory }) => {
