@@ -9,6 +9,20 @@ const engToKor = (name) => {
   return result
 }
 
+const getItemColor = (name) => {
+  let color = 'black'
+  if (name.indexOf('Spade') !== -1) {
+    color = '#BBADFF'
+  } else if (name.indexOf('Clover') !== -1) {
+    color = '#606C38'
+  } else if (name.indexOf('Diamond') !== -1) {
+    color = '#468FAF'
+  } else if (name.indexOf('Heart') !== -1) {
+    color = '#E5989B'
+  }
+  return color
+}
+
 const showToast = ({ type, logo, userName, item }) => {
   Toast.show({
     type: type,
@@ -17,6 +31,7 @@ const showToast = ({ type, logo, userName, item }) => {
       logo: logo,
       userName: userName,
       item: engToKor(item),
+      itemColor: getItemColor(item),
     },
     bottomOffset: 20,
   })

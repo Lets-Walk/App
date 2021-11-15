@@ -38,7 +38,7 @@ const toastConfig = {
   ),
   obtainItem: ({ props }) => (
     <View style={styles.container}>
-      <View style={styles.colorBar} />
+      <View style={{ ...styles.colorBar, backgroundColor: props.itemColor }} />
       <View style={styles.content}>
         <Image
           source={{ uri: props.logo }}
@@ -47,7 +47,9 @@ const toastConfig = {
           style={styles.logo}
         />
         <Text style={styles.text} numberOfLines={1}>
-          {`${props.userName}님이 ${props.item}을(를) 획득했습니다.`}
+          {`${props.userName}님이 `}
+          <Text style={{ color: props.itemColor }}>{props.item}</Text>
+          {`을(를) 획득했습니다`}
         </Text>
       </View>
     </View>
