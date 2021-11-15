@@ -7,7 +7,6 @@ import {
 } from 'react-native'
 import styled from 'styled-components/native'
 import { useFocusEffect } from '@react-navigation/native'
-import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
 import { ActivityIndicator } from '@ant-design/react-native'
 
@@ -36,21 +35,6 @@ const WalkingMode = ({ route, navigation }) => {
   const [showFinishModal, setFinishModal] = useState(false)
   const [mission, setMission] = useState(null)
   const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
-
-  const toastRef = useRef()
-  const markerToastRef = useRef()
-
-  const showBackButtonToast = useCallback(() => {
-    toastRef.current.show("'종료' 버튼을 이용하세요.")
-  }, [])
-
-  useEffect(() => {
-    //워킹모드에서 나갈시(unmount) socket연결 끊어줌.
-    return () => {
-      console.log('walking mode unmount')
-      socket.disconnect()
-    }
-  }, [])
 
   useFocusEffect(
     React.useCallback(() => {
@@ -113,6 +97,8 @@ const WalkingMode = ({ route, navigation }) => {
       console.log('missionSuccess')
       setCrewInfo(crewInfo)
       setMission(null) //미션 초기화
+      console.log('inventory초기화')
+      setInventory([])
       //맵의 마커를 초기화 하는 작업 필요.
       Alert.alert(`${campusName}크루가 ${mission}미션을 완료했습니다.`)
       if (isEnd) return //isEnd면 더 이상 진행하지 않고 return
@@ -121,6 +107,12 @@ const WalkingMode = ({ route, navigation }) => {
         emitReadyWalkingMode()
       }, 3000)
     })
+
+    //워킹모드 unmount시 socket 연결 끊음
+    return () => {
+      console.log('walking mode unmount')
+      socket.disconnect()
+    }
   }, [])
 
   const emitReadyWalkingMode = useCallback(() => {
@@ -190,27 +182,6 @@ const WalkingMode = ({ route, navigation }) => {
         />
       </Container>
       {/* <WalkingTab inventory={inventory} /> */}
-      <Toast
-        ref={toastRef}
-        positionValue={useWindowDimensions().height * 0.12}
-        fadeInDuration={300}
-        fadeOutDuration={2000}
-        style={{ borderRadius: 15, backgroundColor: 'rgba(47, 56, 66, 0.8)' }}
-      />
-      <Toast
-        ref={markerToastRef}
-        positionValue={useWindowDimensions().height * 0.98}
-        fadeInDuration={300}
-        fadeOutDuration={2000}
-        style={{ borderRadius: 15, backgroundColor: 'rgba(47, 56, 66, 0.8)' }}
-      />
-      {/* <Toast
-        ref={obtainItem}
-        positionValue={useWindowDimensions().height * 0.98}
-        fadeInDuration={300}
-        fadeOutDuration={1500}
-        style={{ borderRadius: 15, backgroundColor: 'rgba(37, 81, 125, 0.8)' }}
-      /> */}
     </>
   )
 }

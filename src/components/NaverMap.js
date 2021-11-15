@@ -40,7 +40,11 @@ const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
   }, [])
 
   useEffect(async () => {
-    if (location === initialLocation) return
+    if (mission === null) {
+      setItemList([])
+      return
+    }
+    console.log('아이템 마커 생성')
     const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
       params: {
         lat: location.latitude,
@@ -49,7 +53,7 @@ const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
     })
     const itemList = data.data
     setItemList(itemList)
-  }, [location])
+  }, [mission])
 
   const obatinItem = (item) => {
     if (!mission) {
