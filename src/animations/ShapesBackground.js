@@ -7,6 +7,7 @@ const ShapesBackground = () => {
       source={require('../../assets/animations/shapes-background.json')}
       autoPlay
       loop
+      resizeMode="cover"
     />
   )
 }

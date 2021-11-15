@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '@ant-design/react-native'
-import { Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
 import Modal from 'react-native-modal'
+import { useWindowDimensions } from 'react-native'
 
 const CenterView = styled.View`
   flex: 1;
@@ -12,8 +13,8 @@ const CenterView = styled.View`
 
 const Container = styled.View`
   width: 90%;
-  height: 35%;
-  background-color: #125680;
+  height: 30%;
+  background-color: #ffffff;
   border-radius: 15px;
 `
 
@@ -23,13 +24,22 @@ const ConfirmModal = ({ isVisible, setVisible, texts, onConfirm = null }) => {
   }
 
   return (
-    <Modal isVisible={isVisible} onBackdropPress={onConfirm}>
+    <Modal
+      isVisible={isVisible}
+      onBackdropPress={onConfirm}
+      animationIn="zoomInDown"
+      animationOut="zoomOutUp"
+      animationInTiming={600}
+      backdropOpacity={0.5}
+      backdropTransitionInTiming={600}
+      deviceHeight={useWindowDimensions().height * 1.5}
+    >
       <CenterView>
         <Container>
           <View
             style={{ alignItems: 'center', marginTop: 20, marginBottom: 25 }}
           >
-            <Text style={styles.title}>안내</Text>
+            <Text style={styles.title}>안{'\t\t'}내</Text>
           </View>
           <View style={{ alignItems: 'center' }}>
             {texts.map((text) => (
@@ -39,17 +49,17 @@ const ConfirmModal = ({ isVisible, setVisible, texts, onConfirm = null }) => {
             ))}
           </View>
           <View style={styles.Button}>
-            <Button type="ghost" style={styles.confirm} onPress={onConfirm}>
+            <TouchableOpacity onPress={onConfirm}>
               <Text
                 style={{
                   fontSize: 25,
-                  color: 'black',
+                  color: '#4495D0',
                   fontFamily: 'BMHANNAAir_ttf',
                 }}
               >
                 확인
               </Text>
-            </Button>
+            </TouchableOpacity>
           </View>
         </Container>
       </CenterView>
@@ -59,9 +69,9 @@ const ConfirmModal = ({ isVisible, setVisible, texts, onConfirm = null }) => {
 
 const styles = StyleSheet.create({
   title: {
-    color: 'white',
+    color: 'black',
     fontFamily: 'BMHANNAAir_ttf',
-    fontSize: 35,
+    fontSize: 25,
     fontWeight: 'bold',
   },
   confirm: {
@@ -72,9 +82,9 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   text: {
-    color: 'white',
+    color: 'black',
     fontFamily: 'BMHANNAAir_ttf',
-    fontSize: 19,
+    fontSize: 20,
   },
   Button: {
     alignItems: 'center',
