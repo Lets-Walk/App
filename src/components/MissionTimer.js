@@ -10,7 +10,8 @@ const Container = styled.View`
   position: absolute;
 `
 
-const MissionTimer = ({ count }) => {
+const MissionTimer = ({ show, count }) => {
+  if (!show) return <></>
   return (
     <Container>
       <View style={styles.blackBox}>
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.63)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 
   font: {

@@ -92,18 +92,25 @@ const CrewMatching = ({ route, navigation }) => {
 
     //TODO : 배틀매칭 이벤트가 오면, 배틀정보에 대한 요소 출력 후 워킹모드로 넘어가야 한다.
     // ***** 상대 크루의 학교 정보 수신해서 정보 출력
+  }, [socket])
+
+  useEffect(() => {
+    if (!socket) return
     socket.on('battleMatching', (data) => {
       console.log('배틀 매칭 완료')
-      console.log(data)
+      console.log(data) //매칭완료 데이터 allUsers 안에 두개의 학교에 대한 학교 정보와 유저 정보가 담겨있음.
       setIsMatching(true)
       setTimeout(() => {
         navigation.navigate('WalkingMode', {
           socket: socket,
           battleRoomId: data.battleRoomId,
+          crewInfo: data.crewInfo,
+          userInfo: userInfo,
+          crewId: crewId,
         })
       }, 4000)
     })
-  }, [socket])
+  }, [crewId])
 
   if (crewId) {
     return (

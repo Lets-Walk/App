@@ -6,7 +6,7 @@ import {
   Fourcard,
   Flush,
   Straight,
-  Fullhose,
+  Fullhouse,
   Mission,
 } from '../../assets/images'
 
@@ -17,7 +17,7 @@ const maapingImage = {
   Fourcard,
   Flush,
   Straight,
-  Fullhose,
+  Fullhouse,
   Mission,
 }
 

@@ -1,57 +1,108 @@
 //Heart
-export const Heart2 = require('../../assets/icons/Heart2.png')
-export const Heart3 = require('../../assets/icons/Heart3.png')
-export const Heart4 = require('../../assets/icons/Heart4.png')
-export const Heart5 = require('../../assets/icons/Heart5.png')
-export const Heart6 = require('../../assets/icons/Heart6.png')
-export const Heart7 = require('../../assets/icons/Heart7.png')
-export const Heart8 = require('../../assets/icons/Heart8.png')
-export const Heart9 = require('../../assets/icons/Heart9.png')
-export const HeartJ = require('../../assets/icons/HeartJ.png')
-export const HeartQ = require('../../assets/icons/HeartQ.png')
-export const HeartK = require('../../assets/icons/HeartK.png')
-export const HeartA = require('../../assets/icons/HeartA.png')
+import Heart2 from '../../assets/icons/Heart2.png'
+import Heart3 from '../../assets/icons/Heart3.png'
+import Heart4 from '../../assets/icons/Heart4.png'
+import Heart5 from '../../assets/icons/Heart5.png'
+import Heart6 from '../../assets/icons/Heart6.png'
+import Heart7 from '../../assets/icons/Heart7.png'
+import Heart8 from '../../assets/icons/Heart8.png'
+import Heart9 from '../../assets/icons/Heart9.png'
+import HeartJ from '../../assets/icons/HeartJ.png'
+import HeartQ from '../../assets/icons/HeartQ.png'
+import HeartK from '../../assets/icons/HeartK.png'
+import HeartA from '../../assets/icons/HeartA.png'
+import Clover2 from '../../assets/icons/Clover2.png'
+import Clover3 from '../../assets/icons/Clover3.png'
+import Clover4 from '../../assets/icons/Clover4.png'
+import Clover5 from '../../assets/icons/Clover5.png'
+import Clover6 from '../../assets/icons/Clover6.png'
+import Clover7 from '../../assets/icons/Clover7.png'
+import Clover8 from '../../assets/icons/Clover8.png'
+import Clover9 from '../../assets/icons/Clover9.png'
+import CloverJ from '../../assets/icons/CloverJ.png'
+import CloverQ from '../../assets/icons/CloverQ.png'
+import CloverK from '../../assets/icons/CloverK.png'
+import CloverA from '../../assets/icons/CloverA.png'
+import Diamond2 from '../../assets/icons/Diamond2.png'
+import Diamond3 from '../../assets/icons/Diamond3.png'
+import Diamond4 from '../../assets/icons/Diamond4.png'
+import Diamond5 from '../../assets/icons/Diamond5.png'
+import Diamond6 from '../../assets/icons/Diamond6.png'
+import Diamond7 from '../../assets/icons/Diamond7.png'
+import Diamond8 from '../../assets/icons/Diamond8.png'
+import Diamond9 from '../../assets/icons/Diamond9.png'
+import DiamondJ from '../../assets/icons/DiamondJ.png'
+import DiamondQ from '../../assets/icons/DiamondQ.png'
+import DiamondK from '../../assets/icons/DiamondK.png'
+import DiamondA from '../../assets/icons/DiamondA.png'
+import Spade2 from '../../assets/icons/Spade2.png'
+import Spade3 from '../../assets/icons/Spade3.png'
+import Spade4 from '../../assets/icons/Spade4.png'
+import Spade5 from '../../assets/icons/Spade5.png'
+import Spade6 from '../../assets/icons/Spade6.png'
+import Spade7 from '../../assets/icons/Spade7.png'
+import Spade8 from '../../assets/icons/Spade8.png'
+import Spade9 from '../../assets/icons/Spade9.png'
+import SpadeJ from '../../assets/icons/SpadeJ.png'
+import SpadeQ from '../../assets/icons/SpadeQ.png'
+import SpadeK from '../../assets/icons/SpadeK.png'
+import SpadeA from '../../assets/icons/SpadeA.png'
+import Joker from '../../assets/icons/Joker.png'
+import Medal from '../../assets/icons/Medal.png'
+import Inventory from '../../assets/icons/Inventory.png'
+import Chat from '../../assets/icons/Chat.png'
 
-//Clover
-export const Clover2 = require('../../assets/icons/Clover2.png')
-export const Clover3 = require('../../assets/icons/Clover3.png')
-export const Clover4 = require('../../assets/icons/Clover4.png')
-export const Clover5 = require('../../assets/icons/Clover5.png')
-export const Clover6 = require('../../assets/icons/Clover6.png')
-export const Clover7 = require('../../assets/icons/Clover7.png')
-export const Clover8 = require('../../assets/icons/Clover8.png')
-export const Clover9 = require('../../assets/icons/Clover9.png')
-export const CloverJ = require('../../assets/icons/CloverJ.png')
-export const CloverQ = require('../../assets/icons/CloverQ.png')
-export const CloverK = require('../../assets/icons/CloverK.png')
-export const CloverA = require('../../assets/icons/CloverA.png')
-
-//Diamond
-export const Diamond2 = require('../../assets/icons/Diamond2.png')
-export const Diamond3 = require('../../assets/icons/Diamond3.png')
-export const Diamond4 = require('../../assets/icons/Diamond4.png')
-export const Diamond5 = require('../../assets/icons/Diamond5.png')
-export const Diamond6 = require('../../assets/icons/Diamond6.png')
-export const Diamond7 = require('../../assets/icons/Diamond7.png')
-export const Diamond8 = require('../../assets/icons/Diamond8.png')
-export const Diamond9 = require('../../assets/icons/Diamond9.png')
-export const DiamondJ = require('../../assets/icons/DiamondJ.png')
-export const DiamondQ = require('../../assets/icons/DiamondQ.png')
-export const DiamondK = require('../../assets/icons/DiamondK.png')
-export const DiamondA = require('../../assets/icons/DiamondA.png')
-
-//Spade
-export const Spade2 = require('../../assets/icons/Spade2.png')
-export const Spade3 = require('../../assets/icons/Spade3.png')
-export const Spade4 = require('../../assets/icons/Spade4.png')
-export const Spade5 = require('../../assets/icons/Spade5.png')
-export const Spade6 = require('../../assets/icons/Spade6.png')
-export const Spade7 = require('../../assets/icons/Spade7.png')
-export const Spade8 = require('../../assets/icons/Spade8.png')
-export const Spade9 = require('../../assets/icons/Spade9.png')
-export const SpadeJ = require('../../assets/icons/SpadeJ.png')
-export const SpadeQ = require('../../assets/icons/SpadeQ.png')
-export const SpadeK = require('../../assets/icons/SpadeK.png')
-export const SpadeA = require('../../assets/icons/SpadeA.png')
-
-export const Joker = require('../../assets/icons/Joker.png')
+export {
+  Heart2,
+  Heart3,
+  Heart4,
+  Heart5,
+  Heart6,
+  Heart7,
+  Heart8,
+  Heart9,
+  HeartJ,
+  HeartQ,
+  HeartK,
+  HeartA,
+  Clover2,
+  Clover3,
+  Clover4,
+  Clover5,
+  Clover6,
+  Clover7,
+  Clover8,
+  Clover9,
+  CloverJ,
+  CloverQ,
+  CloverK,
+  CloverA,
+  Diamond2,
+  Diamond3,
+  Diamond4,
+  Diamond5,
+  Diamond6,
+  Diamond7,
+  Diamond8,
+  Diamond9,
+  DiamondJ,
+  DiamondQ,
+  DiamondK,
+  DiamondA,
+  Spade2,
+  Spade3,
+  Spade4,
+  Spade5,
+  Spade6,
+  Spade7,
+  Spade8,
+  Spade9,
+  SpadeJ,
+  SpadeQ,
+  SpadeK,
+  SpadeA,
+  Joker,
+  Medal,
+  Inventory,
+  Chat,
+}

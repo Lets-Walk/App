@@ -1,40 +1,24 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import {
-  View,
-  Pressable,
-  Text,
   BackHandler,
   useWindowDimensions,
-  Animated,
-  TouchableOpacity,
-  Image,
   StyleSheet,
+  Alert,
 } from 'react-native'
 import styled from 'styled-components/native'
-import NaverMapView, {
-  Circle,
-  Marker,
-  Path,
-  Polyline,
-  Polygon,
-} from 'react-native-nmap'
-import axios from 'axios'
-import Geolocation from 'react-native-geolocation-service'
 import { useFocusEffect } from '@react-navigation/native'
-import Toast from 'react-native-easy-toast'
 import Modal from 'react-native-modal'
 import { ActivityIndicator } from '@ant-design/react-native'
 
+import NaverMap from '../components/NaverMap'
 import BattleInfo from '../components/BattleInfo'
-import requestPermission from '../utils/requestPermission'
 import MissionTimer from '../components/MissionTimer'
 import MissionInfo from '../components/MissionInfo'
+import MissionBanner from '../components/MissionBanner'
+import Banner from '../components/Banner'
+import FinishModal from '../components/FinishModal'
+import showToast from '../utils/showToast'
 import { SERVER_URL } from '@env'
-import WalkingTab from '../components/WalkingTab'
-import GetMarkerImage from '../utils/getMarkerImage'
-import getDistance from '../utils/getDistance'
-import { Medal } from '../../assets/images'
-import { ServerStyleSheet } from 'styled-components'
 
 const Container = styled.View`
   flex: 1;
@@ -42,84 +26,35 @@ const Container = styled.View`
 `
 
 const WalkingMode = ({ route, navigation }) => {
-  const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
-  const { socket, battleRoomId } = route.params
-  const [location, setLocation] = useState(initialLocation)
+  const { socket, battleRoomId, userInfo, crewId } = route.params
   const [infoVisible, setInfoVisible] = useState(false)
-  const [ingredient, setIngredient] = useState(null)
-  const [itemList, setItemList] = useState([])
   const [loading, setLoading] = useState(true)
-  const [walkingTime, setWalkingTime] = useState(130) //초기값 0으로 setting 필요
-  const [steps, setSteps] = useState(1542) //초기값 0으로 setting 필요
-  const [labName, setLabName] = useState('')
   const [inventory, setInventory] = useState([])
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
+  const [showFinishModal, setFinishModal] = useState(false)
   const [mission, setMission] = useState(null)
-
-  const toastRef = useRef()
-  const markerToastRef = useRef()
-  const obtainItem = useRef()
-  const ref = useRef(null)
-  const obtainMeter = 0.05 // 아이템 획득하기 위한 거리 0.1 = 100m
-
-  const showBackButtonToast = useCallback(() => {
-    toastRef.current.show("'종료' 버튼을 이용하세요.")
-  }, [])
-
-  const cameraChange = (location) => {
-    ref.current.animateToCoordinate(location) //마커 좌표로 이동
-  }
-
-  useEffect(() => {
-    //워킹모드에서 나갈시(unmount) socket연결 끊어줌.
-    return () => {
-      console.log('walking mode unmount')
-      socket.disconnect()
-    }
-  }, [])
+  const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
 
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-        // navigation.navigate('Home')
-        showBackButtonToast()
+        setFinishModal(true)
         return true
       }
-      BackHandler.addEventListener('hardwareBackPress', onBackPress)
-      return () =>
-        BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+      const backEvent = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      )
+      return () => backEvent.remove()
     }, []),
   )
 
-  useEffect(async () => {
-    const result = await requestPermission()
-    console.log(result)
-    if (result === 'granted') {
-      Geolocation.getCurrentPosition(
-        ({ coords }) => {
-          setLocation({
-            latitude: coords.latitude,
-            longitude: coords.longitude,
-          })
-        },
-        (error) => {
-          console.log(error.code, error.message)
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-      )
-    }
-  }, [])
-
   useEffect(() => {
-    socket.on('missionCount', (count) => {
-      setMissionCount(count)
-    })
-  }, [missionCount])
+    console.log('walking mode useEffect')
+    emitReadyWalkingMode()
 
-  useEffect(() => {
-    socket.emit('readyWalkingMode', { battleRoomId })
-
+    //이 부분 로그 여러개뜨는거 확인해보기.
     socket.on('waitingMission', ({ count }) => {
       //미션을 기다리는 중입니다. 창 필요함.
       setMissionCount(count)
@@ -128,28 +63,90 @@ const WalkingMode = ({ route, navigation }) => {
       setShowTimer(true)
     })
 
+    socket.on('missionCount', (count) => {
+      setMissionCount(count)
+    })
+
+    //이부분 로그 여러개뜨는거 확인해보기.
     socket.on('startWalkingMode', ({ mission }) => {
       setShowTimer(false)
       console.log(`미션 : ${mission}`)
       setMission(mission)
       setInfoVisible(true)
-      //미션에 따른 모달 1회 필요.
-      //그 이후부터는 배너를 통해 미션 이용 가능.
     })
+
+    socket.on('obtainItem', ({ userInfo, item }) => {
+      const { nickname } = userInfo
+      const campusLogoUrl =
+        SERVER_URL + '/static/logos/' + userInfo.campus.image
+      // Alert.alert(`${nickname}이 ${item.type}을 획득했습니다.`)
+      showToast({
+        type: 'obtainItem',
+        logo: campusLogoUrl,
+        userName: nickname,
+        item: item.type,
+      })
+    })
+
+    socket.on('inventorySync', ({ newInventory }) => {
+      console.log('inventorySync')
+      setInventory(newInventory)
+    })
+
+    socket.on('missionSuccess', ({ crewInfo, mission, campusName, isEnd }) => {
+      console.log('missionSuccess')
+      setCrewInfo(crewInfo)
+      setMission(null) //미션 초기화
+      console.log('inventory초기화')
+      setInventory([])
+      //맵의 마커를 초기화 하는 작업 필요.
+      Alert.alert(`${campusName}크루가 ${mission}미션을 완료했습니다.`)
+      if (isEnd) return //isEnd면 더 이상 진행하지 않고 return
+      //미션완료 팝업 후 잠깐 대기한 다음 다음 미션에 대한 준비완료를 알림
+      setTimeout(() => {
+        emitReadyWalkingMode()
+      }, 3000)
+    })
+
+    //워킹모드 unmount시 socket 연결 끊음
+    return () => {
+      console.log('walking mode unmount')
+      socket.disconnect()
+    }
   }, [])
 
-  useEffect(async () => {
-    if (location === initialLocation) return
-    const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
-      params: {
-        lat: location.latitude,
-        lng: location.longitude,
-      },
-    })
-    const itemList = data.data
-    setItemList(itemList)
-    setLoading(false)
-  }, [location])
+  const emitReadyWalkingMode = useCallback(() => {
+    socket.emit('readyWalkingMode', { battleRoomId })
+  }, [battleRoomId])
+
+  const obtainItemEmit = useCallback(
+    ({ item, newInventory }) => {
+      //아이템을 획득할때 전체와 크루에게 이벤트를 발생시키는 함수
+      //크루에게는 broadcast로 처리가 되어 가방 동기화가 일어나야 하고
+      //전체에게는 io.emit 으로 처리가 되어 획득 로그가 출력되어야 한다.
+      //Inventory데이터를 전달하는 식으로 처리해야 할듯 (비동기로 인해 값이 제대로 안들어갈시 변경 필요)
+      //클라이언트에는 아이템 획들을 on하는 함수도 추가되어야함.
+      console.log('obtainItemEmit')
+      socket.emit('inventorySync', { crewId, newInventory })
+      socket.emit('obtainItem', { battleRoomId, userInfo, item })
+      socket.emit('missionValidation', {
+        mission,
+        newInventory,
+        battleRoomId,
+        crewInfo,
+        campusName: userInfo.campus.name,
+      })
+    },
+    [crewInfo, mission],
+  )
+
+  const missionBannerToggle = () => {
+    if (mission) setInfoVisible(!infoVisible)
+  }
+
+  const toggleFinishModal = useCallback(() => {
+    setFinishModal(!showFinishModal)
+  }, [showFinishModal])
 
   return (
     <>
@@ -160,69 +157,15 @@ const WalkingMode = ({ route, navigation }) => {
           text="Loading..."
           size="large"
         /> */}
-        <NaverMapView
-          style={{ width: '100%', height: '100%' }}
-          showsMyLocationButton={true}
-          center={{ ...location, zoom: 16 }}
-          ref={ref}
-        >
-          {itemList.map((item, index) => {
-            const coord = { latitude: item.lat, longitude: item.lng }
-            return (
-              <Marker
-                coordinate={coord}
-                key={index}
-                image={GetMarkerImage(item.type)}
-                width={65}
-                height={65}
-                onClick={(e) => {
-                  const dist = getDistance(
-                    location.latitude,
-                    location.longitude,
-                    item.lat,
-                    item.lng,
-                  )
-                  if (dist > obtainMeter) {
-                    // 50m 이내의 아이템만 획득 가능.
-                    markerToastRef.current.show(
-                      '아이템을 획득하기에는 거리가 너무 멉니다.',
-                    )
-                  } else {
-                    const newItemList = itemList.filter(
-                      (elem) =>
-                        !(elem.lat === item.lat && elem.lng === item.lng),
-                    )
-                    obtainItem.current.show('아이템을 획득했습니다.')
-                    //아이템 추가
-                    let check = false
-                    inventory.map((inv) => {
-                      if (inv.type === item.type) {
-                        inv.quantity += 1
-                        check = true
-                      }
-                    })
-                    let newList = [...inventory]
-                    if (!check) {
-                      newList = [...inventory, { type: item.type, quantity: 1 }]
-                    }
-                    setInventory(newList)
-                    setItemList(newItemList)
-                  }
-                }}
-              />
-            )
-          })}
-        </NaverMapView>
-        <BattleInfo />
-        {showTimer ? <MissionTimer count={missionCount} /> : <></>}
-        <Pressable
-          onPress={() => {
-            if (mission) setInfoVisible(!infoVisible)
-          }}
-          style={styles.missionButton}
-        >
-          <Image source={Medal} style={styles.missionIcon} />
-        </Pressable>
+        <NaverMap
+          inventory={inventory}
+          mission={mission}
+          obtainItemEmit={obtainItemEmit}
+        />
+        <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
+        <MissionTimer show={showTimer} count={missionCount} />
+        <MissionBanner missionBannerToggle={missionBannerToggle} />
+        <Banner inventory={inventory} />
         <Modal
           backdropOpacity={0}
           onBackdropPress={() => {
@@ -233,50 +176,16 @@ const WalkingMode = ({ route, navigation }) => {
         >
           <MissionInfo name={mission} setVisible={setInfoVisible} />
         </Modal>
+        <FinishModal
+          modalVisible={showFinishModal}
+          toggleModal={toggleFinishModal}
+        />
       </Container>
       {/* <WalkingTab inventory={inventory} /> */}
-      <Toast
-        ref={toastRef}
-        positionValue={useWindowDimensions().height * 0.12}
-        fadeInDuration={300}
-        fadeOutDuration={2000}
-        style={{ borderRadius: 15, backgroundColor: 'rgba(47, 56, 66, 0.8)' }}
-      />
-      <Toast
-        ref={markerToastRef}
-        positionValue={useWindowDimensions().height * 0.98}
-        fadeInDuration={300}
-        fadeOutDuration={2000}
-        style={{ borderRadius: 15, backgroundColor: 'rgba(47, 56, 66, 0.8)' }}
-      />
-      <Toast
-        ref={obtainItem}
-        positionValue={useWindowDimensions().height * 0.98}
-        fadeInDuration={300}
-        fadeOutDuration={1500}
-        style={{ borderRadius: 15, backgroundColor: 'rgba(37, 81, 125, 0.8)' }}
-      />
     </>
   )
 }
 
 export default WalkingMode
 
-const styles = StyleSheet.create({
-  missionButton: {
-    width: 60,
-    height: 60,
-    position: 'absolute',
-    backgroundColor: '#ffffff',
-    borderRadius: 60,
-    right: '4%',
-    top: '13%',
-    elevation: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  missionIcon: {
-    width: 40,
-    height: 40,
-  },
-})
+const styles = StyleSheet.create({})

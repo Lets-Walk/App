@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { useState } from 'react/cjs/react.development'
 import styled from 'styled-components'
 import CampusLife from './CampusLife'
 
@@ -14,8 +15,20 @@ const InfoContainer = styled.View`
   flex: 1;
 `
 
-const BattleInfo = () => {
+const BattleInfo = ({ crewInfo, userInfo }) => {
   //TODO : campusName과 life 받아서 CampusLife로 넘기기
+  const [myCrew, setMyCrew] = useState(null)
+  const [anotherCrew, setAnotherCrew] = useState(null)
+
+  useEffect(() => {
+    if (crewInfo[0].campus.name === userInfo.campus.name) {
+      setMyCrew(crewInfo[0])
+      setAnotherCrew(crewInfo[1])
+    } else {
+      setMyCrew(crewInfo[1])
+      setAnotherCrew(crewInfo[0])
+    }
+  }, [crewInfo])
 
   return (
     <View style={styles.container}>
@@ -25,13 +38,13 @@ const BattleInfo = () => {
         }}
       >
         <View style={styles.content}>
-          <CampusLife campusName="중앙대학교" life={3} />
+          <CampusLife crew={myCrew} />
         </View>
         <View style={styles.versusBox}>
           <Text style={styles.versusStyle}>VS</Text>
         </View>
         <View style={styles.content}>
-          <CampusLife campusName="중앙대학교" life={2} />
+          <CampusLife crew={anotherCrew} />
         </View>
       </InfoContainer>
     </View>
