@@ -110,7 +110,7 @@ const CrewMatching = ({ route, navigation }) => {
         })
       }, 4000)
     })
-  }, [socket, crewId])
+  }, [crewId])
 
   if (crewId) {
     return (
