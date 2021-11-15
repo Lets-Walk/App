@@ -28,6 +28,7 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   padding: 0 25px;
+  background-color: #ffffff;
 `
 
 const ErrorText = styled.Text`
@@ -201,194 +202,198 @@ const Signup = ({ navigation }) => {
   }
 
   return (
-    <LinearGradient colors={GradientColor} style={{ flex: 1 }}>
-      <KeyboardAwareScrollView extraScrollHeight={40}>
-        <ConfirmModal
-          isVisible={modalVisible}
-          setVisible={setModalVisible}
-          texts={modalMessages}
-          onConfirm={
-            disabled
-              ? null
-              : () => {
-                  navigation.goBack()
-                }
-          }
+    <KeyboardAwareScrollView extraScrollHeight={40}>
+      <ConfirmModal
+        isVisible={modalVisible}
+        setVisible={setModalVisible}
+        texts={modalMessages}
+        onConfirm={
+          disabled
+            ? null
+            : () => {
+                navigation.goBack()
+              }
+        }
+      />
+      <ActivityIndicator
+        animating={loading}
+        toast
+        text="Loading..."
+        size="large"
+      />
+      <Container
+        style={{
+          height: useWindowDimensions().height - 60,
+          width: useWindowDimensions().width,
+        }}
+      >
+        <AuthInput
+          value={user.name}
+          onChangeText={(text) => setUser({ ...user, name: text.trim() })}
+          placeholder="이름"
         />
-        <ActivityIndicator
-          animating={loading}
-          toast
-          text="Loading..."
-          size="large"
+        <AuthInput
+          value={user.nickname}
+          onChangeText={(text) => setUser({ ...user, nickname: text.trim() })}
+          placeholder="닉네임"
         />
-        <Container
-          style={{
-            height: useWindowDimensions().height - 60,
-            width: useWindowDimensions().width,
+
+        <SelectDropDown
+          data={college}
+          onSelect={(selectedItem, index) => {
+            setCampus(selectedItem)
           }}
-        >
-          <AuthInput
-            value={user.name}
-            onChangeText={(text) => setUser({ ...user, name: text.trim() })}
-            placeholder="이름"
-          />
-          <AuthInput
-            value={user.nickname}
-            onChangeText={(text) => setUser({ ...user, nickname: text.trim() })}
-            placeholder="닉네임"
-          />
+          defaultButtonText={'---------- 학교명을 선택하세요 ----------'}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem.name
+          }}
+          rowTextForSelection={(item, index) => {
+            return item.name
+          }}
+          renderDropdownIcon={() => {
+            return <Icon name="down" />
+          }}
+          buttonStyle={styles.dropdownButtonStyle}
+          buttonTextStyle={styles.dropdownButtonTextStyle}
+          dropdownStyle={styles.dropdownDropdownStyle}
+          rowStyle={styles.dropdownRowStyle}
+          rowTextStyle={styles.dropdownRowTextStyle}
+        />
 
-          <SelectDropDown
-            data={college}
-            onSelect={(selectedItem, index) => {
-              setCampus(selectedItem)
-            }}
-            defaultButtonText={'---------- 학교명을 선택하세요 ----------'}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              return selectedItem.name
-            }}
-            rowTextForSelection={(item, index) => {
-              return item.name
-            }}
-            renderDropdownIcon={() => {
-              return <Icon name="down" />
-            }}
-            buttonStyle={styles.dropdownButtonStyle}
-            buttonTextStyle={styles.dropdownButtonTextStyle}
-            dropdownStyle={styles.dropdownDropdownStyle}
-            rowStyle={styles.dropdownRowStyle}
-            rowTextStyle={styles.dropdownRowTextStyle}
-          />
-
-          <ButtonContainer>
-            <View style={styles.row}>
-              <View style={styles.inputWrap}>
-                <TextInput
-                  style={styles.inputEmailId}
-                  onChangeText={(text) => setEmailId(text.trim())}
-                  placeholder="학교 이메일"
-                  fontSize={15}
-                  value={emailId}
-                />
-              </View>
-
-              <View style={styles.inputWrap}>
-                <TextInput
-                  style={styles.inputDomain}
-                  editable={false}
-                  placeholder={campus.domain}
-                  placeholderTextColor={'#000000'}
-                  fontSize={15}
-                />
-              </View>
+        <ButtonContainer>
+          <View style={styles.row}>
+            <View style={styles.inputWrap}>
+              <TextInput
+                style={styles.inputEmailId}
+                onChangeText={(text) => setEmailId(text.trim())}
+                placeholder="학교 이메일"
+                fontSize={15}
+                value={emailId}
+              />
             </View>
 
-            <Button
-              type="primary"
+            <View style={styles.inputWrap}>
+              <TextInput
+                style={styles.inputDomain}
+                editable={false}
+                placeholder={campus.domain}
+                placeholderTextColor={'#000000'}
+                fontSize={15}
+              />
+            </View>
+          </View>
+
+          <Button
+            type="primary"
+            style={{
+              paddingLeft: 15,
+              paddingRight: 15,
+              paddingTop: 5,
+              paddingBottom: 5,
+              borderRadius: 10,
+              backgroundColor: 'white',
+              elevation: 2,
+              borderColor: 'black',
+              borderWidth: 0.5,
+              marginLeft: 2,
+            }}
+            onPress={_handleVerificationReqButtonPress} // here
+          >
+            <Text
               style={{
-                paddingLeft: 15,
-                paddingRight: 15,
-                paddingTop: 5,
-                paddingBottom: 5,
-                borderRadius: 10,
-                backgroundColor: 'powderblue',
-                borderWidth: 0,
-                marginLeft: 2,
+                fontSize: 16,
+                color: 'black',
+                fontFamily: 'BMHANNAAir_ttf',
               }}
-              onPress={_handleVerificationReqButtonPress} // here
             >
+              인증{'\n'}요청
+            </Text>
+          </Button>
+        </ButtonContainer>
+        <ButtonContainer>
+          <AuthInput
+            value={verificationCode}
+            onChangeText={(text) => setVerificationCode(text.trim())}
+            placeholder="인증번호"
+          />
+          <Button
+            type="primary"
+            style={{
+              paddingLeft: 15,
+              paddingRight: 15,
+              paddingTop: 5,
+              paddingBottom: 5,
+              borderRadius: 10,
+              backgroundColor: 'white',
+              borderWidth: 0.5,
+              elevation: 2,
+              borderColor: 'black',
+              marginLeft: 2,
+            }}
+            onPress={_handleVerificationButtonPress} // here
+            disabled={isVerify}
+          >
+            {isVerify ? (
+              <Icon name="check" color="green" size={30} />
+            ) : (
               <Text
                 style={{
-                  fontSize: 16,
+                  fontSize: 18,
                   color: 'black',
                   fontFamily: 'BMHANNAAir_ttf',
                 }}
               >
-                인증{'\n'}요청
+                인증
               </Text>
-            </Button>
-          </ButtonContainer>
-          <ButtonContainer>
-            <AuthInput
-              value={verificationCode}
-              onChangeText={(text) => setVerificationCode(text.trim())}
-              placeholder="인증번호"
-            />
-            <Button
-              type="primary"
-              style={{
-                paddingLeft: 15,
-                paddingRight: 15,
-                paddingTop: 5,
-                paddingBottom: 5,
-                borderRadius: 10,
-                backgroundColor: 'powderblue',
-                borderWidth: 0,
-                marginLeft: 2,
-              }}
-              onPress={_handleVerificationButtonPress} // here
-              disabled={isVerify}
-            >
-              {isVerify ? (
-                <Icon name="check" color="green" size={30} />
-              ) : (
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: 'black',
-                    fontFamily: 'BMHANNAAir_ttf',
-                  }}
-                >
-                  인증
-                </Text>
-              )}
-            </Button>
-          </ButtonContainer>
+            )}
+          </Button>
+        </ButtonContainer>
 
-          <AuthInput
-            value={user.password}
-            onChangeText={(text) => setUser({ ...user, password: text.trim() })}
-            placeholder="비밀번호(6자리 이상)"
-            isPassword
-          />
-          <ErrorText>{passwordLengthError}</ErrorText>
-          <AuthInput
-            value={passwordConfirm}
-            onChangeText={(text) => setPasswordConfirm(text.trim())}
-            placeholder="비밀번호 확인"
-            isPassword
-          />
-          <ErrorText>{passwordConfirmError}</ErrorText>
-          <WingBlank>
-            <WhiteSpace />
-            <Button
-              type="primary"
+        <AuthInput
+          value={user.password}
+          onChangeText={(text) => setUser({ ...user, password: text.trim() })}
+          placeholder="비밀번호(6자리 이상)"
+          isPassword
+        />
+        <ErrorText>{passwordLengthError}</ErrorText>
+        <AuthInput
+          value={passwordConfirm}
+          onChangeText={(text) => setPasswordConfirm(text.trim())}
+          placeholder="비밀번호 확인"
+          isPassword
+        />
+        <ErrorText>{passwordConfirmError}</ErrorText>
+        <WingBlank>
+          <WhiteSpace />
+          <Button
+            type="primary"
+            style={{
+              paddingLeft: 100,
+              paddingRight: 100,
+              paddingTop: 10,
+              paddingBottom: 10,
+              borderRadius: 10,
+              backgroundColor: '#67AFFF',
+              elevation: 10,
+              borderWidth: 0,
+            }}
+            onPress={_handleSignupButtonPress} // here
+            disabled={disabled}
+          >
+            <Text
               style={{
-                paddingLeft: 100,
-                paddingRight: 100,
-                paddingTop: 10,
-                paddingBottom: 10,
-                borderRadius: 10,
-                backgroundColor: '#008cad',
+                fontSize: 25,
+                color: 'white',
+                fontFamily: 'BMHANNAAir_ttf',
               }}
-              onPress={_handleSignupButtonPress} // here
-              disabled={disabled}
             >
-              <Text
-                style={{
-                  fontSize: 25,
-                  color: 'white',
-                  fontFamily: 'BMHANNAAir_ttf',
-                }}
-              >
-                회원가입
-              </Text>
-            </Button>
-            <WhiteSpace />
-          </WingBlank>
-        </Container>
-      </KeyboardAwareScrollView>
-    </LinearGradient>
+              회원가입
+            </Text>
+          </Button>
+          <WhiteSpace />
+        </WingBlank>
+      </Container>
+    </KeyboardAwareScrollView>
   )
 }
 
@@ -396,17 +401,16 @@ const styles = StyleSheet.create({
   dropdownButtonStyle: {
     width: '100%',
     height: 50,
-    backgroundColor: '#d4edfd',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#444',
+    backgroundColor: '#e9e9e9',
+    borderRadius: 5,
+
     marginTop: 5,
     marginBottom: 5,
   },
   dropdownButtonTextStyle: { color: '#444', textAlign: 'left' },
-  dropdownDropdownStyle: { backgroundColor: '#d4edfd' },
+  dropdownDropdownStyle: { backgroundColor: '#e9e9e9' },
   dropdownRowStyle: {
-    backgroundColor: '#d4edfd',
+    backgroundColor: '#e9e9e9',
     borderBottomColor: '#C5C5C5',
   },
   dropdownRowTextStyle: { color: '#444', textAlign: 'left' },
@@ -426,7 +430,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: -12,
     marginRight: 5,
-    backgroundColor: '#d4edfd',
+    backgroundColor: '#e9e9e9',
     borderRadius: 8,
     paddingLeft: 10,
     paddingRight: 10,
@@ -434,8 +438,7 @@ const styles = StyleSheet.create({
   inputDomain: {
     fontSize: 20,
     marginBottom: -12,
-
-    backgroundColor: '#d4edfd',
+    backgroundColor: '#e9e9e9',
     borderRadius: 8,
   },
 })

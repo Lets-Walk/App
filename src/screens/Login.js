@@ -156,7 +156,7 @@ const Login = ({ navigation, setUser }) => {
             paddingBottom: 10,
             marginBottom: 5,
             borderRadius: 10,
-            backgroundColor: '#008cad',
+            backgroundColor: '#67AFFF',
             elevation: 10,
             borderWidth: 0,
           }}
