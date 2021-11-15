@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     marginTop: 10,
+    resizeMode: 'contain',
   },
   campusRankContainer: { alignItems: 'center', margin: 10 },
 })

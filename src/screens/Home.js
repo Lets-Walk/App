@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   ProfileContainer: {
     width: 50,
     height: 50,
-    borderRadius: 50,
+    resizeMode: 'contain',
   },
   ResultContainer: {
     marginTop: 8,
