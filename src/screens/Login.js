@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import styled from 'styled-components/native'
-import { Text, Pressable, View, Image } from 'react-native'
+import {
+  Text,
+  Pressable,
+  View,
+  Image,
+  KeyboardAvoidingView,
+} from 'react-native'
 import AuthInput from '../components/AuthInput'
 import { validateEmail, removeWhitespace } from '../utils/common'
 import { Button, WhiteSpace, WingBlank } from '@ant-design/react-native'
@@ -10,8 +16,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import auth from '../utils/auth'
 import { ActivityIndicator, Toast } from '@ant-design/react-native'
 import ConfirmModal from '../components/ConfirmModal'
-import LinearGradient from 'react-native-linear-gradient'
-import GradientColor from '../components/styles/GradientColor'
 
 const Container = styled.SafeAreaView`
   flex: 1;
@@ -79,116 +83,125 @@ const Login = ({ navigation, setUser }) => {
   }
 
   return (
-    <Container>
-      <ActivityIndicator
-        animating={loading}
-        toast
-        text="Loading..."
-        size="large"
-      />
-      <ConfirmModal
-        isVisible={modalVisible}
-        setVisible={setModalVisible}
-        texts={['로그인에 실패하였습니다', '이메일과 비밀번호를 확인해주세요.']}
-      />
-      <View
-        style={{
-          position: 'absolute',
-          top: 150,
-          alignItems: 'center',
-          height: '10%',
-          marginBottom: 15,
-        }}
-      >
-        <Image
-          source={require('../utils/auth_top.png')}
-          style={{
-            aspectRatio: 2846 / 759,
-            flex: 1,
-          }}
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: '#ffffff' }}
+      behavior={'padding'}
+    >
+      <Container>
+        <ActivityIndicator
+          animating={loading}
+          toast
+          text="Loading..."
+          size="large"
         />
-      </View>
-      <Text
-        style={{
-          fontSize: 30,
-          color: 'black',
-          fontFamily: 'ONEMobileBold',
-          marginBottom: 5,
-        }}
-      >
-        로그인
-      </Text>
-      <Text
-        style={{
-          fontSize: 14,
-          color: '#0806D9',
-          fontFamily: 'ONEMobileRegular',
-          marginBottom: 5,
-        }}
-      >
-        {` 본 서비스는 대학교 공식 이메일 계정을 
-        보유한 분들만 이용가능합니다. `}
-      </Text>
-      <AuthInput
-        label="이메일"
-        value={email}
-        onChangeText={_handleEmailChange}
-        placeholder="Email"
-      />
-      <ErrorText>{errorMessage}</ErrorText>
-      <AuthInput
-        label="비밀번호"
-        value={password}
-        onChangeText={_handlePasswordChange}
-        placeholder="Password"
-        isPassword
-      />
-
-      <WingBlank>
-        <WhiteSpace />
-        <WhiteSpace />
-        <Button
-          type="primary"
+        <ConfirmModal
+          isVisible={modalVisible}
+          setVisible={setModalVisible}
+          texts={[
+            '로그인에 실패하였습니다',
+            '이메일과 비밀번호를 확인해주세요.',
+          ]}
+        />
+        <View
           style={{
-            paddingLeft: 100,
-            paddingRight: 100,
-            paddingTop: 10,
-            paddingBottom: 10,
-            marginBottom: 5,
-            borderRadius: 10,
-            backgroundColor: '#67AFFF',
-            elevation: 10,
-            borderWidth: 0,
+            position: 'absolute',
+            top: 10,
+            alignItems: 'center',
+            height: '10%',
           }}
-          onPress={login}
-          disabled={disabled}
         >
-          <Text
+          <Image
+            source={require('../utils/auth_top.png')}
             style={{
-              fontSize: 25,
-              color: 'white',
-              fontFamily: 'BMHANNAAir_ttf',
+              aspectRatio: 2846 / 759,
+              flex: 1,
             }}
-          >
-            LOGIN
-          </Text>
-        </Button>
-        <WhiteSpace />
-      </WingBlank>
+          />
+        </View>
 
-      <Pressable onPress={() => navigation.navigate('회원가입')}>
         <Text
           style={{
-            color: '#0806D9',
-            fontSize: 16,
-            fontFamily: 'ONEMobileRegular',
-            textDecorationLine: 'underline',
+            fontSize: 30,
+            color: 'black',
+            fontFamily: 'ONEMobileBold',
+            marginBottom: 5,
           }}
         >
-          계정이 없으신가요? 회원가입
+          로그인
         </Text>
-      </Pressable>
-    </Container>
+        <Text
+          style={{
+            fontSize: 14,
+            color: '#0806D9',
+            fontFamily: 'ONEMobileRegular',
+            marginBottom: 5,
+          }}
+        >
+          {` 본 서비스는 대학교 공식 이메일 계정을 
+        보유한 분들만 이용가능합니다. `}
+        </Text>
+
+        <AuthInput
+          label="이메일"
+          value={email}
+          onChangeText={_handleEmailChange}
+          placeholder="Email"
+        />
+        <ErrorText>{errorMessage}</ErrorText>
+        <AuthInput
+          label="비밀번호"
+          value={password}
+          onChangeText={_handlePasswordChange}
+          placeholder="Password"
+          isPassword
+        />
+
+        <WingBlank>
+          <WhiteSpace />
+          <WhiteSpace />
+          <Button
+            type="primary"
+            style={{
+              paddingLeft: 100,
+              paddingRight: 100,
+              paddingTop: 10,
+              paddingBottom: 10,
+              marginBottom: 5,
+              borderRadius: 10,
+              backgroundColor: '#67AFFF',
+              elevation: 10,
+              borderWidth: 0,
+            }}
+            onPress={login}
+            disabled={disabled}
+          >
+            <Text
+              style={{
+                fontSize: 25,
+                color: 'white',
+                fontFamily: 'BMHANNAAir_ttf',
+              }}
+            >
+              LOGIN
+            </Text>
+          </Button>
+          <WhiteSpace />
+        </WingBlank>
+
+        <Pressable onPress={() => navigation.navigate('회원가입')}>
+          <Text
+            style={{
+              color: '#0806D9',
+              fontSize: 16,
+              fontFamily: 'ONEMobileRegular',
+              textDecorationLine: 'underline',
+            }}
+          >
+            계정이 없으신가요? 회원가입
+          </Text>
+        </Pressable>
+      </Container>
+    </KeyboardAvoidingView>
   )
 }
 

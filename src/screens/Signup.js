@@ -7,9 +7,10 @@ import {
   Dimensions,
   View,
   TextInput,
+  KeyboardAvoidingView,
 } from 'react-native'
 import AuthInput from '../components/AuthInput'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import {
   Button,
   WhiteSpace,
@@ -21,8 +22,6 @@ import Icon from 'react-native-vector-icons/AntDesign'
 import axios from 'axios'
 import { SERVER_URL } from '@env'
 import ConfirmModal from '../components/ConfirmModal'
-import LinearGradient from 'react-native-linear-gradient'
-import GradientColor from '../components/styles/GradientColor'
 
 const Container = styled.View`
   justify-content: center;
@@ -202,7 +201,10 @@ const Signup = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAwareScrollView extraScrollHeight={40}>
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: '#ffffff' }}
+      behavior={'padding'}
+    >
       <ConfirmModal
         isVisible={modalVisible}
         setVisible={setModalVisible}
@@ -393,7 +395,7 @@ const Signup = ({ navigation }) => {
           <WhiteSpace />
         </WingBlank>
       </Container>
-    </KeyboardAwareScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -401,7 +403,7 @@ const styles = StyleSheet.create({
   dropdownButtonStyle: {
     width: '100%',
     height: 50,
-    backgroundColor: '#e9e9e9',
+    backgroundColor: '#EDEDED',
     borderRadius: 5,
 
     marginTop: 5,
@@ -410,7 +412,7 @@ const styles = StyleSheet.create({
   dropdownButtonTextStyle: { color: '#444', textAlign: 'left' },
   dropdownDropdownStyle: { backgroundColor: '#e9e9e9' },
   dropdownRowStyle: {
-    backgroundColor: '#e9e9e9',
+    backgroundColor: '#EDEDED',
     borderBottomColor: '#C5C5C5',
   },
   dropdownRowTextStyle: { color: '#444', textAlign: 'left' },
@@ -430,7 +432,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: -12,
     marginRight: 5,
-    backgroundColor: '#e9e9e9',
+    backgroundColor: '#EDEDED',
     borderRadius: 8,
     paddingLeft: 10,
     paddingRight: 10,
@@ -438,7 +440,7 @@ const styles = StyleSheet.create({
   inputDomain: {
     fontSize: 20,
     marginBottom: -12,
-    backgroundColor: '#e9e9e9',
+    backgroundColor: '#EDEDED',
     borderRadius: 8,
   },
 })
