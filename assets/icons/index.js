@@ -51,6 +51,7 @@ import Joker from '../../assets/icons/Joker.png'
 import Medal from '../../assets/icons/Medal.png'
 import Inventory from '../../assets/icons/Inventory.png'
 import Chat from '../../assets/icons/Chat.png'
+import Trophy from '../../assets/icons/Trophy.png'
 
 export {
   Heart2,
@@ -105,4 +106,5 @@ export {
   Medal,
   Inventory,
   Chat,
+  Trophy,
 }
