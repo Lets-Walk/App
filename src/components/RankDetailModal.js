@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Button } from '@ant-design/react-native'
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
 import Modal from 'react-native-modal'
 import { useWindowDimensions } from 'react-native'

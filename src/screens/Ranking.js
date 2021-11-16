@@ -13,7 +13,6 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 import { List } from '@ant-design/react-native'
 import Confetti from '../animations/Confetti'
 import RankDetailModal from '../components/RankDetailModal'
-import { SERVER_URL } from '@env'
 
 const Ranking = ({ user }) => {
   const startDate = '2021.12.01'
@@ -219,8 +218,8 @@ const Ranking = ({ user }) => {
         </View>
 
         <Text style={{ fontFamily: 'ONEMobileRegular' }}>
-          대항전 기간: ({startDate} ~ {endDate}){'\n'} 대학 순위는 실시간으로
-          업데이트 됩니다.
+          대항전 기간: {startDate} ~ {endDate}
+          {'\n'} 대학 순위는 실시간으로 업데이트 됩니다.
         </Text>
       </View>
     </ScreenName>
