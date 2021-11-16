@@ -51,6 +51,10 @@ import Joker from '../../assets/icons/Joker.png'
 import Medal from '../../assets/icons/Medal.png'
 import Inventory from '../../assets/icons/Inventory.png'
 import Chat from '../../assets/icons/Chat.png'
+import Diamond from '../../assets/icons/Diamond.png'
+import Clover from '../../assets/icons/Clover.png'
+import Heart from '../../assets/icons/Heart.png'
+import Spade from '../../assets/icons/Spade.png'
 import Trophy from '../../assets/icons/Trophy.png'
 
 export {
@@ -107,4 +111,8 @@ export {
   Inventory,
   Chat,
   Trophy,
+  Diamond,
+  Clover,
+  Heart,
+  Spade,
 }
