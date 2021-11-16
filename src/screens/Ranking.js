@@ -13,41 +13,51 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 import { List } from '@ant-design/react-native'
 import Confetti from '../animations/Confetti'
 
-const Ranking = () => {
+const Ranking = ({ user }) => {
+  const userCampus = user.Campus.name
   const [ranks, setRanks] = useState([
     {
       rank: 1,
       campus: '중앙대학교',
+      score: 1820,
     },
     {
       rank: 2,
       campus: '숭실대학교',
+      score: 1610,
     },
     {
       rank: 3,
       campus: '서울대학교',
+      score: 1500,
     },
     {
       rank: 4,
       campus: '연세대학교',
+      score: 1480,
     },
     {
       rank: 5,
       campus: '건국대학교',
+      score: 1120,
     },
     {
       rank: 6,
       campus: '고려대학교',
+      score: 1090,
     },
     {
       rank: 7,
       campus: '동국대학교',
+      score: 870,
     },
     {
       rank: 8,
-      campus: '성균관대학교',
+      campus: '서강대학교',
+      score: 850,
     },
   ]) // mockup data
+
   return (
     <ScreenName name="대학랭킹">
       <View style={{ flex: 1, alignItems: 'center' }}>
@@ -70,23 +80,92 @@ const Ranking = () => {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                      marginRight: 5,
                     }}
                   >
-                    <Text style={[styles.BasicText, { fontSize: 15 }]}>
-                      {result.rank}위
-                    </Text>
-                    <Text style={[styles.BasicText, { fontSize: 15 }]}>
-                      {result.campus}
-                    </Text>
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flex: 1,
+                      }}
+                    >
+                      <Text style={[styles.BasicText, { fontSize: 15 }]}>
+                        {result.rank}위
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flex: 1,
+                      }}
+                    >
+                      {result.rank === 1 ? (
+                        <Image
+                          source={require('../utils/gold_medal.png')}
+                          style={{
+                            aspectRatio: 184 / 369,
+                            height: 30,
+                          }}
+                        />
+                      ) : null}
+                      {result.rank === 2 ? (
+                        <Image
+                          source={require('../utils/silver_medal.png')}
+                          style={{
+                            aspectRatio: 184 / 369,
+                            height: 30,
+                          }}
+                        />
+                      ) : null}
+                      {result.rank === 3 ? (
+                        <Image
+                          source={require('../utils/bronze_medal.png')}
+                          style={{
+                            aspectRatio: 184 / 369,
+                            height: 30,
+                          }}
+                        />
+                      ) : null}
+                    </View>
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flex: 3,
+                      }}
+                    >
+                      <Text style={[styles.BasicText, { fontSize: 15 }]}>
+                        {result.campus}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flex: 2,
+                      }}
+                    >
+                      <Text style={[styles.BasicText, { fontSize: 15 }]}>
+                        {result.score}점
+                      </Text>
+                    </View>
 
-                    <TouchableOpacity>
-                      <FontAwesomeIcon
-                        name="chevron-right"
-                        color="#001d40"
-                        size={15}
-                      />
-                    </TouchableOpacity>
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flex: 1,
+                      }}
+                    >
+                      <TouchableOpacity>
+                        <FontAwesomeIcon
+                          name="chevron-right"
+                          color="#001d40"
+                          size={15}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </List.Item>
               ))}
@@ -138,7 +217,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   ResultContainer: {
-    marginTop: 8,
+    marginTop: 10,
     backgroundColor: '#F4F4F4',
     elevation: 5,
     width: Dimensions.get('window').width - 40,
