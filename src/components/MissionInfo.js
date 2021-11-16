@@ -19,7 +19,7 @@ const missionDesc = {
 const MissionInfo = ({ infoVisible, setInfoVisible, name }) => {
   const onClose = () => {
     console.log('close button click')
-    setVisible(false)
+    setInfoVisible(false)
   }
 
   if (!name) return <></>
