@@ -18,6 +18,7 @@ import Banner from '../components/Banner'
 import FinishModal from '../components/FinishModal'
 import MissionSuccess from '../components/MissionSuccess'
 import showToast from '../utils/showToast'
+import Inventory from '../components/Inventory'
 import { SERVER_URL } from '@env'
 
 const Container = styled.View`
@@ -33,6 +34,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
   const [showFinishModal, setFinishModal] = useState(false)
+  const [showInventory, setShowInventory] = useState(false)
   const [mission, setMission] = useState(null)
   const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
   const [successMission, setSuccessMission] = useState({
@@ -155,6 +157,10 @@ const WalkingMode = ({ route, navigation }) => {
     setFinishModal(!showFinishModal)
   }, [showFinishModal])
 
+  const toggleInventory = useCallback(() => {
+    setShowInventory(!showInventory)
+  }, [showInventory])
+
   return (
     <>
       <Container>
@@ -176,11 +182,16 @@ const WalkingMode = ({ route, navigation }) => {
         />
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
-        <Banner inventory={inventory} />
+        <Banner toggleInventory={toggleInventory} />
         <MissionInfo
           name={mission}
           infoVisible={infoVisible}
           setInfoVisible={setInfoVisible}
+        />
+        <Inventory
+          inventory={inventory}
+          showInventory={showInventory}
+          toggleInventory={toggleInventory}
         />
         <FinishModal
           modalVisible={showFinishModal}
