@@ -75,7 +75,10 @@ const Ranking = ({ user }) => {
           <ScrollView>
             <List>
               {ranks.map((result) => (
-                <List.Item key={result.rank}>
+                <List.Item
+                  key={result.rank}
+                  style={result.campus === userCampus ? styles.MyCampus : null}
+                >
                   <View
                     style={{
                       flexDirection: 'row',
@@ -222,6 +225,9 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: Dimensions.get('window').width - 40,
     height: 300,
+  },
+  MyCampus: {
+    backgroundColor: '#D1F2FF',
   },
 })
 
