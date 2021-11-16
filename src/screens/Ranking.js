@@ -12,8 +12,12 @@ import ScreenName from '../components/ScreenName'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 import { List } from '@ant-design/react-native'
 import Confetti from '../animations/Confetti'
+import RankDetailModal from '../components/RankDetailModal'
+import { SERVER_URL } from '@env'
 
 const Ranking = ({ user }) => {
+  const startDate = '2021.12.01'
+  const endDate = '2021.12.31'
   const userCampus = user.Campus.name
   const [ranks, setRanks] = useState([
     {
@@ -56,10 +60,46 @@ const Ranking = ({ user }) => {
       campus: '서강대학교',
       score: 850,
     },
+    {
+      rank: 9,
+      campus: '한양대학교',
+      score: 790,
+    },
+    {
+      rank: 10,
+      campus: '홍익대학교',
+      score: 750,
+    },
+    {
+      rank: 11,
+      campus: '광운대학교',
+      score: 660,
+    },
   ]) // mockup data
+
+  const _handleDetail = (campus) => {
+    // 서버에서 해당 대학정보, 참여자 정보 불러오기
+    console.log(campus)
+    setIsVisible(true)
+    setModalVisible(true)
+    setCampusName(campus)
+  }
+
+  const [isVisible, setIsVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false)
+  const _handleConfirm = useCallback(() => {
+    setModalVisible(false)
+  }, [])
+  const [campusName, setCampusName] = useState('')
 
   return (
     <ScreenName name="대학랭킹">
+      <RankDetailModal
+        isVisible={modalVisible}
+        setVisible={setModalVisible}
+        onConfirm={_handleConfirm}
+        campusName={campusName}
+      />
       <View style={{ flex: 1, alignItems: 'center' }}>
         <Confetti />
         <Image
@@ -161,7 +201,9 @@ const Ranking = ({ user }) => {
                         flex: 1,
                       }}
                     >
-                      <TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => _handleDetail(result.campus)}
+                      >
                         <FontAwesomeIcon
                           name="chevron-right"
                           color="#001d40"
@@ -175,6 +217,11 @@ const Ranking = ({ user }) => {
             </List>
           </ScrollView>
         </View>
+
+        <Text style={{ fontFamily: 'ONEMobileRegular' }}>
+          대항전 기간: ({startDate} ~ {endDate}){'\n'} 대학 순위는 실시간으로
+          업데이트 됩니다.
+        </Text>
       </View>
     </ScreenName>
   )
@@ -190,41 +237,18 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-
-  CountContainer: {
-    marginTop: 20,
-    marginLeft: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    elevation: 5,
-    height: 120,
-    width: (Dimensions.get('window').width - 40) / 2 - 10,
-    height: 120,
-    borderRadius: 10,
-  },
   BasicText: {
     fontFamily: 'ONEMobileRegular',
     paddingBottom: 0,
     fontSize: 18,
-  },
-  ProfileContainer: {
-    width: 50,
-    height: 50,
-    resizeMode: 'contain',
-    borderRadius: 50,
-  },
-  LogoContainer: {
-    width: 50,
-    height: 50,
-    resizeMode: 'contain',
   },
   ResultContainer: {
     marginTop: 10,
     backgroundColor: '#F4F4F4',
     elevation: 5,
     width: Dimensions.get('window').width - 40,
-    height: 300,
+    height: 450,
+    marginBottom: 10,
   },
   MyCampus: {
     backgroundColor: '#D1F2FF',
