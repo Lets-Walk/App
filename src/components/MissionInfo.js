@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text, Pressable, StyleSheet, Image } from 'react-native'
+import Modal from 'react-native-modal'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SvgXml } from 'react-native-svg'
 import { Mission } from '../../assets/images/index'
@@ -15,7 +16,7 @@ const missionDesc = {
   Fullhouse: ['무늬와 색에 상관 없이', '같은 숫자 3개와 2개를 각각 모으세요.'],
 }
 
-const MissionInfo = ({ setVisible, name }) => {
+const MissionInfo = ({ infoVisible, setInfoVisible, name }) => {
   const onClose = () => {
     console.log('close button click')
     setVisible(false)
@@ -25,25 +26,34 @@ const MissionInfo = ({ setVisible, name }) => {
   const desc = missionDesc[name]
 
   return (
-    <View style={styles.infoConatiner}>
-      <View style={styles.header}>
-        <Pressable
-          onPress={onClose}
-          style={{ position: 'absolute', right: '1%', top: 0 }}
-        >
-          <Ionicons name="close-outline" size={38} color="gray" />
-        </Pressable>
-        <SvgXml xml={Mission} width={200} height={200} />
+    <Modal
+      backdropOpacity={0}
+      onBackdropPress={() => {
+        setInfoVisible(false)
+      }}
+      isVisible={infoVisible}
+      style={{ margin: 0 }}
+    >
+      <View style={styles.infoConatiner}>
+        <View style={styles.header}>
+          <Pressable
+            onPress={onClose}
+            style={{ position: 'absolute', right: '1%', top: 0 }}
+          >
+            <Ionicons name="close-outline" size={38} color="gray" />
+          </Pressable>
+          <SvgXml xml={Mission} width={200} height={200} />
+        </View>
+        <View style={styles.content}>
+          <SvgXml xml={getMissionImage(name)} style={styles.title} />
+          {desc.map((text, index) => (
+            <Text key={index} style={styles.desc}>
+              {text}
+            </Text>
+          ))}
+        </View>
       </View>
-      <View style={styles.content}>
-        <SvgXml xml={getMissionImage(name)} style={styles.title} />
-        {desc.map((text, index) => (
-          <Text key={index} style={styles.desc}>
-            {text}
-          </Text>
-        ))}
-      </View>
-    </View>
+    </Modal>
   )
 }
 

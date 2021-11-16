@@ -166,16 +166,11 @@ const WalkingMode = ({ route, navigation }) => {
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
         <Banner inventory={inventory} />
-        <Modal
-          backdropOpacity={0}
-          onBackdropPress={() => {
-            setInfoVisible(false)
-          }}
-          isVisible={infoVisible}
-          style={{ margin: 0 }}
-        >
-          <MissionInfo name={mission} setVisible={setInfoVisible} />
-        </Modal>
+        <MissionInfo
+          name={mission}
+          infoVisible={infoVisible}
+          setInfoVisible={setInfoVisible}
+        />
         <FinishModal
           modalVisible={showFinishModal}
           toggleModal={toggleFinishModal}
