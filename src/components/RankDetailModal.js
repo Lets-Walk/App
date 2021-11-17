@@ -11,21 +11,17 @@ const CenterView = styled.View`
 `
 
 const Container = styled.View`
-  width: 90%;
-  height: 50%;
+  width: 100%;
+  height: 80%;
   background-color: #ffffff;
   border-radius: 15px;
 `
 
-const HomeResultModal = ({
+const RankDetailModal = ({
   isVisible,
   setVisible,
-  date,
-  startTime,
-  endTime,
-  opponent,
-  outcome,
-  steps,
+  campusName,
+
   onConfirm = null,
 }) => {
   if (!onConfirm) {
@@ -48,19 +44,7 @@ const HomeResultModal = ({
           <View
             style={{ alignItems: 'center', marginTop: 20, marginBottom: 25 }}
           >
-            <Text style={styles.title}>
-              상{'\t'}세{'\t'}결{'\t'}과
-            </Text>
-          </View>
-          <View style={{ alignItems: 'flex-start', marginLeft: 15 }}>
-            <Text style={styles.text}>
-              배틀 일시 : {date} ({startTime} ~ {endTime})
-            </Text>
-            <Text style={styles.text}>상대 학교 : {opponent}</Text>
-            <Text style={styles.text}>나의 걸음수 : {steps}보</Text>
-            <Text style={styles.text}>
-              최종 결과 : {outcome == 'win' ? '승리' : '패배'}
-            </Text>
+            <Text style={styles.title}>{campusName}</Text>
           </View>
           <View style={styles.Button}>
             <TouchableOpacity onPress={onConfirm}>
@@ -110,4 +94,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default HomeResultModal
+export default RankDetailModal

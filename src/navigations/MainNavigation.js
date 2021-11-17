@@ -60,14 +60,15 @@ const MainNavigation = ({ user }) => {
       </Tab.Screen>
       <Tab.Screen
         name="Ranking"
-        component={Ranking}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <IoniconsIcon name="trophy-sharp" color={color} size={size} />
           ),
         }}
-      />
+      >
+        {(props) => <Ranking {...props} user={user} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Setting"
         component={Setting}
