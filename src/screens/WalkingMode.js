@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   BackHandler,
   useWindowDimensions,
   StyleSheet,
   Alert,
+  Animated,
 } from 'react-native'
 import styled from 'styled-components/native'
 import { useFocusEffect } from '@react-navigation/native'
-import Modal from 'react-native-modal'
 import { ActivityIndicator } from '@ant-design/react-native'
 
 import NaverMap from '../components/NaverMap'
@@ -17,7 +17,9 @@ import MissionInfo from '../components/MissionInfo'
 import MissionBanner from '../components/MissionBanner'
 import Banner from '../components/Banner'
 import FinishModal from '../components/FinishModal'
+import MissionSuccess from '../components/MissionSuccess'
 import showToast from '../utils/showToast'
+import Inventory from '../components/Inventory'
 import { SERVER_URL } from '@env'
 
 const Container = styled.View`
@@ -27,14 +29,21 @@ const Container = styled.View`
 
 const WalkingMode = ({ route, navigation }) => {
   const { socket, battleRoomId, userInfo, crewId } = route.params
-  const [infoVisible, setInfoVisible] = useState(false)
+  const [infoVisible, setInfoVisible] = useState(false) //미션정보 모달
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
+  const [invAnimation, setAnimValue] = useState(new Animated.Value(0))
+  const [invBadge, setInvBadge] = useState(false)
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
   const [showFinishModal, setFinishModal] = useState(false)
+  const [showInventory, setShowInventory] = useState(false)
   const [mission, setMission] = useState(null)
   const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
+  const [successMission, setSuccessMission] = useState({
+    winCampus: null,
+    modalVisible: false,
+  })
 
   useFocusEffect(
     React.useCallback(() => {
@@ -90,6 +99,7 @@ const WalkingMode = ({ route, navigation }) => {
 
     socket.on('inventorySync', ({ newInventory }) => {
       console.log('inventorySync')
+      setInvBadge(true)
       setInventory(newInventory)
     })
 
@@ -100,9 +110,12 @@ const WalkingMode = ({ route, navigation }) => {
       console.log('inventory초기화')
       setInventory([])
       //맵의 마커를 초기화 하는 작업 필요.
-      Alert.alert(`${campusName}크루가 ${mission}미션을 완료했습니다.`)
       if (isEnd) return //isEnd면 더 이상 진행하지 않고 return
       //미션완료 팝업 후 잠깐 대기한 다음 다음 미션에 대한 준비완료를 알림
+      setSuccessMission({
+        winCampus: campusName,
+        modalVisible: true,
+      })
       setTimeout(() => {
         emitReadyWalkingMode()
       }, 3000)
@@ -148,6 +161,21 @@ const WalkingMode = ({ route, navigation }) => {
     setFinishModal(!showFinishModal)
   }, [showFinishModal])
 
+  const toggleInventory = useCallback(() => {
+    setInvBadge(false)
+    if (showInventory) {
+      setShowInventory(false)
+      setAnimValue(new Animated.Value(0))
+    } else {
+      setShowInventory(true)
+      Animated.timing(invAnimation, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start()
+    }
+  }, [showInventory])
+
   return (
     <>
       <Container>
@@ -163,19 +191,24 @@ const WalkingMode = ({ route, navigation }) => {
           obtainItemEmit={obtainItemEmit}
         />
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
+        <MissionSuccess
+          successMission={successMission}
+          setSuccessMission={setSuccessMission}
+        />
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
-        <Banner inventory={inventory} />
-        <Modal
-          backdropOpacity={0}
-          onBackdropPress={() => {
-            setInfoVisible(false)
-          }}
-          isVisible={infoVisible}
-          style={{ margin: 0 }}
-        >
-          <MissionInfo name={mission} setVisible={setInfoVisible} />
-        </Modal>
+        <Banner toggleInventory={toggleInventory} invBadge={invBadge} />
+        <MissionInfo
+          name={mission}
+          infoVisible={infoVisible}
+          setInfoVisible={setInfoVisible}
+        />
+        <Inventory
+          inventory={inventory}
+          showInventory={showInventory}
+          toggleInventory={toggleInventory}
+          invAnimation={invAnimation}
+        />
         <FinishModal
           modalVisible={showFinishModal}
           toggleModal={toggleFinishModal}
