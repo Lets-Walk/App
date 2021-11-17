@@ -1,10 +1,11 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { SvgXml } from 'react-native-svg'
 
 const Pattern = ({ pattern }) => {
   return (
     <View style={styles.pattern}>
-      <Image source={pattern} style={styles.patternSize} />
+      <SvgXml xml={pattern} width={30} height={30} />
     </View>
   )
 }
@@ -18,9 +19,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  patternSize: {
-    width: 30,
-    height: 30,
   },
 })

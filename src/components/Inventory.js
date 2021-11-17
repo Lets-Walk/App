@@ -7,14 +7,9 @@ import {
   FlatList,
   Pressable,
 } from 'react-native'
-import styled, { ServerStyleSheet } from 'styled-components'
-import {
-  Heart,
-  Diamond,
-  Spade,
-  Clover,
-  Inventory as Inv,
-} from '../../assets/icons'
+import styled from 'styled-components'
+import { Inventory as Inv } from '../../assets/icons'
+import { Heart, Diamond, Spade, Clover } from '../../assets/images'
 import GetMarkerImage from '../utils/getMarkerImage'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import ItemList from './ItemList'
@@ -31,6 +26,7 @@ const Container = styled.View`
 
 const Inventory = ({ inventory, toggleInventory, showInventory }) => {
   if (!showInventory) return <></>
+
   const [itemByPattern, setItems] = useState({
     Spade: [],
     Clover: [],
@@ -51,7 +47,7 @@ const Inventory = ({ inventory, toggleInventory, showInventory }) => {
     setItems(items)
   }, [inventory])
 
-  //TODO :: 인벤토리 열었을 때 패턴이미지 깜빡이는 문제(svg로 교체 ?)
+  //TODO ::
   //조커 먹었을 때 앱 튕기는 현상. (아이템 획득 부분에서 예외처리 필요)
   //인벤토리 열었을 때의 애니메이션 추가, draggable 가능하면 추가.
   //4인 워킹모드일 때 테스튼 필요.
