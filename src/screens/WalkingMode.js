@@ -109,6 +109,7 @@ const WalkingMode = ({ route, navigation }) => {
       setMission(null) //미션 초기화
       console.log('inventory초기화')
       setInventory([])
+      setInvBadge(false)
       //맵의 마커를 초기화 하는 작업 필요.
       if (isEnd) return //isEnd면 더 이상 진행하지 않고 return
       //미션완료 팝업 후 잠깐 대기한 다음 다음 미션에 대한 준비완료를 알림
