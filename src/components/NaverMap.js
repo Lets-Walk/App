@@ -8,6 +8,7 @@ import { SERVER_URL } from '@env'
 import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
 import { useCallback } from 'react/cjs/react.development'
+import showToast from '../utils/showToast'
 
 const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
@@ -15,7 +16,7 @@ const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
   const [itemList, setItemList] = useState([])
 
   const mapRef = useRef(null)
-  const obtainMeter = 3
+  const obtainMeter = 0.5
 
   const cameraChange = (location) => {
     mapRef.current.animateToCoordinate(location) //마커 좌표로 이동
@@ -69,35 +70,39 @@ const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
 
     if (dist > obtainMeter) {
       // 50m 이내의 아이템만 획득 가능.
-      // markerToastRef.current.show(
-      //   '아이템을 획득하기에는 거리가 너무 멉니다.',
-      // )
+      showToast({ type: 'errorItem' })
       console.log('거리가 너무 멀음')
-    } else {
-      //현재 아이템 리스트에서 획득한 아이템을 제거함.
-      const filterItemList = itemList.filter(
-        (elem) => !(elem.lat === item.lat && elem.lng === item.lng),
-      )
-
-      //아이템을 인벤토리에 추가하고 state에 반영함.
-      // obtainItem.current.show('아이템을 획득했습니다.')
-      console.log('아이템 획득')
-      let isExist = false //아이템이 이미 인벤토리에 존재하는지 확인
-      inventory.map((inv) => {
-        if (inv.type === item.type) {
-          inv.quantity += 1
-          isExist = true
-        }
-      })
-      let newInventory = null
-      if (isExist) {
-        newInventory = [...inventory]
-      } else {
-        newInventory = [...inventory, { type: item.type, quantity: 1 }]
-      }
-      setItemList(filterItemList)
-      obtainItemEmit({ item, newInventory })
+      return
     }
+
+    if (item.type === 'Joker') {
+      //조커일때의 처리
+
+      return
+    }
+    //현재 아이템 리스트에서 획득한 아이템을 제거함.
+    const filterItemList = itemList.filter(
+      (elem) => !(elem.lat === item.lat && elem.lng === item.lng),
+    )
+
+    //아이템을 인벤토리에 추가하고 state에 반영함.
+    // obtainItem.current.show('아이템을 획득했습니다.')
+    console.log('아이템 획득')
+    let isExist = false //아이템이 이미 인벤토리에 존재하는지 확인
+    inventory.map((inv) => {
+      if (inv.type === item.type) {
+        inv.quantity += 1
+        isExist = true
+      }
+    })
+    let newInventory = null
+    if (isExist) {
+      newInventory = [...inventory]
+    } else {
+      newInventory = [...inventory, { type: item.type, quantity: 1 }]
+    }
+    setItemList(filterItemList)
+    obtainItemEmit({ item, newInventory })
   }
 
   return (

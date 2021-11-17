@@ -57,6 +57,7 @@ import Heart from '../../assets/icons/Heart.png'
 import Spade from '../../assets/icons/Spade.png'
 import Trophy from '../../assets/icons/Trophy.png'
 import New from '../../assets/icons/New.png'
+import Error from '../../assets/icons/Error.png'
 
 export {
   Heart2,
@@ -117,4 +118,5 @@ export {
   Heart,
   Spade,
   New,
+  Error,
 }

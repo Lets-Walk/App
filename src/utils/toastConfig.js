@@ -2,6 +2,7 @@
 import React from 'react'
 import { BaseToast, ErrorToast } from 'react-native-toast-message'
 import { View, Text, Image, StyleSheet } from 'react-native'
+import { Error } from '../../assets/icons'
 /*
   1. Create the config
 */
@@ -54,6 +55,17 @@ const toastConfig = {
       </View>
     </View>
   ),
+
+  errorItem: () => (
+    <View style={styles.container}>
+      <View style={{ ...styles.content, left: 10 }}>
+        <Image source={Error} width={20} height={20} style={styles.logo} />
+        <Text style={styles.errortext}>
+          아이템과의 거리가 멀어 획득할 수 없습니다
+        </Text>
+      </View>
+    </View>
+  ),
 }
 
 export default toastConfig
@@ -77,7 +89,7 @@ const styles = StyleSheet.create({
   content: {
     position: 'absolute',
     height: 40,
-    width: 280,
+    width: 320,
     left: 25,
     justifyContent: 'center',
   },
@@ -88,6 +100,11 @@ const styles = StyleSheet.create({
   },
   text: {
     left: 35,
+    fontSize: 17,
+    fontFamily: 'BMHANNAAir_ttf',
+  },
+  errortext: {
+    marginLeft: 40,
     fontSize: 17,
     fontFamily: 'BMHANNAAir_ttf',
   },

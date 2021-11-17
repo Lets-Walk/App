@@ -24,7 +24,7 @@ const getItemColor = (name) => {
   return color
 }
 
-const showToast = ({ type, logo, userName, item }) => {
+const showToast = ({ type, logo, userName = '', item = '' }) => {
   Toast.show({
     type: type,
     position: 'bottom',
