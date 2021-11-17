@@ -58,6 +58,7 @@ import Spade from '../../assets/icons/Spade.png'
 import Trophy from '../../assets/icons/Trophy.png'
 import New from '../../assets/icons/New.png'
 import Error from '../../assets/icons/Error.png'
+import Trophy_finish from '../../assets/icons/Trophy_finish.png'
 
 export {
   Heart2,
@@ -119,4 +120,5 @@ export {
   Spade,
   New,
   Error,
+  Trophy_finish,
 }

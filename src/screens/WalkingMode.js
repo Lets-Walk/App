@@ -21,6 +21,7 @@ import MissionSuccess from '../components/MissionSuccess'
 import showToast from '../utils/showToast'
 import Inventory from '../components/Inventory'
 import { SERVER_URL } from '@env'
+import FinishMode from '../components/FinishMode'
 
 const Container = styled.View`
   flex: 1;
@@ -41,6 +42,10 @@ const WalkingMode = ({ route, navigation }) => {
   const [mission, setMission] = useState(null)
   const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
   const [successMission, setSuccessMission] = useState({
+    winCampus: null,
+    modalVisible: false,
+  })
+  const [finishMode, setFinishMode] = useState({
     winCampus: null,
     modalVisible: false,
   })
@@ -110,8 +115,17 @@ const WalkingMode = ({ route, navigation }) => {
       console.log('inventory초기화')
       setInventory([])
       setInvBadge(false)
-      //맵의 마커를 초기화 하는 작업 필요.
-      if (isEnd) return //isEnd면 더 이상 진행하지 않고 return
+
+      //isEnd면 더 이상 진행하지 않고 return
+      if (isEnd) {
+        //setFinishMode 설정
+        setFinishMode({
+          winCampus: campusName,
+          modalVisible: true,
+        })
+        return
+      }
+
       //미션완료 팝업 후 잠깐 대기한 다음 다음 미션에 대한 준비완료를 알림
       setSuccessMission({
         winCampus: campusName,
@@ -196,6 +210,7 @@ const WalkingMode = ({ route, navigation }) => {
           successMission={successMission}
           setSuccessMission={setSuccessMission}
         />
+        <FinishMode finishMode={finishMode} setFinishMode={setFinishMode} />
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
         <Banner toggleInventory={toggleInventory} invBadge={invBadge} />
