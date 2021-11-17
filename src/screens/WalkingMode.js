@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   BackHandler,
   useWindowDimensions,
@@ -33,6 +33,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
   const [invAnimation, setAnimValue] = useState(new Animated.Value(0))
+  const [invBadge, setInvBadge] = useState(false)
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
   const [showFinishModal, setFinishModal] = useState(false)
@@ -98,6 +99,7 @@ const WalkingMode = ({ route, navigation }) => {
 
     socket.on('inventorySync', ({ newInventory }) => {
       console.log('inventorySync')
+      setInvBadge(true)
       setInventory(newInventory)
     })
 
@@ -160,6 +162,7 @@ const WalkingMode = ({ route, navigation }) => {
   }, [showFinishModal])
 
   const toggleInventory = useCallback(() => {
+    setInvBadge(false)
     if (showInventory) {
       setShowInventory(false)
       setAnimValue(new Animated.Value(0))
@@ -194,7 +197,7 @@ const WalkingMode = ({ route, navigation }) => {
         />
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
-        <Banner toggleInventory={toggleInventory} />
+        <Banner toggleInventory={toggleInventory} invBadge={invBadge} />
         <MissionInfo
           name={mission}
           infoVisible={infoVisible}

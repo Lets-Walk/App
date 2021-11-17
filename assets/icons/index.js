@@ -56,6 +56,7 @@ import Clover from '../../assets/icons/Clover.png'
 import Heart from '../../assets/icons/Heart.png'
 import Spade from '../../assets/icons/Spade.png'
 import Trophy from '../../assets/icons/Trophy.png'
+import New from '../../assets/icons/New.png'
 
 export {
   Heart2,
@@ -115,4 +116,5 @@ export {
   Clover,
   Heart,
   Spade,
+  New,
 }
