@@ -10,13 +10,13 @@ import getDistance from '../utils/getDistance'
 import { useCallback } from 'react/cjs/react.development'
 import showToast from '../utils/showToast'
 
-const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
+const NaverMap = ({ inventory, mission, obtainItemEmit, obtainJokerEmit }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
   const [itemList, setItemList] = useState([])
 
   const mapRef = useRef(null)
-  const obtainMeter = 0.5
+  const obtainMeter = 3
 
   const cameraChange = (location) => {
     mapRef.current.animateToCoordinate(location) //마커 좌표로 이동
@@ -77,7 +77,7 @@ const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
 
     if (item.type === 'Joker') {
       //조커일때의 처리
-
+      obtainJokerEmit()
       return
     }
     //현재 아이템 리스트에서 획득한 아이템을 제거함.

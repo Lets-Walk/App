@@ -12,6 +12,7 @@ import Diamond from '../../assets/images/Diamond.svg'
 import Heart from '../../assets/images/Heart.svg'
 import Spade from '../../assets/images/Spade.svg'
 import Clover from '../../assets/images/Clover.svg'
+import Joker from '../../assets/images/Joker.svg'
 
 export {
   Onepair,
@@ -28,4 +29,5 @@ export {
   Clover,
   Heart,
   Spade,
+  Joker,
 }

@@ -21,6 +21,7 @@ import MissionSuccess from '../components/MissionSuccess'
 import showToast from '../utils/showToast'
 import Inventory from '../components/Inventory'
 import { SERVER_URL } from '@env'
+import JokerWait from '../components/JokerWait'
 
 const Container = styled.View`
   flex: 1;
@@ -44,6 +45,7 @@ const WalkingMode = ({ route, navigation }) => {
     winCampus: null,
     modalVisible: false,
   })
+  const [jokerWait, setJokerWait] = useState(false)
 
   useFocusEffect(
     React.useCallback(() => {
@@ -180,6 +182,7 @@ const WalkingMode = ({ route, navigation }) => {
     })
 
     //조커 미션을 기다리는 모달 창 켜기
+    setJokerWait(true)
   }, [crewInfo])
 
   const missionBannerToggle = () => {
@@ -218,6 +221,7 @@ const WalkingMode = ({ route, navigation }) => {
           inventory={inventory}
           mission={mission}
           obtainItemEmit={obtainItemEmit}
+          obtainJokerEmit={obtainJokerEmit}
         />
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionSuccess
@@ -226,6 +230,7 @@ const WalkingMode = ({ route, navigation }) => {
         />
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
+        <JokerWait modalVisible={jokerWait} />
         <Banner toggleInventory={toggleInventory} invBadge={invBadge} />
         <MissionInfo
           name={mission}
