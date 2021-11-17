@@ -97,6 +97,22 @@ const WalkingMode = ({ route, navigation }) => {
       })
     })
 
+    socket.on('jokerMission', ({ type, obtainCampus, effectedCampus }) => {
+      //조커 미션을 설명하는 모달 창 띄움 (campusName에 따라 렌더링 다르게 필요)
+
+      if (userInfo.campus.name === effectedCampus) {
+        //조커 미션을 당하는 크루라면
+        //타입에 따른 조커 미션 적용
+        //조커 미션 타이머 띄움
+      }
+
+      //조커 모달 띄움 obtainCampus와 effectedCampus 전달해서 렌더링 다르게 하기.
+    })
+
+    socket.on('jokerMissionEnd', () => {
+      //조커 모달, 조커 효과, 타이머 제거 (함수화로 빼서, 미션 성공했을 때도 사용하기)
+    })
+
     socket.on('inventorySync', ({ newInventory }) => {
       console.log('inventorySync')
       setInvBadge(true)
@@ -153,6 +169,18 @@ const WalkingMode = ({ route, navigation }) => {
     },
     [crewInfo, mission],
   )
+
+  const obtainJokerEmit = useCallback(() => {
+    console.log('jokerItemEmit')
+    socket.emit('jokerGain', {
+      crewId,
+      battleRoomId,
+      crewInfo,
+      campusName: userInfo.campus.name,
+    })
+
+    //조커 미션을 기다리는 모달 창 켜기
+  }, [crewInfo])
 
   const missionBannerToggle = () => {
     if (mission) setInfoVisible(!infoVisible)
