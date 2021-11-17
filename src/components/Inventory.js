@@ -6,6 +6,7 @@ import {
   Image,
   FlatList,
   Pressable,
+  Animated,
 } from 'react-native'
 import styled from 'styled-components'
 import { Inventory as Inv } from '../../assets/icons'
@@ -24,9 +25,13 @@ const Container = styled.View`
   align-items: center;
 `
 
-const Inventory = ({ inventory, toggleInventory, showInventory }) => {
+const Inventory = ({
+  inventory,
+  toggleInventory,
+  showInventory,
+  invAnimation,
+}) => {
   if (!showInventory) return <></>
-
   const [itemByPattern, setItems] = useState({
     Spade: [],
     Clover: [],
@@ -49,12 +54,12 @@ const Inventory = ({ inventory, toggleInventory, showInventory }) => {
 
   //TODO ::
   //조커 먹었을 때 앱 튕기는 현상. (아이템 획득 부분에서 예외처리 필요)
-  //인벤토리 열었을 때의 애니메이션 추가, draggable 가능하면 추가.
   //4인 워킹모드일 때 테스튼 필요.
-
   return (
     <Container>
-      <View style={styles.inventory}>
+      <Animated.View
+        style={{ ...styles.inventory, transform: [{ scale: invAnimation }] }}
+      >
         <View style={styles.header}>
           <Image source={Inv} style={styles.icon} />
           <Text style={styles.headerFontColor}>INVENTORY</Text>
@@ -84,7 +89,7 @@ const Inventory = ({ inventory, toggleInventory, showInventory }) => {
             <ItemList items={itemByPattern.Spade} />
           </View>
         </View>
-      </View>
+      </Animated.View>
     </Container>
   )
 }

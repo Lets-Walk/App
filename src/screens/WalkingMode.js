@@ -4,6 +4,7 @@ import {
   useWindowDimensions,
   StyleSheet,
   Alert,
+  Animated,
 } from 'react-native'
 import styled from 'styled-components/native'
 import { useFocusEffect } from '@react-navigation/native'
@@ -31,6 +32,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [infoVisible, setInfoVisible] = useState(false) //미션정보 모달
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
+  const [invAnimation, setAnimValue] = useState(new Animated.Value(0))
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
   const [showFinishModal, setFinishModal] = useState(false)
@@ -158,7 +160,17 @@ const WalkingMode = ({ route, navigation }) => {
   }, [showFinishModal])
 
   const toggleInventory = useCallback(() => {
-    setShowInventory(!showInventory)
+    if (showInventory) {
+      setShowInventory(false)
+      setAnimValue(new Animated.Value(0))
+    } else {
+      setShowInventory(true)
+      Animated.timing(invAnimation, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start()
+    }
   }, [showInventory])
 
   return (
@@ -192,6 +204,7 @@ const WalkingMode = ({ route, navigation }) => {
           inventory={inventory}
           showInventory={showInventory}
           toggleInventory={toggleInventory}
+          invAnimation={invAnimation}
         />
         <FinishModal
           modalVisible={showFinishModal}
