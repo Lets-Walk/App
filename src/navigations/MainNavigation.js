@@ -25,9 +25,9 @@ const MainNavigation = ({ user }) => {
       initialRouteName="Home" //initial screen
       tabBarOptions={{
         showLabel: false, //탭 아이콘 라벨
-        activeTintColor: '#001d40', //탭 focus 색깔
-        activeBackgroundColor: '#c8eef9',
-        inactiveBackgroundColor: '#001d40',
+        activeTintColor: '#37688B', //탭 focus 색깔
+        // activeBackgroundColor: '#001d40',
+        inactiveBackgroundColor: '#ffffff',
         style: {
           // 탭 스타일
           position: 'absolute',

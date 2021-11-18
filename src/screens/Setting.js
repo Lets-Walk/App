@@ -196,10 +196,10 @@ const Setting = () => {
 
       <View
         style={{
-          justifyContent: 'space-around',
-          marginTop: 30,
+          flex: 1,
+          justifyContent: 'center',
           alignItems: 'center',
-          height: height * 0.7,
+          marginBottom: 60,
         }}
       >
         <SettingsButton text="워크투게더 소개" pressFunction={_handleIntro} />

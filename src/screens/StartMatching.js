@@ -50,19 +50,19 @@ const StartMatching = ({ navigation, user }) => {
           <Text
             style={{
               fontSize: 32,
-              fontFamily: 'Cafe24Shiningstar',
+              fontFamily: 'BMHANNAAir_ttf',
               marginBottom: 0,
             }}
           >
             현재 순위
           </Text>
-          <Text style={{ fontSize: 30, fontFamily: 'Cafe24Shiningstar' }}>
+          <Text style={{ fontSize: 24, fontFamily: 'BMHANNAAir_ttf' }}>
             {campusRank}위 ({campusScore}점)
           </Text>
         </View>
 
         <View style={styles.buttonContainer}>
-          <BasicButton text="START" pressFunction={_handleStartButton} />
+          <BasicButton text="매칭 시작" pressFunction={_handleStartButton} />
         </View>
       </View>
     </ScreenName>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   campusNameText: {
-    fontFamily: 'Cafe24Shiningstar',
+    fontFamily: 'BMHANNAAir_ttf',
     fontSize: 48,
   },
   logoContainer: {

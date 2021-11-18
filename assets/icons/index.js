@@ -63,6 +63,8 @@ import Ghost from '../../assets/icons/Ghost.png'
 import Hide from '../../assets/icons/Hide.png'
 import GhostMarker from '../../assets/icons/GhostMarker.png'
 import Trophy_finish from '../../assets/icons/Trophy_finish.png'
+import Crown from '../../assets/icons/Crown.png'
+import Footprint from '../../assets/icons/Footprint.png'
 
 export {
   Heart2,
@@ -129,4 +131,6 @@ export {
   Hide,
   GhostMarker,
   Trophy_finish,
+  Crown,
+  Footprint,
 }

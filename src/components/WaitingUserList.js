@@ -11,10 +11,12 @@ const WaitingUserList = ({ waitingUsers }) => {
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        backgroundColor: '#D4ECFB',
+        // backgroundColor: '#D4ECFB',
         height: 120,
         width: width * 0.9,
         borderRadius: 10,
+        borderColor: '#989898',
+        borderBottomWidth: 1,
       }}
     >
       {waitingUsers.map((user) => (

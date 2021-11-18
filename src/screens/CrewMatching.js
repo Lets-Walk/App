@@ -171,8 +171,8 @@ const CrewMatching = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 30,
-    fontFamily: 'Cafe24Shiningstar',
+    fontSize: 24,
+    fontFamily: 'BMHANNAAir_ttf',
     textAlign: 'center',
   },
   textContainer: {
@@ -187,7 +187,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     alignItems: 'center',
   },
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ffffff',
+  },
   campusNameText: {
     fontFamily: 'BMHANNAAir_ttf',
     fontSize: 35,

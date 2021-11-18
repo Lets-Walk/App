@@ -99,7 +99,7 @@ const Ranking = ({ user }) => {
         onConfirm={_handleConfirm}
         campusName={campusName}
       />
-      <View style={{ flex: 1, alignItems: 'center' }}>
+      <View style={{ flex: 1, alignItems: 'center', top: 30 }}>
         <Confetti />
         <Image
           source={require('../utils/medals.png')}
@@ -108,7 +108,7 @@ const Ranking = ({ user }) => {
             height: '10%',
           }}
         />
-        <Text style={styles.ListTitleText}>대학별 랭킹</Text>
+        {/* <Text style={styles.ListTitleText}>대학별 랭킹</Text> */}
 
         <View style={styles.ResultContainer}>
           <ScrollView>
@@ -227,7 +227,7 @@ const Ranking = ({ user }) => {
 }
 const styles = StyleSheet.create({
   ListTitleText: {
-    fontFamily: 'Cafe24Shiningstar',
+    fontFamily: 'ONEMobileRegular',
     fontSize: 40,
   },
   Container: {

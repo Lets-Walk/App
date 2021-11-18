@@ -13,6 +13,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 import { List } from '@ant-design/react-native'
 import HomeResultModal from '../components/HomeResultModal'
 import { SERVER_URL } from '@env'
+import { Crown, Footprint } from '../../assets/icons'
 
 const Home = ({ user }) => {
   const name = user.name // 사용자 이름
@@ -73,6 +74,26 @@ const Home = ({ user }) => {
       startTime: '17:55',
       endTime: '18:05',
       outcome: 'win',
+      opponent: '연세대학교',
+      steps: 194,
+      members: ['yoon', 'kim', 'john'],
+    },
+    {
+      no: 6,
+      date: '21.12.31',
+      startTime: '12:55',
+      endTime: '15:05',
+      outcome: 'win',
+      opponent: '연세대학교',
+      steps: 194,
+      members: ['yoon', 'kim', 'john'],
+    },
+    {
+      no: 7,
+      date: '21.12.31',
+      startTime: '15:55',
+      endTime: '20:05',
+      outcome: 'lose',
       opponent: '연세대학교',
       steps: 194,
       members: ['yoon', 'kim', 'john'],
@@ -184,31 +205,45 @@ const Home = ({ user }) => {
           </View>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <View style={[{ backgroundColor: '#e6f4f1' }, styles.CountContainer]}>
+          <View style={[{ backgroundColor: '#ffffff' }, styles.CountContainer]}>
             <View style={{ flexDirection: 'row' }}>
-              <FontAwesomeIcon name="shoe-prints" color="#001d40" size={15} />
+              {/* <FontAwesomeIcon name="shoe-prints" color="#001d40" size={15} /> */}
+              <Image
+                source={Footprint}
+                style={{ width: 20, height: 20, bottom: 2 }}
+              />
               <Text style={[styles.BasicText, { fontFamily: 'ONEMobileBold' }]}>
                 {'\t'}나의 걸음 수{'\n'}
               </Text>
             </View>
-            <Text style={[styles.BasicText, { flexDirection: 'column' }]}>
-              {stepCount} 걸음
+            <Text style={[styles.BasicText, { flexDirection: 'row' }]}>
+              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+                {stepCount}{' '}
+              </Text>
+              <Text>걸음</Text>
             </Text>
           </View>
 
-          <View style={[{ backgroundColor: '#fcfcd4' }, styles.CountContainer]}>
+          <View style={[{ backgroundColor: '#ffffff' }, styles.CountContainer]}>
             <View style={{ flexDirection: 'row' }}>
-              <FontAwesomeIcon name="crown" color="#001d40" size={15} />
+              {/* <FontAwesomeIcon name="crown" color="#001d40" size={15} /> */}
+              <Image
+                source={Crown}
+                style={{ width: 20, height: 20, bottom: 3 }}
+              />
               <Text style={[styles.BasicText, { fontFamily: 'ONEMobileBold' }]}>
                 {'\t'}나의 전적
               </Text>
             </View>
             <Text
-              style={[styles.BasicText, { paddingTop: 5, paddingBottom: 3 }]}
+              style={[
+                styles.BasicText,
+                { paddingTop: 7, paddingBottom: 3, fontSize: 20 },
+              ]}
             >
               {winNum}승 {loseNum}패
             </Text>
-            <Text style={[styles.BasicText, { fontSize: 15 }]}>
+            <Text style={[styles.BasicText, { fontSize: 14 }]}>
               (승률: {winningRate}%)
             </Text>
           </View>
@@ -353,10 +388,10 @@ const styles = StyleSheet.create({
   ResultContainer: {
     marginTop: 8,
     marginLeft: 20,
-    backgroundColor: '#F4F4F4',
+    backgroundColor: '#ffffff',
     elevation: 5,
     width: Dimensions.get('window').width - 40,
-    height: 200,
+    height: Dimensions.get('window').height - 500,
   },
 })
 
