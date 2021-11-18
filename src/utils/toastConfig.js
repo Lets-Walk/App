@@ -2,7 +2,7 @@
 import React from 'react'
 import { BaseToast, ErrorToast } from 'react-native-toast-message'
 import { View, Text, Image, StyleSheet } from 'react-native'
-import { Error } from '../../assets/icons'
+import { Error, Freeze } from '../../assets/icons'
 /*
   1. Create the config
 */
@@ -62,6 +62,26 @@ const toastConfig = {
         <Image source={Error} width={20} height={20} style={styles.logo} />
         <Text style={styles.errortext}>
           아이템과의 거리가 멀어 획득할 수 없습니다
+        </Text>
+      </View>
+    </View>
+  ),
+
+  errorJoker: () => (
+    <View style={styles.container}>
+      <View style={{ ...styles.content, left: 10 }}>
+        <Image source={Error} width={20} height={20} style={styles.logo} />
+        <Text style={styles.errortext}>이미 조커 아이템이 적용 중 입니다.</Text>
+      </View>
+    </View>
+  ),
+
+  freezeItem: () => (
+    <View style={styles.container}>
+      <View style={{ ...styles.content, left: 10 }}>
+        <Image source={Freeze} width={20} height={20} style={styles.logo} />
+        <Text style={styles.errortext}>
+          프리즈 효과로 인해 획득할 수 없습니다
         </Text>
       </View>
     </View>

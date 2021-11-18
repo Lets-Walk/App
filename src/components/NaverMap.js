@@ -9,14 +9,24 @@ import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
 import { useCallback } from 'react/cjs/react.development'
 import showToast from '../utils/showToast'
+import { LongPressGestureHandler } from 'react-native-gesture-handler'
 
-const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
+const NaverMap = ({
+  inventory,
+  mission,
+  jokerMission,
+  obtainItemEmit,
+  obtainJokerEmit,
+}) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
   const [itemList, setItemList] = useState([])
+  const [tempItemList, setTempItemList] = useState([])
+  const [freeze, setFreeze] = useState(false)
+  const [ghost, setGhost] = useState(false)
 
   const mapRef = useRef(null)
-  const obtainMeter = 0.5
+  const obtainMeter = 3
 
   const cameraChange = (location) => {
     mapRef.current.animateToCoordinate(location) //마커 좌표로 이동
@@ -43,6 +53,8 @@ const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
   useEffect(async () => {
     if (mission === null) {
       setItemList([])
+      setTempItemList([])
+      removeJoker('All')
       return
     }
     console.log('아이템 마커 생성')
@@ -56,7 +68,18 @@ const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
     setItemList(itemList)
   }, [mission])
 
-  const obatinItem = (item) => {
+  useEffect(() => {
+    const { effected, type, isEnd } = jokerMission
+    if (!effected) return
+    //조커 미션 제거
+    if (isEnd) {
+      removeJoker(type)
+      return
+    }
+    applyJoker(type)
+  }, [jokerMission])
+
+  const obtainItem = (item) => {
     if (!mission) {
       console.log('미션이 없을 땐 아이템을 획득할 수 없음')
       return
@@ -75,15 +98,27 @@ const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
       return
     }
 
+    if (freeze) {
+      showToast({ type: 'freezeItem' })
+      return
+    }
+
     if (item.type === 'Joker') {
       //조커일때의 처리
-
+      //이미 상대방에게 조커효과가 진행 중이면 아이템을 획득할 수 없음.
+      if (
+        jokerMission.effected === false &&
+        jokerMission.type &&
+        jokerMission.isEnd === false
+      ) {
+        showToast({ type: 'errorJoker' })
+        return
+      }
+      obtainJokerEmit({ item })
+      filterItem(item)
       return
     }
     //현재 아이템 리스트에서 획득한 아이템을 제거함.
-    const filterItemList = itemList.filter(
-      (elem) => !(elem.lat === item.lat && elem.lng === item.lng),
-    )
 
     //아이템을 인벤토리에 추가하고 state에 반영함.
     // obtainItem.current.show('아이템을 획득했습니다.')
@@ -101,28 +136,78 @@ const NaverMap = ({ inventory, mission, obtainItemEmit }) => {
     } else {
       newInventory = [...inventory, { type: item.type, quantity: 1 }]
     }
-    setItemList(filterItemList)
+    filterItem(item)
     obtainItemEmit({ item, newInventory })
+  }
+
+  const filterItem = (item) => {
+    const filterItemList = itemList.filter(
+      (elem) => !(elem.lat === item.lat && elem.lng === item.lng),
+    )
+    setItemList(filterItemList)
+  }
+
+  const applyJoker = (type) => {
+    console.log('applyJoker' + type)
+    if (type === 'Freeze') {
+      setFreeze(true)
+    } else if (type === 'Hide') {
+      hide()
+    } else if (type === 'Ghost') {
+      setGhost(true)
+    }
+  }
+
+  const removeJoker = (type) => {
+    console.log('removeJoker' + type)
+    if (type === 'Freeze') {
+      if (freeze) setFreeze(false)
+    } else if (type === 'Hide') {
+      unhide()
+    } else if (type === 'Ghost') {
+      if (ghost) setGhost(false)
+    } else if (type === 'All') {
+      if (ghost) setGhost(false)
+      if (freeze) setFreeze(false)
+      unhide()
+    }
+  }
+
+  const hide = () => {
+    setTempItemList(itemList)
+    setItemList([])
+  }
+
+  const unhide = () => {
+    setItemList(tempItemList)
+    setTempItemList([])
   }
 
   return (
     <NaverMapView
       style={{ width: '100%', height: '100%' }}
       showsMyLocationButton={true}
-      center={{ ...location, zoom: 16 }}
+      center={{ ...location, zoom: 15 }}
       ref={mapRef}
     >
       {itemList.map((item, index) => {
         const coord = { latitude: item.lat, longitude: item.lng }
+        let image = null
+        if (ghost) {
+          image = GetMarkerImage('GhostMarker')
+        } else {
+          image = GetMarkerImage(item.type)
+        }
+
         return (
           <Marker
             coordinate={coord}
             key={index}
-            image={GetMarkerImage(item.type)}
+            image={image}
             width={65}
             height={65}
             onClick={(e) => {
-              obatinItem(item)
+              obtainItem(item)
             }}
           />
         )
