@@ -21,13 +21,10 @@ import MissionSuccess from '../components/MissionSuccess'
 import showToast from '../utils/showToast'
 import Inventory from '../components/Inventory'
 import { SERVER_URL } from '@env'
-<<<<<<< HEAD
 import JokerWait from '../components/JokerWait'
 import JokerMission from '../components/JokerMission'
 import JokerTimer from '../components/JokerTimer'
-=======
 import FinishMode from '../components/FinishMode'
->>>>>>> feat/finishmode
 
 const Container = styled.View`
   flex: 1;
