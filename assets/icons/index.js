@@ -61,6 +61,7 @@ import Error from '../../assets/icons/Error.png'
 import Freeze from '../../assets/icons/Freeze.png'
 import Ghost from '../../assets/icons/Ghost.png'
 import Hide from '../../assets/icons/Hide.png'
+import GhostMarker from '../../assets/icons/GhostMarker.png'
 
 export {
   Heart2,
@@ -125,4 +126,5 @@ export {
   Freeze,
   Ghost,
   Hide,
+  GhostMarker,
 }
