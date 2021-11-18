@@ -22,6 +22,8 @@ import showToast from '../utils/showToast'
 import Inventory from '../components/Inventory'
 import { SERVER_URL } from '@env'
 import JokerWait from '../components/JokerWait'
+import JokerMission from '../components/JokerMission'
+import JokerTimer from '../components/JokerTimer'
 
 const Container = styled.View`
   flex: 1;
@@ -46,6 +48,14 @@ const WalkingMode = ({ route, navigation }) => {
     modalVisible: false,
   })
   const [jokerWait, setJokerWait] = useState(false)
+  const [showJokerTimer, setShowJokerTimer] = useState(false)
+  const [jokerTimerCount, setJokerTimerCount] = useState(0)
+  const [jokerMission, setJokerMission] = useState({
+    effected: false,
+    type: null,
+    modalVisible: false,
+    isEnd: false,
+  })
 
   useFocusEffect(
     React.useCallback(() => {
@@ -99,20 +109,52 @@ const WalkingMode = ({ route, navigation }) => {
       })
     })
 
-    socket.on('jokerMission', ({ type, obtainCampus, effectedCampus }) => {
-      //조커 미션을 설명하는 모달 창 띄움 (campusName에 따라 렌더링 다르게 필요)
+    socket.on(
+      'jokerMission',
+      ({ type, seconds, obtainCampus, effectedCampus }) => {
+        setJokerWait(false)
+        //조커 미션을 설명하는 모달 창 띄움 (campusName에 따라 렌더링 다르게 필요)
+        console.log(type, obtainCampus, effectedCampus)
+        let effected = false
+        if (userInfo.campus.name === effectedCampus) {
+          //조커 미션을 당하는 크루라면
+          //타입에 따른 조커 미션 적용
+          //조커 미션 타이머 띄움
+          setShowJokerTimer(true)
+          setJokerTimerCount(seconds)
+          effected = true
+        }
 
-      if (userInfo.campus.name === effectedCampus) {
-        //조커 미션을 당하는 크루라면
-        //타입에 따른 조커 미션 적용
-        //조커 미션 타이머 띄움
-      }
+        //조커 모달 띄움 obtainCampus와 effectedCampus 전달해서 렌더링 다르게 하기.
+        setJokerMission({
+          effected: effected,
+          type: type,
+          modalVisible: true,
+          isEnd: false,
+        })
+      },
+    )
 
-      //조커 모달 띄움 obtainCampus와 effectedCampus 전달해서 렌더링 다르게 하기.
+    socket.on('jokerMissionCount', ({ count }) => {
+      setJokerTimerCount(count)
     })
 
-    socket.on('jokerMissionEnd', () => {
+    socket.on('jokerMissionEnd', ({ type, effectedCampus }) => {
       //조커 모달, 조커 효과, 타이머 제거 (함수화로 빼서, 미션 성공했을 때도 사용하기)
+      console.log('jokerMission End')
+      const effected = userInfo.campus.name === effectedCampus
+
+      if (effected) {
+        setJokerTimerCount(0)
+        setShowJokerTimer(false)
+      }
+
+      setJokerMission({
+        effected: effected,
+        type: type,
+        modalVisible: false,
+        isEnd: true,
+      })
     })
 
     socket.on('inventorySync', ({ newInventory }) => {
@@ -128,6 +170,8 @@ const WalkingMode = ({ route, navigation }) => {
       console.log('inventory초기화')
       setInventory([])
       setInvBadge(false)
+      setShowJokerTimer(false)
+      setJokerTimerCount(0)
       //맵의 마커를 초기화 하는 작업 필요.
       if (isEnd) return //isEnd면 더 이상 진행하지 않고 return
       //미션완료 팝업 후 잠깐 대기한 다음 다음 미션에 대한 준비완료를 알림
@@ -172,18 +216,22 @@ const WalkingMode = ({ route, navigation }) => {
     [crewInfo, mission],
   )
 
-  const obtainJokerEmit = useCallback(() => {
-    console.log('jokerItemEmit')
-    socket.emit('jokerGain', {
-      crewId,
-      battleRoomId,
-      crewInfo,
-      campusName: userInfo.campus.name,
-    })
+  const obtainJokerEmit = useCallback(
+    ({ item }) => {
+      console.log('jokerItemEmit')
+      socket.emit('jokerGain', {
+        crewId,
+        battleRoomId,
+        crewInfo,
+        campusName: userInfo.campus.name,
+      })
+      socket.emit('obtainItem', { battleRoomId, userInfo, item })
 
-    //조커 미션을 기다리는 모달 창 켜기
-    setJokerWait(true)
-  }, [crewInfo])
+      //조커 미션을 기다리는 모달 창 켜기
+      setJokerWait(true)
+    },
+    [crewInfo],
+  )
 
   const missionBannerToggle = () => {
     if (mission) setInfoVisible(!infoVisible)
@@ -220,6 +268,7 @@ const WalkingMode = ({ route, navigation }) => {
         <NaverMap
           inventory={inventory}
           mission={mission}
+          jokerMission={jokerMission}
           obtainItemEmit={obtainItemEmit}
           obtainJokerEmit={obtainJokerEmit}
         />
@@ -231,6 +280,14 @@ const WalkingMode = ({ route, navigation }) => {
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
         <JokerWait modalVisible={jokerWait} />
+        <JokerMission
+          jokerMission={jokerMission}
+          setJokerMission={setJokerMission}
+        />
+        <JokerTimer
+          showJokerTimer={showJokerTimer}
+          jokerTimerCount={jokerTimerCount}
+        />
         <Banner toggleInventory={toggleInventory} invBadge={invBadge} />
         <MissionInfo
           name={mission}
