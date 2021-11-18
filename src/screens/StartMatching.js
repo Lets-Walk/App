@@ -85,15 +85,16 @@ const styles = StyleSheet.create({
   },
   campusNameText: {
     fontFamily: 'Cafe24Shiningstar',
-    fontSize: 45,
+    fontSize: 48,
   },
   logoContainer: {
     width: 150,
     height: 150,
     marginTop: 10,
+    marginBottom: 10,
     resizeMode: 'contain',
   },
-  campusRankContainer: { alignItems: 'center', margin: 10 },
+  campusRankContainer: { alignItems: 'center' },
 })
 
 export default StartMatching
