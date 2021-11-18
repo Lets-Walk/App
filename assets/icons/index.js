@@ -62,6 +62,7 @@ import Freeze from '../../assets/icons/Freeze.png'
 import Ghost from '../../assets/icons/Ghost.png'
 import Hide from '../../assets/icons/Hide.png'
 import GhostMarker from '../../assets/icons/GhostMarker.png'
+import Trophy_finish from '../../assets/icons/Trophy_finish.png'
 
 export {
   Heart2,
@@ -127,4 +128,5 @@ export {
   Ghost,
   Hide,
   GhostMarker,
+  Trophy_finish,
 }

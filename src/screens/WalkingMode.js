@@ -21,9 +21,13 @@ import MissionSuccess from '../components/MissionSuccess'
 import showToast from '../utils/showToast'
 import Inventory from '../components/Inventory'
 import { SERVER_URL } from '@env'
+<<<<<<< HEAD
 import JokerWait from '../components/JokerWait'
 import JokerMission from '../components/JokerMission'
 import JokerTimer from '../components/JokerTimer'
+=======
+import FinishMode from '../components/FinishMode'
+>>>>>>> feat/finishmode
 
 const Container = styled.View`
   flex: 1;
@@ -55,6 +59,10 @@ const WalkingMode = ({ route, navigation }) => {
     effected: false,
     type: null,
     isEnd: false,
+  })
+  const [finishMode, setFinishMode] = useState({
+    winCampus: null,
+    modalVisible: false,
   })
 
   useFocusEffect(
@@ -173,7 +181,15 @@ const WalkingMode = ({ route, navigation }) => {
       setShowJokerTimer(false)
       setJokerTimerCount(0)
       //맵의 마커를 초기화 하는 작업 필요.
-      if (isEnd) return //isEnd면 더 이상 진행하지 않고 return
+      //isEnd면 더 이상 진행하지 않고 return
+      if (isEnd) {
+        //setFinishMode 설정
+        setFinishMode({
+          winCampus: campusName,
+          modalVisible: true,
+        })
+        return
+      }
       //미션완료 팝업 후 잠깐 대기한 다음 다음 미션에 대한 준비완료를 알림
       setSuccessMission({
         winCampus: campusName,
@@ -282,6 +298,7 @@ const WalkingMode = ({ route, navigation }) => {
           successMission={successMission}
           setSuccessMission={setSuccessMission}
         />
+        <FinishMode finishMode={finishMode} setFinishMode={setFinishMode} />
         <MissionTimer show={showTimer} count={missionCount} />
         <MissionBanner missionBannerToggle={missionBannerToggle} />
         <JokerWait modalVisible={jokerWait} />
