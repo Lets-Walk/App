@@ -67,6 +67,15 @@ const toastConfig = {
     </View>
   ),
 
+  errorJoker: () => (
+    <View style={styles.container}>
+      <View style={{ ...styles.content, left: 10 }}>
+        <Image source={Error} width={20} height={20} style={styles.logo} />
+        <Text style={styles.errortext}>이미 조커 아이템이 적용 중 입니다.</Text>
+      </View>
+    </View>
+  ),
+
   freezeItem: () => (
     <View style={styles.container}>
       <View style={{ ...styles.content, left: 10 }}>

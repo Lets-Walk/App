@@ -79,7 +79,7 @@ const NaverMap = ({
     applyJoker(type)
   }, [jokerMission])
 
-  const obatinItem = (item) => {
+  const obtainItem = (item) => {
     if (!mission) {
       console.log('미션이 없을 땐 아이템을 획득할 수 없음')
       return
@@ -103,14 +103,19 @@ const NaverMap = ({
       return
     }
 
-    const filterItemList = itemList.filter(
-      (elem) => !(elem.lat === item.lat && elem.lng === item.lng),
-    )
-    setItemList(filterItemList)
-
     if (item.type === 'Joker') {
       //조커일때의 처리
+      //이미 상대방에게 조커효과가 진행 중이면 아이템을 획득할 수 없음.
+      if (
+        jokerMission.effected === false &&
+        jokerMission.type &&
+        jokerMission.isEnd === false
+      ) {
+        showToast({ type: 'errorJoker' })
+        return
+      }
       obtainJokerEmit({ item })
+      filterItem(item)
       return
     }
     //현재 아이템 리스트에서 획득한 아이템을 제거함.
@@ -131,7 +136,15 @@ const NaverMap = ({
     } else {
       newInventory = [...inventory, { type: item.type, quantity: 1 }]
     }
+    filterItem(item)
     obtainItemEmit({ item, newInventory })
+  }
+
+  const filterItem = (item) => {
+    const filterItemList = itemList.filter(
+      (elem) => !(elem.lat === item.lat && elem.lng === item.lng),
+    )
+    setItemList(filterItemList)
   }
 
   const applyJoker = (type) => {
@@ -194,7 +207,7 @@ const NaverMap = ({
             width={65}
             height={65}
             onClick={(e) => {
-              obatinItem(item)
+              obtainItem(item)
             }}
           />
         )
