@@ -2,9 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
 import ScreenName from '../components/ScreenName'
 import axios from 'axios'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SERVER_URL } from '@env'
-import ShapesBackground from '../animations/ShapesBackground'
 import BasicButton from '../components/BasicButton'
 
 const width = Dimensions.get('window').width
@@ -45,7 +43,6 @@ const StartMatching = ({ navigation, user }) => {
 
   return (
     <ScreenName name="워킹크루 매칭">
-      <ShapesBackground style={{ width: '100%' }} />
       <View style={styles.container}>
         <Text style={styles.campusNameText}>{campus.name}</Text>
         <Image source={{ uri: campusLogoUrl }} style={styles.logoContainer} />
