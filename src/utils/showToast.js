@@ -6,6 +6,7 @@ const engToKor = (name) => {
   result = result.replace('Clover', '클로버')
   result = result.replace('Diamond', '다이아몬드')
   result = result.replace('Heart', '하트')
+  result = result.replace('Joker', '조커')
 
   return result
 }
@@ -20,7 +21,10 @@ const getItemColor = (name) => {
     color = '#468FAF'
   } else if (getItemType(name) === 'Heart') {
     color = '#E5989B'
+  } else if (name === 'Joker') {
+    color = '#383834'
   }
+
   return color
 }
 

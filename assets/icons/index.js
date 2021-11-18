@@ -58,6 +58,9 @@ import Spade from '../../assets/icons/Spade.png'
 import Trophy from '../../assets/icons/Trophy.png'
 import New from '../../assets/icons/New.png'
 import Error from '../../assets/icons/Error.png'
+import Freeze from '../../assets/icons/Freeze.png'
+import Ghost from '../../assets/icons/Ghost.png'
+import Hide from '../../assets/icons/Hide.png'
 
 export {
   Heart2,
@@ -119,4 +122,7 @@ export {
   Spade,
   New,
   Error,
+  Freeze,
+  Ghost,
+  Hide,
 }
