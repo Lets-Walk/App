@@ -10,9 +10,9 @@ const BasicButton = ({ text, pressFunction }) => {
         paddingTop: 10,
         paddingBottom: 10,
         marginBottom: 5,
-        borderRadius: 10,
-        backgroundColor: '#008cad',
-        elevation: 10,
+        borderRadius: 50,
+        backgroundColor: '#67AFFF',
+        elevation: 5,
         borderWidth: 0,
         fontFamily: 'BMHANNAAir_ttf',
       }}

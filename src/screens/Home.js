@@ -35,6 +35,7 @@ const Home = ({ user }) => {
       outcome: 'win',
       opponent: '숭실대학교',
       steps: 328,
+      members: ['kim', 'lee', 'jason'],
     },
     {
       no: 2,
@@ -44,6 +45,7 @@ const Home = ({ user }) => {
       outcome: 'win',
       opponent: '서울대학교',
       steps: 277,
+      members: ['park', 'yoon', 'kevin'],
     },
     {
       no: 3,
@@ -53,6 +55,7 @@ const Home = ({ user }) => {
       outcome: 'lose',
       opponent: '건국대학교',
       steps: 302,
+      members: ['park', 'kim2', 'john'],
     },
     {
       no: 4,
@@ -62,6 +65,7 @@ const Home = ({ user }) => {
       outcome: 'lose',
       opponent: '가야대학교',
       steps: 411,
+      members: ['jang', 'harry', 'choi'],
     },
     {
       no: 5,
@@ -71,13 +75,13 @@ const Home = ({ user }) => {
       outcome: 'win',
       opponent: '연세대학교',
       steps: 194,
+      members: ['yoon', 'kim', 'john'],
     },
   ]) // mockup data
   const [modalVisible, setModalVisible] = useState(false)
   const [modalNum, setModalNum] = useState(0)
 
   const _handleSee = (num) => {
-    console.log(num)
     setModalNum(num - 1)
     setModalVisible(true)
   }
@@ -97,6 +101,7 @@ const Home = ({ user }) => {
         opponent={results[modalNum].opponent}
         outcome={results[modalNum].outcome}
         steps={results[modalNum].steps}
+        members={results[modalNum].members}
         onConfirm={_handleConfirm}
       />
 
