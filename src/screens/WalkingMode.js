@@ -50,10 +50,10 @@ const WalkingMode = ({ route, navigation }) => {
   const [jokerWait, setJokerWait] = useState(false)
   const [showJokerTimer, setShowJokerTimer] = useState(false)
   const [jokerTimerCount, setJokerTimerCount] = useState(0)
+  const [showJokerMission, setShowJokerMission] = useState(false)
   const [jokerMission, setJokerMission] = useState({
     effected: false,
     type: null,
-    modalVisible: false,
     isEnd: false,
   })
 
@@ -129,9 +129,9 @@ const WalkingMode = ({ route, navigation }) => {
         setJokerMission({
           effected: effected,
           type: type,
-          modalVisible: true,
           isEnd: false,
         })
+        setShowJokerMission(true)
       },
     )
 
@@ -152,9 +152,9 @@ const WalkingMode = ({ route, navigation }) => {
       setJokerMission({
         effected: effected,
         type: type,
-        modalVisible: false,
         isEnd: true,
       })
+      setShowJokerMission(false)
     })
 
     socket.on('inventorySync', ({ newInventory }) => {
@@ -237,6 +237,11 @@ const WalkingMode = ({ route, navigation }) => {
     if (mission) setInfoVisible(!infoVisible)
   }
 
+  const jokerMissionToggle = useCallback(() => {
+    console.log('jokerMissionToggle')
+    setShowJokerMission(!showJokerMission)
+  }, [jokerMission])
+
   const toggleFinishModal = useCallback(() => {
     setFinishModal(!showFinishModal)
   }, [showFinishModal])
@@ -283,8 +288,11 @@ const WalkingMode = ({ route, navigation }) => {
         <JokerMission
           jokerMission={jokerMission}
           setJokerMission={setJokerMission}
+          showJokerMission={showJokerMission}
+          setShowJokerMission={setShowJokerMission}
         />
         <JokerTimer
+          jokerMissionToggle={jokerMissionToggle}
           showJokerTimer={showJokerTimer}
           jokerTimerCount={jokerTimerCount}
         />

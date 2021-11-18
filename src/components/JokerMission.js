@@ -6,8 +6,13 @@ import { SvgXml } from 'react-native-svg'
 import { Freeze, Hide, Ghost } from '../../assets/icons'
 import { Joker } from '../../assets/images'
 
-const JokerMission = ({ jokerMission, setJokerMission }) => {
-  const { type, modalVisible } = jokerMission
+const JokerMission = ({
+  jokerMission,
+  showJokerMission,
+  setShowJokerMission,
+}) => {
+  console.log(jokerMission)
+  const { type } = jokerMission
   if (!type) return <></>
 
   const missionDesc = {
@@ -35,17 +40,14 @@ const JokerMission = ({ jokerMission, setJokerMission }) => {
   const mission = missionDesc[type]
 
   const onClose = () => {
-    setJokerMission({
-      ...type,
-      modalVisible: false,
-    })
+    setShowJokerMission(false)
   }
 
   return (
     <Modal
       backdropOpacity={0}
       onBackdropPress={onClose}
-      isVisible={modalVisible}
+      isVisible={showJokerMission}
       style={{ margin: 0 }}
     >
       <View style={{ ...styles.centerView, ...styles.container }}>
@@ -96,7 +98,7 @@ const JokerMission = ({ jokerMission, setJokerMission }) => {
   )
 }
 
-export default JokerMission
+export default React.memo(JokerMission)
 
 const styles = StyleSheet.create({
   container: {

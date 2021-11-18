@@ -1,12 +1,19 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { SvgXml } from 'react-native-svg'
 import { Joker } from '../../assets/images'
 
-const JokerTimer = ({ showJokerTimer, jokerTimerCount }) => {
+const JokerTimer = ({
+  showJokerTimer,
+  jokerTimerCount,
+  jokerMissionToggle,
+}) => {
   if (!showJokerTimer) return <></>
+
+  const minute = parseInt(jokerTimerCount / 60)
+  const second = parseInt(jokerTimerCount % 60)
   return (
-    <View style={styles.blackBox}>
+    <Pressable onPress={jokerMissionToggle} style={styles.blackBox}>
       <View
         style={{
           flex: 1,
@@ -16,13 +23,9 @@ const JokerTimer = ({ showJokerTimer, jokerTimerCount }) => {
         }}
       >
         <SvgXml xml={Joker} width={18} height={18} style={{ left: 3 }} />
-        <Text style={styles.font}>
-          {`${parseInt(jokerTimerCount / 60)} : ${parseInt(
-            jokerTimerCount % 60,
-          )}`}
-        </Text>
+        <Text style={styles.font}>{`${minute} : ${second}`}</Text>
       </View>
-    </View>
+    </Pressable>
   )
 }
 

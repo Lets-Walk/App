@@ -75,7 +75,7 @@ const MissionSuccess = ({ successMission, setSuccessMission }) => {
   )
 }
 
-export default MissionSuccess
+export default React.memo(MissionSuccess)
 
 const styles = StyleSheet.create({
   container: {

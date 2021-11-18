@@ -44,7 +44,7 @@ const JokerWait = ({ modalVisible }) => {
   )
 }
 
-export default JokerWait
+export default React.memo(JokerWait)
 
 const styles = StyleSheet.create({
   container: {
