@@ -25,6 +25,7 @@ import JokerWait from '../components/JokerWait'
 import JokerMission from '../components/JokerMission'
 import JokerTimer from '../components/JokerTimer'
 import FinishMode from '../components/FinishMode'
+import Chat from '../components/Chat'
 
 const Container = styled.View`
   flex: 1;
@@ -42,6 +43,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [showTimer, setShowTimer] = useState(false)
   const [showFinishModal, setFinishModal] = useState(false)
   const [showInventory, setShowInventory] = useState(false)
+  const [showChat, setShowChat] = useState(false)
   const [mission, setMission] = useState(null)
   const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
   const [successMission, setSuccessMission] = useState({
@@ -274,6 +276,10 @@ const WalkingMode = ({ route, navigation }) => {
     }
   }, [showInventory])
 
+  const toggleChat = useCallback(() => {
+    setShowChat(!showChat)
+  }, [showChat])
+
   return (
     <>
       <Container>
@@ -310,7 +316,11 @@ const WalkingMode = ({ route, navigation }) => {
           showJokerTimer={showJokerTimer}
           jokerTimerCount={jokerTimerCount}
         />
-        <Banner toggleInventory={toggleInventory} invBadge={invBadge} />
+        <Banner
+          toggleInventory={toggleInventory}
+          invBadge={invBadge}
+          toggleChat={toggleChat}
+        />
         <MissionInfo
           name={mission}
           infoVisible={infoVisible}
@@ -322,6 +332,7 @@ const WalkingMode = ({ route, navigation }) => {
           toggleInventory={toggleInventory}
           invAnimation={invAnimation}
         />
+        <Chat showChat={showChat} toggleChat={toggleChat} />
         <FinishModal
           modalVisible={showFinishModal}
           toggleModal={toggleFinishModal}
