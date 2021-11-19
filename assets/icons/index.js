@@ -51,6 +51,20 @@ import Joker from '../../assets/icons/Joker.png'
 import Medal from '../../assets/icons/Medal.png'
 import Inventory from '../../assets/icons/Inventory.png'
 import Chat from '../../assets/icons/Chat.png'
+import Diamond from '../../assets/icons/Diamond.png'
+import Clover from '../../assets/icons/Clover.png'
+import Heart from '../../assets/icons/Heart.png'
+import Spade from '../../assets/icons/Spade.png'
+import Trophy from '../../assets/icons/Trophy.png'
+import New from '../../assets/icons/New.png'
+import Error from '../../assets/icons/Error.png'
+import Freeze from '../../assets/icons/Freeze.png'
+import Ghost from '../../assets/icons/Ghost.png'
+import Hide from '../../assets/icons/Hide.png'
+import GhostMarker from '../../assets/icons/GhostMarker.png'
+import Trophy_finish from '../../assets/icons/Trophy_finish.png'
+import Crown from '../../assets/icons/Crown.png'
+import Footprint from '../../assets/icons/Footprint.png'
 
 export {
   Heart2,
@@ -105,4 +119,18 @@ export {
   Medal,
   Inventory,
   Chat,
+  Trophy,
+  Diamond,
+  Clover,
+  Heart,
+  Spade,
+  New,
+  Error,
+  Freeze,
+  Ghost,
+  Hide,
+  GhostMarker,
+  Trophy_finish,
+  Crown,
+  Footprint,
 }

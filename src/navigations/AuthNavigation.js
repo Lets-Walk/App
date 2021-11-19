@@ -13,17 +13,17 @@ const AuthNavigation = ({ setUser }) => {
         screenOptions={{
           headerStyle: {
             height: 60,
-            backgroundColor: '#00193c',
+            backgroundColor: '#ffffff',
             borderWidth: 0,
           },
           headerTitleStyle: {
-            color: '#ffffff',
-            fontWeight: '200',
-            fontFamily: 'Cafe24Shiningstar.ttf',
+            color: 'black',
+
+            fontFamily: 'ONEMobileBold',
             fontSize: 25,
           },
           headerTitleAlign: 'center',
-          headerTitle: '회원가입',
+          headerTitle: '워크투게더 회원가입',
         }}
       >
         <Stack.Screen name="Login" options={{ headerShown: false }}>

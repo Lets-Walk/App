@@ -1,15 +1,15 @@
 import React from 'react'
 import LottieView from 'lottie-react-native'
 
-const ShapesBackground = () => {
+const Confetti = () => {
   return (
     <LottieView
-      source={require('../../assets/animations/shapes-background.json')}
+      source={require('../../assets/animations/confetti.json')}
       autoPlay
-      loop
       resizeMode="cover"
+      loop
     />
   )
 }
 
-export default ShapesBackground
+export default Confetti

@@ -2,9 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
 import ScreenName from '../components/ScreenName'
 import axios from 'axios'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SERVER_URL } from '@env'
-import ShapesBackground from '../animations/ShapesBackground'
 import BasicButton from '../components/BasicButton'
 
 const width = Dimensions.get('window').width
@@ -45,7 +43,6 @@ const StartMatching = ({ navigation, user }) => {
 
   return (
     <ScreenName name="워킹크루 매칭">
-      <ShapesBackground style={{ width: '100%' }} />
       <View style={styles.container}>
         <Text style={styles.campusNameText}>{campus.name}</Text>
         <Image source={{ uri: campusLogoUrl }} style={styles.logoContainer} />
@@ -53,19 +50,19 @@ const StartMatching = ({ navigation, user }) => {
           <Text
             style={{
               fontSize: 32,
-              fontFamily: 'Cafe24Shiningstar',
+              fontFamily: 'BMHANNAAir_ttf',
               marginBottom: 0,
             }}
           >
             현재 순위
           </Text>
-          <Text style={{ fontSize: 30, fontFamily: 'Cafe24Shiningstar' }}>
+          <Text style={{ fontSize: 24, fontFamily: 'BMHANNAAir_ttf' }}>
             {campusRank}위 ({campusScore}점)
           </Text>
         </View>
 
         <View style={styles.buttonContainer}>
-          <BasicButton text="START" pressFunction={_handleStartButton} />
+          <BasicButton text="매칭 시작" pressFunction={_handleStartButton} />
         </View>
       </View>
     </ScreenName>
@@ -87,15 +84,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   campusNameText: {
-    fontFamily: 'Cafe24Shiningstar',
-    fontSize: 45,
+    fontFamily: 'BMHANNAAir_ttf',
+    fontSize: 48,
   },
   logoContainer: {
     width: 150,
     height: 150,
     marginTop: 10,
+    marginBottom: 10,
+    resizeMode: 'contain',
   },
-  campusRankContainer: { alignItems: 'center', margin: 10 },
+  campusRankContainer: { alignItems: 'center' },
 })
 
 export default StartMatching

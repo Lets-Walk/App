@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import styled from 'styled-components'
 
 const Container = styled.View`
-  justify-content: center;
+  margin-top: 30%;
   align-items: center;
   width: 100%;
   height: 100%;

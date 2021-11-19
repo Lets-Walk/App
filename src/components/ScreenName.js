@@ -8,31 +8,27 @@ const Container = styled.SafeAreaView`
 `
 
 const ScreenName = ({ name, children }) => {
-  if (name !== '워킹크루 매칭') {
-    return (
-      <Container>
-        <View
+  return (
+    <Container>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '8%',
+          marginTop: 5,
+        }}
+      >
+        <Image
+          source={require('../utils/screen_top.png')}
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '8%',
-            marginTop: 5,
+            aspectRatio: 2846 / 759,
+            flex: 1,
           }}
-        >
-          <Image
-            source={require('../utils/screen_top.png')}
-            style={{
-              aspectRatio: 2846 / 759,
-              flex: 1,
-            }}
-          />
-        </View>
-        {children}
-      </Container>
-    )
-  } else {
-    return <Container>{children}</Container>
-  }
+        />
+      </View>
+      {children}
+    </Container>
+  )
 }
 
 export default ScreenName

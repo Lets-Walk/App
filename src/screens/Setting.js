@@ -94,7 +94,23 @@ const Setting = () => {
 
       <SettingsModal
         modalTitle="이용약관"
-        modalText="이용 약관 내용 작성..."
+        modalText="크루 매칭을 통해 같은 대학 소속 사용자 4명이 한 크루가 됩니다.
+
+        배틀 모드에서 타대학 크루와 크루대 크루 포커 아이템 선착순 줍기 미션을 수행하게 됩니다. 
+        
+        처음에 주어진 5개 라이프는 상대 크루가 먼저 미션을 성공할 때마다 1개씩 차감됩니다.
+        
+        인벤토리는 크루끼리 공유하며 미션 종료 시마다 인벤토리와 아이템 위치는 초기화 됩니다. 
+        
+        아이템 위치는 사용자 현위치의 반경 1km이내이며 아이템 사이 최소 간격은 200m입니다.
+        
+        조커 아이템은 랜덤 효과를 지니고 있습니다.
+        
+        채팅 사용이 가능하며 타인의 득템 정보를 실시간으로 확인할 수 있습니다.
+        
+        성별, 키 정보를 통한 걸음 수 검증이나 이동 속도 검증에서 의심을 받지 않도록 주의하여야 합니다. (자전거 및 대중교통 이용 불가)
+        
+        상대 크루의 라이프가 모두 소진되면 승리한 것이며 진 크루보다 승점 40점을 더 소속 대학 점수판에 더할 수 있습니다."
         isVisible={termsVisible}
         width="100%"
         height="100%"
@@ -180,10 +196,10 @@ const Setting = () => {
 
       <View
         style={{
-          justifyContent: 'space-around',
-          marginTop: 30,
+          flex: 1,
+          justifyContent: 'center',
           alignItems: 'center',
-          height: height * 0.7,
+          marginBottom: 60,
         }}
       >
         <SettingsButton text="워크투게더 소개" pressFunction={_handleIntro} />

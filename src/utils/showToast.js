@@ -1,29 +1,34 @@
 import Toast from 'react-native-toast-message'
+import getItemType from './getItemType'
 
 const engToKor = (name) => {
   result = name.replace('Spade', '스페이드')
   result = result.replace('Clover', '클로버')
   result = result.replace('Diamond', '다이아몬드')
   result = result.replace('Heart', '하트')
+  result = result.replace('Joker', '조커')
 
   return result
 }
 
 const getItemColor = (name) => {
   let color = 'black'
-  if (name.indexOf('Spade') !== -1) {
+  if (getItemType(name) === 'Spade') {
     color = '#BBADFF'
-  } else if (name.indexOf('Clover') !== -1) {
+  } else if (getItemType(name) === 'Clover') {
     color = '#606C38'
-  } else if (name.indexOf('Diamond') !== -1) {
+  } else if (getItemType(name) === 'Diamond') {
     color = '#468FAF'
-  } else if (name.indexOf('Heart') !== -1) {
+  } else if (getItemType(name) === 'Heart') {
     color = '#E5989B'
+  } else if (name === 'Joker') {
+    color = '#383834'
   }
+
   return color
 }
 
-const showToast = ({ type, logo, userName, item }) => {
+const showToast = ({ type, logo, userName = '', item = '' }) => {
   Toast.show({
     type: type,
     position: 'bottom',
