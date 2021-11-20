@@ -1,20 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  FlatList,
-  Pressable,
-  Animated,
-} from 'react-native'
+import { StyleSheet, Text, View, Pressable, Animated } from 'react-native'
 import styled from 'styled-components'
-import { Heart, Diamond, Spade, Clover } from '../../assets/images'
-import GetMarkerImage from '../utils/getMarkerImage'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import ItemList from './ItemList'
-import getItemType from '../utils/getItemType'
-import Pattern from './Pattern'
 import { GiftedChat } from 'react-native-gifted-chat'
 
 const Container = styled.View`
@@ -29,32 +16,26 @@ const Chat = ({ showChat, toggleChat }) => {
   const [messages, setMessages] = useState([])
 
   useEffect(() => {
-    setMessages([
-      //   {
-      //     _id: 1,
-      //     text: 'Hello developer',
-      //     createdAt: new Date(),
-      //     user: {
-      //       _id: 2,
-      //       name: 'React Native',
-      //       avatar: 'https://placeimg.com/140/140/any',
-      //     },
-      //   },
-    ])
+    console.log('채팅 서버 연결됨')
+    //시스템 메세지 전송 필요
+    return () => {
+      console.log('채팅 서버 연결 끊김')
+      //시스템 메세지 전송 필요
+    }
   }, [])
 
   const onSend = useCallback((messages = []) => {
     setMessages((previousMessages) => {
       return GiftedChat.append(previousMessages, messages)
     })
+
+    //소켓 전송 필요
   }, [])
-  //TODO ::
-  //조커 먹었을 때 앱 튕기는 현상. (아이템 획득 부분에서 예외처리 필요)
-  //4인 워킹모드일 때 테스튼 필요.
+
   if (!showChat) return <></>
   return (
     <Container>
-      <Animated.View style={{ ...styles.inventory }}>
+      <Animated.View style={{ ...styles.chat }}>
         <View style={styles.header}>
           <Text style={styles.headerFontColor}>CHATTING</Text>
           <Pressable
@@ -86,7 +67,7 @@ const Chat = ({ showChat, toggleChat }) => {
 export default React.memo(Chat)
 
 const styles = StyleSheet.create({
-  inventory: {
+  chat: {
     width: '70%',
     height: '60%',
     backgroundColor: '#ffffff',
@@ -113,21 +94,5 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderColor: '#D9D9D9',
     borderRightWidth: 1,
-  },
-  pattern: {
-    flex: 1,
-    borderColor: '#D9D9D9',
-    borderBottomWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  patternSize: {
-    width: 30,
-    height: 30,
-  },
-  icon: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
   },
 })
