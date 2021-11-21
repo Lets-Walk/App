@@ -12,7 +12,7 @@ const Container = styled.View`
   align-items: center;
 `
 
-const Chat = ({ showChat, toggleChat }) => {
+const Chat = ({ showChat, toggleChat, chatAnimation }) => {
   const [messages, setMessages] = useState([])
 
   useEffect(() => {
@@ -35,7 +35,9 @@ const Chat = ({ showChat, toggleChat }) => {
   if (!showChat) return <></>
   return (
     <Container>
-      <Animated.View style={{ ...styles.chat }}>
+      <Animated.View
+        style={{ ...styles.chat, transform: [{ scale: chatAnimation }] }}
+      >
         <View style={styles.header}>
           <Text style={styles.headerFontColor}>CHATTING</Text>
           <Pressable
@@ -68,7 +70,7 @@ export default React.memo(Chat)
 
 const styles = StyleSheet.create({
   chat: {
-    width: '70%',
+    width: '68%',
     height: '60%',
     backgroundColor: '#ffffff',
     borderRadius: 20,

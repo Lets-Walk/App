@@ -38,6 +38,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
   const [invAnimation, setAnimValue] = useState(new Animated.Value(0))
+  const [chatAnimation, setChatAnimation] = useState(new Animated.Value(0))
   const [invBadge, setInvBadge] = useState(false)
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
@@ -277,7 +278,17 @@ const WalkingMode = ({ route, navigation }) => {
   }, [showInventory])
 
   const toggleChat = useCallback(() => {
-    setShowChat(!showChat)
+    if (showChat) {
+      setShowChat(false)
+      setChatAnimation(new Animated.Value(0))
+    } else {
+      setShowChat(true)
+      Animated.timing(chatAnimation, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start()
+    }
   }, [showChat])
 
   return (
@@ -332,7 +343,11 @@ const WalkingMode = ({ route, navigation }) => {
           toggleInventory={toggleInventory}
           invAnimation={invAnimation}
         />
-        <Chat showChat={showChat} toggleChat={toggleChat} />
+        <Chat
+          showChat={showChat}
+          toggleChat={toggleChat}
+          chatAnimation={chatAnimation}
+        />
         <FinishModal
           modalVisible={showFinishModal}
           toggleModal={toggleFinishModal}
