@@ -165,7 +165,7 @@ const OnBoarding = ({ navigation }) => {
       titleStyles={styles.titleText}
       subTitleStyles={styles.subtitleText}
       imageContainerStyles={styles.imageContainer}
-      bottomBarColor={'#e6f4f1'}
+      bottomBarColor={'#eafcff'}
       onSkip={() => navigation.navigate('Login')}
       onDone={() => navigation.navigate('Login')}
     />
