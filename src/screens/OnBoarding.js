@@ -138,11 +138,36 @@ const OnBoarding = ({ navigation }) => {
           subtitle:
             '한 미션이 종료되면 새로운 미션이 주어집니다.\n이때, 주변 아이템들과 인벤토리는 초기화됩니다.',
         },
+        {
+          backgroundColor: '#D1EEFF',
+          image: (
+            <Image
+              source={require('../../assets/images/ranking.png')}
+              style={[styles.image, { aspectRatio: 1612 / 2010 }]}
+            />
+          ),
+          title: '랭킹(Ranking)',
+          subtitle:
+            '실시간으로 대학들의 랭킹을 확인할 수 있습니다.\n화살표를 누르면 유저들의 기여도를 확인할 수 있습니다.',
+        },
+        {
+          backgroundColor: '#FFFFFF',
+          image: (
+            <Image
+              source={require('../../assets/images/start.png')}
+              style={[styles.image, { aspectRatio: 1613 / 2010 }]}
+            />
+          ),
+          title: '',
+          subtitle: '',
+        },
       ]}
       titleStyles={styles.titleText}
       subTitleStyles={styles.subtitleText}
       imageContainerStyles={styles.imageContainer}
+      bottomBarColor={'#e6f4f1'}
       onSkip={() => navigation.navigate('Login')}
+      onDone={() => navigation.navigate('Login')}
     />
   )
 }
@@ -163,8 +188,8 @@ const styles = StyleSheet.create({
     fontFamily: 'ONEMobileRegular',
   },
   logoImage: {
-    width: 200,
-    height: 200,
+    width: 250,
+    height: 250,
   },
   image: {
     height: '100%',
