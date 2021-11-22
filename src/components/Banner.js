@@ -10,6 +10,7 @@ const Banner = ({ toggleInventory, invBadge, toggleChat, chatBadge }) => {
         <Image source={Inventory} style={styles.icon} />
       </Pressable>
       <Pressable onPress={toggleChat} style={styles.button}>
+        {chatBadge ? <Image source={New} style={styles.newBadge} /> : <></>}
         <Image source={Chat} style={styles.icon} />
       </Pressable>
     </View>

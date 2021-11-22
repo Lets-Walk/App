@@ -46,6 +46,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [showInventory, setShowInventory] = useState(false)
   const [showChat, setShowChat] = useState(false)
   const [chatMessages, setChatMessages] = useState([])
+  const [chatBadge, setChatBadge] = useState(false)
   const [mission, setMission] = useState(null)
   const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
   const [successMission, setSuccessMission] = useState({
@@ -201,15 +202,23 @@ const WalkingMode = ({ route, navigation }) => {
       }, 3000)
     })
 
-    socket.on('receiveChat', ({ messages }) => {
-      setChatMessages(messages)
-    })
     //워킹모드 unmount시 socket 연결 끊음
     return () => {
       console.log('walking mode unmount')
       socket.disconnect()
     }
   }, [])
+
+  useEffect(() => {
+    socket.on('receiveChat', ({ messages }) => {
+      if (!showChat) setChatBadge(true)
+      setChatMessages(messages)
+    })
+
+    return () => {
+      socket.removeAllListeners('receiveChat')
+    }
+  }, [showChat])
 
   const emitReadyWalkingMode = useCallback(() => {
     socket.emit('readyWalkingMode', { battleRoomId })
@@ -282,6 +291,7 @@ const WalkingMode = ({ route, navigation }) => {
   }, [showInventory])
 
   const toggleChat = useCallback(() => {
+    setChatBadge(false)
     if (showChat) {
       setShowChat(false)
       setChatAnimation(new Animated.Value(0))
@@ -297,7 +307,6 @@ const WalkingMode = ({ route, navigation }) => {
 
   const sendMessageEmit = useCallback((messages) => {
     console.log('send Chat Emit')
-    console.log(messages)
     socket.emit('sendChat', { messages, crewId, battleRoomId })
   }, [])
 
@@ -340,6 +349,7 @@ const WalkingMode = ({ route, navigation }) => {
         <Banner
           toggleInventory={toggleInventory}
           invBadge={invBadge}
+          chatBadge={chatBadge}
           toggleChat={toggleChat}
         />
         <MissionInfo
