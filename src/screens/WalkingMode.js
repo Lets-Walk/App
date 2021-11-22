@@ -167,15 +167,27 @@ const WalkingMode = ({ route, navigation }) => {
       setShowJokerMission(false)
     })
 
+    //워킹모드 unmount시 socket 연결 끊음
+    return () => {
+      console.log('walking mode unmount')
+      socket.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
     socket.on('missionSuccess', ({ crewInfo, mission, campusName, isEnd }) => {
       console.log('missionSuccess')
-      setCrewInfo(crewInfo)
+      setCrewInfo(crewInfo) //LIFE 깎기,
       setMission(null) //미션 초기화
+
       console.log('inventory초기화')
       setInventory([])
       setInvBadge(false)
+
       setShowJokerTimer(false)
       setJokerTimerCount(0)
+      setJokerMission({ ...jokerMission, isEnd: true })
+
       //맵의 마커를 초기화 하는 작업 필요.
       //isEnd면 더 이상 진행하지 않고 return
       if (isEnd) {
@@ -196,12 +208,10 @@ const WalkingMode = ({ route, navigation }) => {
       }, 3000)
     })
 
-    //워킹모드 unmount시 socket 연결 끊음
     return () => {
-      console.log('walking mode unmount')
-      socket.disconnect()
+      socket.removeAllListeners('missionSuccess')
     }
-  }, [])
+  }, [jokerMission])
 
   useEffect(() => {
     socket.on('receiveChat', ({ messages }) => {
@@ -244,6 +254,7 @@ const WalkingMode = ({ route, navigation }) => {
         newInventory,
         battleRoomId,
         crewInfo,
+        crewId,
         campusName: userInfo.campus.name,
       })
     },
