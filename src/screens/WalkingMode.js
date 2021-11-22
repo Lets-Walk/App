@@ -167,12 +167,6 @@ const WalkingMode = ({ route, navigation }) => {
       setShowJokerMission(false)
     })
 
-    socket.on('inventorySync', ({ newInventory }) => {
-      console.log('inventorySync')
-      setInvBadge(true)
-      setInventory(newInventory)
-    })
-
     socket.on('missionSuccess', ({ crewInfo, mission, campusName, isEnd }) => {
       console.log('missionSuccess')
       setCrewInfo(crewInfo)
@@ -219,6 +213,17 @@ const WalkingMode = ({ route, navigation }) => {
       socket.removeAllListeners('receiveChat')
     }
   }, [showChat])
+
+  useEffect(() => {
+    socket.on('inventorySync', ({ newInventory }) => {
+      if (!showInventory) setInvBadge(true)
+      setInventory(newInventory)
+    })
+
+    return () => {
+      socket.removeAllListeners('inventorySync')
+    }
+  }, [showInventory])
 
   const emitReadyWalkingMode = useCallback(() => {
     socket.emit('readyWalkingMode', { battleRoomId })
