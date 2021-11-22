@@ -1,8 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { StyleSheet, Text, View, Pressable, Animated } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Animated,
+  Image,
+} from 'react-native'
 import styled from 'styled-components'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { GiftedChat } from 'react-native-gifted-chat'
+import { Chat as ChatIcon } from '../../assets/icons'
 
 const Container = styled.View`
   width: 100%;
@@ -47,6 +55,7 @@ const Chat = ({
         style={{ ...styles.chat, transform: [{ scale: chatAnimation }] }}
       >
         <View style={styles.header}>
+          <Image source={ChatIcon} style={styles.icon} />
           <Text style={styles.headerFontColor}>CHATTING</Text>
           <Pressable
             onPress={toggleChat}
@@ -106,5 +115,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     borderColor: '#D9D9D9',
     borderRightWidth: 1,
+  },
+  icon: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
   },
 })
