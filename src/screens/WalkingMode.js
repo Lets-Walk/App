@@ -292,6 +292,7 @@ const WalkingMode = ({ route, navigation }) => {
   }, [showFinishModal])
 
   const toggleInventory = useCallback(() => {
+    setShowChat(false)
     setInvBadge(false)
     if (showInventory) {
       setShowInventory(false)
@@ -307,6 +308,7 @@ const WalkingMode = ({ route, navigation }) => {
   }, [showInventory])
 
   const toggleChat = useCallback(() => {
+    setShowInventory(false)
     setChatBadge(false)
     if (showChat) {
       setShowChat(false)
