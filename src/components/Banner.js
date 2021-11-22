@@ -2,14 +2,15 @@ import React from 'react'
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import { Inventory, Chat, New } from '../../assets/icons'
 
-const Banner = ({ toggleInventory, invBadge }) => {
+const Banner = ({ toggleInventory, invBadge, toggleChat, chatBadge }) => {
   return (
     <View style={styles.container}>
       <Pressable onPress={toggleInventory} style={styles.button}>
         {invBadge ? <Image source={New} style={styles.newBadge} /> : <></>}
         <Image source={Inventory} style={styles.icon} />
       </Pressable>
-      <Pressable onPress={() => {}} style={styles.button}>
+      <Pressable onPress={toggleChat} style={styles.button}>
+        {chatBadge ? <Image source={New} style={styles.newBadge} /> : <></>}
         <Image source={Chat} style={styles.icon} />
       </Pressable>
     </View>
