@@ -12,25 +12,33 @@ const Container = styled.View`
   align-items: center;
 `
 
-const Chat = ({ showChat, toggleChat, chatAnimation }) => {
-  const [messages, setMessages] = useState([])
-
+const Chat = ({
+  showChat,
+  toggleChat,
+  chatAnimation,
+  sendMessageEmit,
+  chatMessages,
+  setChatMessages,
+  userInfo,
+}) => {
   useEffect(() => {
     console.log('채팅 서버 연결됨')
+
     //시스템 메세지 전송 필요
     return () => {
       console.log('채팅 서버 연결 끊김')
-      //시스템 메세지 전송 필요
     }
   }, [])
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) => {
-      return GiftedChat.append(previousMessages, messages)
-    })
+  const onSend = useCallback(
+    (newMessages = []) => {
+      const appendMessage = GiftedChat.append(chatMessages, newMessages)
 
-    //소켓 전송 필요
-  }, [])
+      setChatMessages(appendMessage)
+      sendMessageEmit(appendMessage)
+    },
+    [chatMessages],
+  )
 
   if (!showChat) return <></>
   return (
@@ -54,10 +62,12 @@ const Chat = ({ showChat, toggleChat, chatAnimation }) => {
           }}
         >
           <GiftedChat
-            messages={messages}
+            messages={chatMessages}
             onSend={(messages) => onSend(messages)}
+            renderUsernameOnMessage={true}
             user={{
-              _id: 1,
+              _id: userInfo.id,
+              name: userInfo.nickname,
             }}
           />
         </View>

@@ -45,6 +45,7 @@ const WalkingMode = ({ route, navigation }) => {
   const [showFinishModal, setFinishModal] = useState(false)
   const [showInventory, setShowInventory] = useState(false)
   const [showChat, setShowChat] = useState(false)
+  const [chatMessages, setChatMessages] = useState([])
   const [mission, setMission] = useState(null)
   const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
   const [successMission, setSuccessMission] = useState({
@@ -200,6 +201,9 @@ const WalkingMode = ({ route, navigation }) => {
       }, 3000)
     })
 
+    socket.on('receiveChat', ({ messages }) => {
+      setChatMessages(messages)
+    })
     //워킹모드 unmount시 socket 연결 끊음
     return () => {
       console.log('walking mode unmount')
@@ -291,6 +295,12 @@ const WalkingMode = ({ route, navigation }) => {
     }
   }, [showChat])
 
+  const sendMessageEmit = useCallback((messages) => {
+    console.log('send Chat Emit')
+    console.log(messages)
+    socket.emit('sendChat', { messages, crewId, battleRoomId })
+  }, [])
+
   return (
     <>
       <Container>
@@ -344,9 +354,13 @@ const WalkingMode = ({ route, navigation }) => {
           invAnimation={invAnimation}
         />
         <Chat
+          chatMessages={chatMessages}
+          setChatMessages={setChatMessages}
           showChat={showChat}
           toggleChat={toggleChat}
           chatAnimation={chatAnimation}
+          sendMessageEmit={sendMessageEmit}
+          userInfo={userInfo}
         />
         <FinishModal
           modalVisible={showFinishModal}
