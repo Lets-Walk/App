@@ -7,6 +7,7 @@ import {
   useWindowDimensions,
   TouchableOpacity,
   ScrollView,
+  BackHandler,
 } from 'react-native'
 import styled from 'styled-components'
 import ScreenName from '../components/ScreenName'
@@ -14,6 +15,7 @@ import SettingsButton from '../components/SettingsButton'
 import Modal from 'react-native-modal'
 import SettingsModal from '../components/SettingsModal'
 import ConfirmModal from '../components/ConfirmModal'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Setting = () => {
   const height = Dimensions.get('window').height
@@ -66,6 +68,9 @@ const Setting = () => {
 
   const _handleLogoutOK = () => {
     // Logout logic
+    AsyncStorage.setItem('token', '')
+    BackHandler.exitApp()
+    return
   }
 
   return (
