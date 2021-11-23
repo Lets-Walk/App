@@ -14,8 +14,7 @@ const StartMatching = ({ navigation, user }) => {
   const nickname = user.nickname
   const [campusScore, setCampusScore] = useState('')
   const [campusRank, setCampusRank] = useState(1)
-  const [profileUrl, setProfileUrl] = useState('https://ifh.cc/g/sSjFNC.png')
-
+  const profileUrl = SERVER_URL + '/static/profiles/' + user.profileUrl
   const campusLogoUrl = SERVER_URL + '/static/logos/' + campus.image
 
   // 로그인 된 사용자의 학교명 load
