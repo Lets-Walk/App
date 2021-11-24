@@ -13,9 +13,8 @@ import ScreenName from '../components/ScreenName'
 import SettingsButton from '../components/SettingsButton'
 import Modal from 'react-native-modal'
 import SettingsModal from '../components/SettingsModal'
-import ConfirmModal from '../components/ConfirmModal'
 
-const Setting = () => {
+const Setting = ({ navigation }) => {
   const height = Dimensions.get('window').height
   const [isIntroVisible, setIsIntroVisible] = useState(false) // 앱 소개
   const [versionVisible, setVersionVisible] = useState(false) // 버전정보
@@ -41,7 +40,7 @@ const Setting = () => {
     useState(false)
 
   const _handleIntro = useCallback(() => {
-    setIsIntroVisible(true)
+    navigation.navigate('OnBoarding')
   })
 
   const _handleVersion = useCallback(() => {
@@ -70,17 +69,6 @@ const Setting = () => {
 
   return (
     <ScreenName name="설정">
-      <SettingsModal
-        modalTitle="워크투게더 소개"
-        modalText="앱 소개 내용 작성..."
-        isVisible={isIntroVisible}
-        width="100%"
-        height="100%"
-        onConfirm={useCallback(() => {
-          setIsIntroVisible(false)
-        })}
-      />
-
       <SettingsModal
         modalTitle="버전정보"
         modalText="ver. 1.0.0"

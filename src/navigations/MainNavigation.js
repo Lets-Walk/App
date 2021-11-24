@@ -9,6 +9,7 @@ import Home from '../screens/Home'
 import CrewNavigation from './CrewNavigation'
 import Ranking from '../screens/Ranking'
 import Setting from '../screens/Setting'
+import OnBoarding from '../screens/OnBoarding'
 
 const Tab = createBottomTabNavigator()
 
@@ -69,6 +70,7 @@ const MainNavigation = ({ user }) => {
       >
         {(props) => <Ranking {...props} user={user} />}
       </Tab.Screen>
+
       <Tab.Screen
         name="Setting"
         component={Setting}
@@ -77,6 +79,15 @@ const MainNavigation = ({ user }) => {
           tabBarIcon: ({ color, size }) => (
             <IoniconsIcon name="settings-sharp" color={color} size={size} />
           ),
+        }}
+      />
+      <Tab.Screen
+        name="OnBoarding"
+        component={OnBoarding}
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
+          tabBarVisible: false,
         }}
       />
     </Tab.Navigator>
