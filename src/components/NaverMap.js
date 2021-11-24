@@ -17,6 +17,7 @@ const NaverMap = ({
   jokerMission,
   obtainItemEmit,
   obtainJokerEmit,
+  sendItemsEmit,
 }) => {
   const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
   const [location, setLocation] = useState(initialLocation)
@@ -66,6 +67,8 @@ const NaverMap = ({
     })
     const itemList = data.data
     setItemList(itemList)
+    //item data emit
+    sendItemsEmit(itemList)
   }, [mission])
 
   useEffect(() => {
@@ -80,10 +83,10 @@ const NaverMap = ({
   }, [jokerMission])
 
   const obtainItem = (item) => {
-    if (!mission) {
-      console.log('미션이 없을 땐 아이템을 획득할 수 없음')
-      return
-    }
+    // if (!mission) {
+    //   console.log('미션이 없을 땐 아이템을 획득할 수 없음')
+    //   return
+    // }
     const dist = getDistance(
       location.latitude,
       location.longitude,

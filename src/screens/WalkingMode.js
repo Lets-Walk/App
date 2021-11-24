@@ -250,7 +250,6 @@ const WalkingMode = ({ route, navigation }) => {
       socket.emit('inventorySync', { crewId, newInventory })
       socket.emit('obtainItem', { battleRoomId, userInfo, item })
       socket.emit('missionValidation', {
-        mission,
         newInventory,
         battleRoomId,
         crewInfo,
@@ -258,7 +257,7 @@ const WalkingMode = ({ route, navigation }) => {
         campusName: userInfo.campus.name,
       })
     },
-    [crewInfo, mission],
+    [crewInfo],
   )
 
   const obtainJokerEmit = useCallback(
@@ -328,6 +327,15 @@ const WalkingMode = ({ route, navigation }) => {
     socket.emit('sendChat', { messages, crewId, battleRoomId })
   }, [])
 
+  const sendItemsEmit = useCallback((items) => {
+    socket.emit('sendItems', {
+      battleRoomId,
+      crewId,
+      items,
+      userId: userInfo.id,
+    })
+  }, [])
+
   return (
     <>
       <Container>
@@ -343,6 +351,7 @@ const WalkingMode = ({ route, navigation }) => {
           jokerMission={jokerMission}
           obtainItemEmit={obtainItemEmit}
           obtainJokerEmit={obtainJokerEmit}
+          sendItemsEmit={sendItemsEmit}
         />
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionSuccess
