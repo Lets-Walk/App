@@ -14,16 +14,19 @@ import { List } from '@ant-design/react-native'
 import HomeResultModal from '../components/HomeResultModal'
 import { SERVER_URL } from '@env'
 import { Crown, Footprint } from '../../assets/icons'
+import { io } from 'socket.io-client'
 
-const Home = ({ user }) => {
+const Home = ({ user, navigation }) => {
   const name = user.name // 사용자 이름
   const campus = user.Campus.name // 소속 대학명
   const userEmail = user.email // 사용자 이메일
   const nickname = user.nickname // 사용자 닉네임
+  const battleRoomId = user.battleRoomId
 
   const profileUrl = SERVER_URL + '/static/profiles/' + user.profileUrl
   const campusLogoUrl = SERVER_URL + '/static/logos/' + user.Campus.image
 
+  const [socket, setSocket] = useState(null)
   const [stepCount, setStepCount] = useState(user.Walk.stepcount)
   const [winNum, setWinNum] = useState(user.Walk.wincount)
   const [loseNum, setLoseNum] = useState(user.Walk.losecount)
@@ -111,6 +114,35 @@ const Home = ({ user }) => {
 
   const _handleConfirm = useCallback(() => {
     setModalVisible(false)
+  }, [])
+
+  useEffect(() => {
+    if (battleRoomId && !socket) {
+      setSocket(io.connect(SERVER_URL))
+      return
+    }
+
+    socket.emit('reconnect', { battleRoomId })
+    socket.on('reconnect', (currentBattle) => {
+      const myCrew = currentBattle.crewInfo.find(
+        (crew) => crew.campus.name === campus,
+      )
+      console.log(myCrew)
+      // navigation.navigate('WalkingMode', {
+      //   socket: socket,
+      //   battleRoomId: battleRoomId,
+      //   crewInfo: currentBattle.crewInfo,
+      //   userInfo: user,
+      //   crewId: myCrew.roomId,
+      //   mission: currentBattle.mission,
+      // })
+    })
+  }, [socket])
+
+  useEffect(() => {
+    console.log('home render')
+
+    //여기서 배틀룸 아이디 갱신하기
   }, [])
 
   return (
