@@ -76,12 +76,12 @@ const Ranking = ({ user }) => {
     },
   ]) // mockup data
 
-  const _handleDetail = (campus) => {
+  const _handleDetail = (campus, rank) => {
     // 서버에서 해당 대학정보, 참여자 정보 불러오기
-    console.log(campus)
     setIsVisible(true)
     setModalVisible(true)
     setCampusName(campus)
+    setCampusRank(rank)
   }
 
   const [isVisible, setIsVisible] = useState(false)
@@ -90,6 +90,7 @@ const Ranking = ({ user }) => {
     setModalVisible(false)
   }, [])
   const [campusName, setCampusName] = useState('')
+  const [campusRank, setCampusRank] = useState(0)
 
   return (
     <ScreenName name="대학랭킹">
@@ -98,6 +99,7 @@ const Ranking = ({ user }) => {
         setVisible={setModalVisible}
         onConfirm={_handleConfirm}
         campusName={campusName}
+        campusRank={campusRank}
       />
       <View style={{ flex: 1, alignItems: 'center', top: 30 }}>
         <Confetti />
@@ -201,7 +203,9 @@ const Ranking = ({ user }) => {
                       }}
                     >
                       <TouchableOpacity
-                        onPress={() => _handleDetail(result.campus)}
+                        onPress={() =>
+                          _handleDetail(result.campus, result.rank)
+                        }
                       >
                         <FontAwesomeIcon
                           name="chevron-right"
