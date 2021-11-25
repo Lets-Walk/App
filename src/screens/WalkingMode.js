@@ -37,7 +37,8 @@ const Container = styled.View`
 
 const WalkingMode = ({ route, navigation }) => {
   const { socket, battleRoomId, userInfo, crewId } = route.params
-  const { isProgress, p_crewInfo, p_mission, p_inventory } = route.params
+  const { isProgress, p_crewInfo, p_mission, p_inventory, p_items } =
+    route.params
   const [infoVisible, setInfoVisible] = useState(false) //미션정보 모달
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
@@ -201,9 +202,9 @@ const WalkingMode = ({ route, navigation }) => {
       setMission(mission)
       setInfoVisible(true)
       //아이템 마커 그리기
-      const itemList = await createItems(location)
-      setItemList(itemList)
-      sendItemsEmit(itemList)
+      const items = await createItems(location)
+      setItemList(items)
+      sendItemsEmit(items)
     })
 
     return () => {
@@ -220,6 +221,10 @@ const WalkingMode = ({ route, navigation }) => {
       console.log('inventory초기화')
       setInventory([])
       setInvBadge(false)
+
+      //아이템 초기화
+      setItemList([])
+      sendItemsEmit([])
 
       setShowJokerTimer(false)
       setJokerTimerCount(0)
@@ -279,6 +284,7 @@ const WalkingMode = ({ route, navigation }) => {
   const reconnectWalkingMode = useCallback(() => {
     setMission(p_mission)
     setCrewInfo(p_crewInfo)
+    setItemList(p_items)
     if (p_inventory) setInventory(p_inventory)
     else setInventory([])
   }, [])

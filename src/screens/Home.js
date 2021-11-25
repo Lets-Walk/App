@@ -124,7 +124,7 @@ const Home = ({ user, navigation }) => {
       return
     }
 
-    socket.emit('reconnect', { battleRoomId })
+    socket.emit('reconnect', { battleRoomId, campusName: campus })
     socket.on('reconnect', (currentBattle) => {
       if (!currentBattle) return
       const myCrew = currentBattle.crewInfo.find(
@@ -145,7 +145,7 @@ const Home = ({ user, navigation }) => {
         crewId: myCrew.roomId,
         p_mission: currentBattle.mission,
         crewInfo: currentBattle.crewInfo,
-        p_inventory: myCrew.p_inventory,
+        p_inventory: myCrew.inventory,
         p_items: me.items,
         isProgress: true,
       })

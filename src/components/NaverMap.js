@@ -148,6 +148,7 @@ const NaverMap = ({
       (elem) => !(elem.lat === item.lat && elem.lng === item.lng),
     )
     setItemList(filterItemList)
+    sendItemsEmit(filterItemList)
   }
 
   const applyJoker = (type) => {
