@@ -34,6 +34,7 @@ const Container = styled.View`
 
 const WalkingMode = ({ route, navigation }) => {
   const { socket, battleRoomId, userInfo, crewId } = route.params
+  const { isProgress, p_crewInfo, p_mission, p_inventory } = route.params
   const [infoVisible, setInfoVisible] = useState(false) //미션정보 모달
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
@@ -83,7 +84,11 @@ const WalkingMode = ({ route, navigation }) => {
 
   useEffect(() => {
     console.log('walking mode useEffect')
-    emitReadyWalkingMode()
+    if (isProgress) {
+      reconnectWalkingMode()
+    } else {
+      emitReadyWalkingMode()
+    }
 
     //이 부분 로그 여러개뜨는거 확인해보기.
     socket.on('waitingMission', ({ count }) => {
@@ -238,6 +243,13 @@ const WalkingMode = ({ route, navigation }) => {
   const emitReadyWalkingMode = useCallback(() => {
     socket.emit('readyWalkingMode', { battleRoomId })
   }, [battleRoomId])
+
+  const reconnectWalkingMode = useCallback(() => {
+    setMission(p_mission)
+    setCrewInfo(p_crewInfo)
+    if (p_inventory) setInventory(p_inventory)
+    else setInventory([])
+  }, [])
 
   const obtainItemEmit = useCallback(
     ({ item, newInventory }) => {

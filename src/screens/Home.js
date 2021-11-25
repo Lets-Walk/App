@@ -117,25 +117,38 @@ const Home = ({ user, navigation }) => {
   }, [])
 
   useEffect(() => {
-    if (battleRoomId && !socket) {
+    console.log(battleRoomId)
+    if (!battleRoomId) return
+    if (!socket) {
       setSocket(io.connect(SERVER_URL))
       return
     }
 
     socket.emit('reconnect', { battleRoomId })
     socket.on('reconnect', (currentBattle) => {
+      if (!currentBattle) return
       const myCrew = currentBattle.crewInfo.find(
         (crew) => crew.campus.name === campus,
       )
-      console.log(myCrew)
-      // navigation.navigate('WalkingMode', {
-      //   socket: socket,
-      //   battleRoomId: battleRoomId,
-      //   crewInfo: currentBattle.crewInfo,
-      //   userInfo: user,
-      //   crewId: myCrew.roomId,
-      //   mission: currentBattle.mission,
-      // })
+
+      const me = myCrew.users.find((crewuser) => crewuser.userId === user.id)
+
+      navigation.navigate('WalkingMode', {
+        socket: socket,
+        battleRoomId: battleRoomId,
+        userInfo: {
+          id: user.userId,
+          nickname: user.nickname,
+          profileUrl: user.profileUrl,
+          campus: user.Campus,
+        },
+        crewId: myCrew.roomId,
+        p_mission: currentBattle.mission,
+        crewInfo: currentBattle.crewInfo,
+        p_inventory: myCrew.p_inventory,
+        p_items: me.items,
+        isProgress: true,
+      })
     })
   }, [socket])
 
