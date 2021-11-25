@@ -137,7 +137,7 @@ const Home = ({ user, navigation }) => {
         socket: socket,
         battleRoomId: battleRoomId,
         userInfo: {
-          id: user.userId,
+          id: user.id,
           nickname: user.nickname,
           profileUrl: user.profileUrl,
           campus: user.Campus,
