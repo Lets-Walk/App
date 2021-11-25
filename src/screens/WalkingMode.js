@@ -9,7 +9,10 @@ import {
 import styled from 'styled-components/native'
 import { useFocusEffect } from '@react-navigation/native'
 import { ActivityIndicator } from '@ant-design/react-native'
+import Geolocation from 'react-native-geolocation-service'
+import axios from 'axios'
 
+import requestPermission from '../utils/requestPermission'
 import NaverMap from '../components/NaverMap'
 import BattleInfo from '../components/BattleInfo'
 import MissionTimer from '../components/MissionTimer'
@@ -38,6 +41,8 @@ const WalkingMode = ({ route, navigation }) => {
   const [infoVisible, setInfoVisible] = useState(false) //미션정보 모달
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
+  const [location, setLocation] = useState(null)
+  const [itemList, setItemList] = useState([])
   const [invAnimation, setAnimValue] = useState(new Animated.Value(0))
   const [chatAnimation, setChatAnimation] = useState(new Animated.Value(0))
   const [invBadge, setInvBadge] = useState(false)
@@ -82,6 +87,24 @@ const WalkingMode = ({ route, navigation }) => {
     }, []),
   )
 
+  useEffect(async () => {
+    const result = await requestPermission()
+    if (result === 'granted') {
+      Geolocation.getCurrentPosition(
+        ({ coords }) => {
+          setLocation({
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+          })
+        },
+        (error) => {
+          console.log(error.code, error.message)
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      )
+    }
+  }, [])
+
   useEffect(() => {
     console.log('walking mode useEffect')
     if (isProgress) {
@@ -101,14 +124,6 @@ const WalkingMode = ({ route, navigation }) => {
 
     socket.on('missionCount', (count) => {
       setMissionCount(count)
-    })
-
-    //이부분 로그 여러개뜨는거 확인해보기.
-    socket.on('startWalkingMode', ({ mission }) => {
-      setShowTimer(false)
-      console.log(`미션 : ${mission}`)
-      setMission(mission)
-      setInfoVisible(true)
     })
 
     socket.on('obtainItem', ({ userInfo, item }) => {
@@ -178,6 +193,23 @@ const WalkingMode = ({ route, navigation }) => {
       socket.disconnect()
     }
   }, [])
+
+  useEffect(() => {
+    socket.on('startWalkingMode', async ({ mission }) => {
+      setShowTimer(false)
+      console.log(`미션 : ${mission}`)
+      setMission(mission)
+      setInfoVisible(true)
+      //아이템 마커 그리기
+      const itemList = await createItems(location)
+      setItemList(itemList)
+      sendItemsEmit(itemList)
+    })
+
+    return () => {
+      socket.removeAllListeners('startWalkingMode')
+    }
+  }, [location])
 
   useEffect(() => {
     socket.on('missionSuccess', ({ crewInfo, mission, campusName, isEnd }) => {
@@ -348,6 +380,22 @@ const WalkingMode = ({ route, navigation }) => {
     })
   }, [])
 
+  const createItems = useCallback(
+    async (location) => {
+      const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
+        params: {
+          lat: location.latitude,
+          lng: location.longitude,
+        },
+      })
+
+      const itemList = data.data
+
+      return itemList
+    },
+    [location],
+  )
+
   return (
     <>
       <Container>
@@ -364,6 +412,9 @@ const WalkingMode = ({ route, navigation }) => {
           obtainItemEmit={obtainItemEmit}
           obtainJokerEmit={obtainJokerEmit}
           sendItemsEmit={sendItemsEmit}
+          itemList={itemList}
+          setItemList={setItemList}
+          location={location}
         />
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionSuccess

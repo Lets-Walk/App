@@ -18,10 +18,10 @@ const NaverMap = ({
   obtainItemEmit,
   obtainJokerEmit,
   sendItemsEmit,
+  location,
+  itemList = [],
+  setItemList,
 }) => {
-  const initialLocation = { latitude: 37.564362, longitude: 126.977011 }
-  const [location, setLocation] = useState(initialLocation)
-  const [itemList, setItemList] = useState([])
   const [tempItemList, setTempItemList] = useState([])
   const [freeze, setFreeze] = useState(false)
   const [ghost, setGhost] = useState(false)
@@ -33,43 +33,43 @@ const NaverMap = ({
     mapRef.current.animateToCoordinate(location) //마커 좌표로 이동
   }
 
-  useEffect(async () => {
-    const result = await requestPermission()
-    if (result === 'granted') {
-      Geolocation.getCurrentPosition(
-        ({ coords }) => {
-          setLocation({
-            latitude: coords.latitude,
-            longitude: coords.longitude,
-          })
-        },
-        (error) => {
-          console.log(error.code, error.message)
-        },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
-      )
-    }
-  }, [])
+  // useEffect(async () => {
+  //   const result = await requestPermission()
+  //   if (result === 'granted') {
+  //     Geolocation.getCurrentPosition(
+  //       ({ coords }) => {
+  //         setLocation({
+  //           latitude: coords.latitude,
+  //           longitude: coords.longitude,
+  //         })
+  //       },
+  //       (error) => {
+  //         console.log(error.code, error.message)
+  //       },
+  //       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+  //     )
+  //   }
+  // }, [])
 
-  useEffect(async () => {
-    if (mission === null) {
-      setItemList([])
-      setTempItemList([])
-      removeJoker('All')
-      return
-    }
-    console.log('아이템 마커 생성')
-    const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
-      params: {
-        lat: location.latitude,
-        lng: location.longitude,
-      },
-    })
-    const itemList = data.data
-    setItemList(itemList)
-    //item data emit
-    sendItemsEmit(itemList)
-  }, [mission])
+  // useEffect(async () => {
+  //   if (mission === null) {
+  //     setItemList([])
+  //     setTempItemList([])
+  //     removeJoker('All')
+  //     return
+  //   }
+  //   console.log('아이템 마커 생성')
+  //   const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
+  //     params: {
+  //       lat: location.latitude,
+  //       lng: location.longitude,
+  //     },
+  //   })
+  //   const itemList = data.data
+  //   setItemList(itemList)
+  //   //item data emit
+  //   sendItemsEmit(itemList)
+  // }, [mission])
 
   useEffect(() => {
     const { effected, type, isEnd } = jokerMission
@@ -186,6 +186,7 @@ const NaverMap = ({
     setTempItemList([])
   }
 
+  if (!location) return <></>
   return (
     <NaverMapView
       style={{ width: '100%', height: '100%' }}
