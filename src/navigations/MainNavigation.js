@@ -9,7 +9,7 @@ import Home from '../screens/Home'
 import CrewNavigation from './CrewNavigation'
 import Ranking from '../screens/Ranking'
 import Setting from '../screens/Setting'
-import OnBoarding from '../screens/OnBoarding'
+import OnBoardingInApp from '../screens/OnBoardingInApp'
 
 const Tab = createBottomTabNavigator()
 
@@ -83,7 +83,7 @@ const MainNavigation = ({ user }) => {
       />
       <Tab.Screen
         name="OnBoarding"
-        component={OnBoarding}
+        component={OnBoardingInApp}
         options={{
           headerShown: false,
           tabBarButton: () => null,
