@@ -247,7 +247,7 @@ const WalkingMode = ({ route, navigation }) => {
       //Inventory데이터를 전달하는 식으로 처리해야 할듯 (비동기로 인해 값이 제대로 안들어갈시 변경 필요)
       //클라이언트에는 아이템 획들을 on하는 함수도 추가되어야함.
       console.log('obtainItemEmit')
-      socket.emit('inventorySync', { crewId, newInventory })
+      socket.emit('inventorySync', { crewId, battleRoomId, newInventory })
       socket.emit('obtainItem', { battleRoomId, userInfo, item })
       socket.emit('missionValidation', {
         newInventory,
