@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   View,
   Text,
@@ -14,90 +14,95 @@ import { List } from '@ant-design/react-native'
 import HomeResultModal from '../components/HomeResultModal'
 import { SERVER_URL } from '@env'
 import { Crown, Footprint } from '../../assets/icons'
+import { io } from 'socket.io-client'
 
-const Home = ({ user }) => {
+const Home = ({ user, navigation }) => {
   const name = user.name // 사용자 이름
   const campus = user.Campus.name // 소속 대학명
-  const [stepCount, setStepCount] = useState(1512) // 걸음수 mockup data(user.Walk.stepcount)
   const userEmail = user.email // 사용자 이메일
   const nickname = user.nickname // 사용자 닉네임
-  const profileMessage = user.profilemessage // 사용자 프로필 메세지
-  const [winNum, setWinNum] = useState(3) // mockup data (user.win)
-  const [loseNum, setLoseNum] = useState(2) // mockup data (user.lose)
-  const winningRate = parseFloat((winNum / (winNum + loseNum)) * 100).toFixed(2) // 승률
-  const [profileUrl, setProfileUrl] = useState('https://ifh.cc/g/sSjFNC.png') // 프로필 사진 url (user.profileUrl)
+  const battleRoomId = user.battleRoomId
+
+  const profileUrl = SERVER_URL + '/static/profiles/' + user.profileUrl
   const campusLogoUrl = SERVER_URL + '/static/logos/' + user.Campus.image
+
+  const [socket, setSocket] = useState(null)
+  const [stepCount, setStepCount] = useState(user.Walk.stepcount)
+  const [winNum, setWinNum] = useState(user.Walk.wincount)
+  const [loseNum, setLoseNum] = useState(user.Walk.losecount)
+  const winningRate = parseFloat((winNum / (winNum + loseNum)) * 100).toFixed(2) // 승률
+
   const [results, setResults] = useState([
-    {
-      no: 1,
-      date: '21.12.26',
-      startTime: '10:23',
-      endTime: '10:55',
-      outcome: 'win',
-      opponent: '숭실대학교',
-      steps: 328,
-      members: ['kim', 'lee', 'jason'],
-    },
-    {
-      no: 2,
-      date: '21.12.28',
-      startTime: '09:11',
-      endTime: '09:42',
-      outcome: 'win',
-      opponent: '서울대학교',
-      steps: 277,
-      members: ['park', 'yoon', 'kevin'],
-    },
-    {
-      no: 3,
-      date: '21.12.28',
-      startTime: '14:48',
-      endTime: '15:01',
-      outcome: 'lose',
-      opponent: '건국대학교',
-      steps: 302,
-      members: ['park', 'kim2', 'john'],
-    },
-    {
-      no: 4,
-      date: '21.12.29',
-      startTime: '11:11',
-      endTime: '11:35',
-      outcome: 'lose',
-      opponent: '가야대학교',
-      steps: 411,
-      members: ['jang', 'harry', 'choi'],
-    },
-    {
-      no: 5,
-      date: '21.12.30',
-      startTime: '17:55',
-      endTime: '18:05',
-      outcome: 'win',
-      opponent: '연세대학교',
-      steps: 194,
-      members: ['yoon', 'kim', 'john'],
-    },
-    {
-      no: 6,
-      date: '21.12.31',
-      startTime: '12:55',
-      endTime: '15:05',
-      outcome: 'win',
-      opponent: '연세대학교',
-      steps: 194,
-      members: ['yoon', 'kim', 'john'],
-    },
-    {
-      no: 7,
-      date: '21.12.31',
-      startTime: '15:55',
-      endTime: '20:05',
-      outcome: 'lose',
-      opponent: '연세대학교',
-      steps: 194,
-      members: ['yoon', 'kim', 'john'],
-    },
+    // {
+    //   no: 1,
+    //   date: '21.12.26',
+    //   startTime: '10:23',
+    //   endTime: '10:55',
+    //   outcome: 'win',
+    //   opponent: '숭실대학교',
+    //   steps: 328,
+    //   members: ['kim', 'lee', 'jason'],
+    // },
+    // {
+    //   no: 2,
+    //   date: '21.12.28',
+    //   startTime: '09:11',
+    //   endTime: '09:42',
+    //   outcome: 'win',
+    //   opponent: '서울대학교',
+    //   steps: 277,
+    //   members: ['park', 'yoon', 'kevin'],
+    // },
+    // {
+    //   no: 3,
+    //   date: '21.12.28',
+    //   startTime: '14:48',
+    //   endTime: '15:01',
+    //   outcome: 'lose',
+    //   opponent: '건국대학교',
+    //   steps: 302,
+    //   members: ['park', 'kim2', 'john'],
+    // },
+    // {
+    //   no: 4,
+    //   date: '21.12.29',
+    //   startTime: '11:11',
+    //   endTime: '11:35',
+    //   outcome: 'lose',
+    //   opponent: '가야대학교',
+    //   steps: 411,
+    //   members: ['jang', 'harry', 'choi'],
+    // },
+    // {
+    //   no: 5,
+    //   date: '21.12.30',
+    //   startTime: '17:55',
+    //   endTime: '18:05',
+    //   outcome: 'win',
+    //   opponent: '연세대학교',
+    //   steps: 194,
+    //   members: ['yoon', 'kim', 'john'],
+    // },
+    // {
+    //   no: 6,
+    //   date: '21.12.31',
+    //   startTime: '12:55',
+    //   endTime: '15:05',
+    //   outcome: 'win',
+    //   opponent: '연세대학교',
+    //   steps: 194,
+    //   members: ['yoon', 'kim', 'john'],
+    // },
+    // {
+    //   no: 7,
+    //   date: '21.12.31',
+    //   startTime: '15:55',
+    //   endTime: '20:05',
+    //   outcome: 'lose',
+    //   opponent: '연세대학교',
+    //   steps: 194,
+    //   members: ['yoon', 'kim', 'john'],
+    // },
   ]) // mockup data
   const [modalVisible, setModalVisible] = useState(false)
   const [modalNum, setModalNum] = useState(0)
@@ -111,18 +116,60 @@ const Home = ({ user }) => {
     setModalVisible(false)
   }, [])
 
+  useEffect(() => {
+    console.log(battleRoomId)
+    if (!battleRoomId) return
+    if (!socket) {
+      setSocket(io.connect(SERVER_URL))
+      return
+    }
+
+    socket.emit('reconnect', { battleRoomId, campusName: campus })
+    socket.on('reconnect', (currentBattle) => {
+      if (!currentBattle) return
+      const myCrew = currentBattle.crewInfo.find(
+        (crew) => crew.campus.name === campus,
+      )
+
+      const me = myCrew.users.find((crewuser) => crewuser.userId === user.id)
+
+      navigation.navigate('WalkingMode', {
+        socket: socket,
+        battleRoomId: battleRoomId,
+        userInfo: {
+          id: user.id,
+          nickname: user.nickname,
+          profileUrl: user.profileUrl,
+          campus: user.Campus,
+        },
+        crewId: myCrew.roomId,
+        p_mission: currentBattle.mission,
+        crewInfo: currentBattle.crewInfo,
+        p_inventory: myCrew.inventory,
+        p_items: me.items,
+        isProgress: true,
+      })
+    })
+  }, [socket])
+
+  useEffect(() => {
+    console.log('home render')
+
+    //여기서 배틀룸 아이디 갱신하기
+  }, [])
+
   return (
     <ScreenName name="홈">
       <HomeResultModal
         isVisible={modalVisible}
         setVisible={setModalVisible}
-        date={results[modalNum].date}
-        startTime={results[modalNum].startTime}
-        endTime={results[modalNum].endTime}
-        opponent={results[modalNum].opponent}
-        outcome={results[modalNum].outcome}
-        steps={results[modalNum].steps}
-        members={results[modalNum].members}
+        date={results[modalNum]?.date}
+        startTime={results[modalNum]?.startTime}
+        endTime={results[modalNum]?.endTime}
+        opponent={results[modalNum]?.opponent}
+        outcome={results[modalNum]?.outcome}
+        steps={results[modalNum]?.steps}
+        members={results[modalNum]?.members}
         onConfirm={_handleConfirm}
       />
 
@@ -213,15 +260,19 @@ const Home = ({ user }) => {
                 style={{ width: 20, height: 20, bottom: 2 }}
               />
               <Text style={[styles.BasicText, { fontFamily: 'ONEMobileBold' }]}>
-                {'\t'}나의 걸음 수{'\n'}
+                {'\t'}나의 걸음 수
               </Text>
             </View>
-            <Text style={[styles.BasicText, { flexDirection: 'row' }]}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-                {stepCount}{' '}
+            <View
+              style={{ alignItems: 'center', paddingRight: 20, paddingTop: 15 }}
+            >
+              <Text style={[styles.BasicText, { flexDirection: 'row' }]}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+                  {stepCount}{' '}
+                </Text>
+                <Text>걸음</Text>
               </Text>
-              <Text>걸음</Text>
-            </Text>
+            </View>
           </View>
 
           <View style={[{ backgroundColor: '#ffffff' }, styles.CountContainer]}>
@@ -235,17 +286,19 @@ const Home = ({ user }) => {
                 {'\t'}나의 전적
               </Text>
             </View>
-            <Text
-              style={[
-                styles.BasicText,
-                { paddingTop: 7, paddingBottom: 3, fontSize: 20 },
-              ]}
-            >
-              {winNum}승 {loseNum}패
-            </Text>
-            <Text style={[styles.BasicText, { fontSize: 14 }]}>
-              (승률: {winningRate}%)
-            </Text>
+            <View style={{ alignItems: 'center', paddingRight: 20 }}>
+              <Text
+                style={[
+                  styles.BasicText,
+                  { paddingTop: 15, paddingBottom: 3, fontSize: 20 },
+                ]}
+              >
+                {winNum}승 {loseNum}패
+              </Text>
+              <Text style={[styles.BasicText, { fontSize: 14, color: 'gray' }]}>
+                (승률: {winningRate}%)
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -360,9 +413,8 @@ const styles = StyleSheet.create({
   CountContainer: {
     marginTop: 20,
     marginLeft: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-
+    paddingTop: 25,
+    paddingLeft: 20,
     elevation: 5,
     height: 120,
     width: (Dimensions.get('window').width - 40) / 2 - 10,

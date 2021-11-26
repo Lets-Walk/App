@@ -33,6 +33,8 @@ const HomeResultModal = ({
     onConfirm = () => setVisible(false)
   }
 
+  if (!isVisible) return <></>
+
   return (
     <Modal
       isVisible={isVisible}

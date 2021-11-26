@@ -9,7 +9,10 @@ import {
 import styled from 'styled-components/native'
 import { useFocusEffect } from '@react-navigation/native'
 import { ActivityIndicator } from '@ant-design/react-native'
+import Geolocation from 'react-native-geolocation-service'
+import axios from 'axios'
 
+import requestPermission from '../utils/requestPermission'
 import NaverMap from '../components/NaverMap'
 import BattleInfo from '../components/BattleInfo'
 import MissionTimer from '../components/MissionTimer'
@@ -25,6 +28,7 @@ import JokerWait from '../components/JokerWait'
 import JokerMission from '../components/JokerMission'
 import JokerTimer from '../components/JokerTimer'
 import FinishMode from '../components/FinishMode'
+import Chat from '../components/Chat'
 
 const Container = styled.View`
   flex: 1;
@@ -33,15 +37,23 @@ const Container = styled.View`
 
 const WalkingMode = ({ route, navigation }) => {
   const { socket, battleRoomId, userInfo, crewId } = route.params
+  const { isProgress, p_crewInfo, p_mission, p_inventory, p_items } =
+    route.params
   const [infoVisible, setInfoVisible] = useState(false) //미션정보 모달
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
+  const [location, setLocation] = useState(null)
+  const [itemList, setItemList] = useState([])
   const [invAnimation, setAnimValue] = useState(new Animated.Value(0))
+  const [chatAnimation, setChatAnimation] = useState(new Animated.Value(0))
   const [invBadge, setInvBadge] = useState(false)
   const [missionCount, setMissionCount] = useState(null)
   const [showTimer, setShowTimer] = useState(false)
   const [showFinishModal, setFinishModal] = useState(false)
   const [showInventory, setShowInventory] = useState(false)
+  const [showChat, setShowChat] = useState(false)
+  const [chatMessages, setChatMessages] = useState([])
+  const [chatBadge, setChatBadge] = useState(false)
   const [mission, setMission] = useState(null)
   const [crewInfo, setCrewInfo] = useState(route.params.crewInfo)
   const [successMission, setSuccessMission] = useState({
@@ -76,9 +88,31 @@ const WalkingMode = ({ route, navigation }) => {
     }, []),
   )
 
+  useEffect(async () => {
+    const result = await requestPermission()
+    if (result === 'granted') {
+      Geolocation.getCurrentPosition(
+        ({ coords }) => {
+          setLocation({
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+          })
+        },
+        (error) => {
+          console.log(error.code, error.message)
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      )
+    }
+  }, [])
+
   useEffect(() => {
     console.log('walking mode useEffect')
-    emitReadyWalkingMode()
+    if (isProgress) {
+      reconnectWalkingMode()
+    } else {
+      emitReadyWalkingMode()
+    }
 
     //이 부분 로그 여러개뜨는거 확인해보기.
     socket.on('waitingMission', ({ count }) => {
@@ -91,14 +125,6 @@ const WalkingMode = ({ route, navigation }) => {
 
     socket.on('missionCount', (count) => {
       setMissionCount(count)
-    })
-
-    //이부분 로그 여러개뜨는거 확인해보기.
-    socket.on('startWalkingMode', ({ mission }) => {
-      setShowTimer(false)
-      console.log(`미션 : ${mission}`)
-      setMission(mission)
-      setInfoVisible(true)
     })
 
     socket.on('obtainItem', ({ userInfo, item }) => {
@@ -162,21 +188,48 @@ const WalkingMode = ({ route, navigation }) => {
       setShowJokerMission(false)
     })
 
-    socket.on('inventorySync', ({ newInventory }) => {
-      console.log('inventorySync')
-      setInvBadge(true)
-      setInventory(newInventory)
+    //워킹모드 unmount시 socket 연결 끊음
+    return () => {
+      console.log('walking mode unmount')
+      socket.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    socket.on('startWalkingMode', async ({ mission }) => {
+      setShowTimer(false)
+      console.log(`미션 : ${mission}`)
+      setMission(mission)
+      setInfoVisible(true)
+      //아이템 마커 그리기
+      const items = await createItems(location)
+      setItemList(items)
+      sendItemsEmit(items)
     })
 
+    return () => {
+      socket.removeAllListeners('startWalkingMode')
+    }
+  }, [location])
+
+  useEffect(() => {
     socket.on('missionSuccess', ({ crewInfo, mission, campusName, isEnd }) => {
       console.log('missionSuccess')
-      setCrewInfo(crewInfo)
+      setCrewInfo(crewInfo) //LIFE 깎기,
       setMission(null) //미션 초기화
+
       console.log('inventory초기화')
       setInventory([])
       setInvBadge(false)
+
+      //아이템 초기화
+      setItemList([])
+      sendItemsEmit([])
+
       setShowJokerTimer(false)
       setJokerTimerCount(0)
+      setJokerMission({ ...jokerMission, isEnd: true })
+
       //맵의 마커를 초기화 하는 작업 필요.
       //isEnd면 더 이상 진행하지 않고 return
       if (isEnd) {
@@ -197,16 +250,44 @@ const WalkingMode = ({ route, navigation }) => {
       }, 3000)
     })
 
-    //워킹모드 unmount시 socket 연결 끊음
     return () => {
-      console.log('walking mode unmount')
-      socket.disconnect()
+      socket.removeAllListeners('missionSuccess')
     }
-  }, [])
+  }, [jokerMission])
+
+  useEffect(() => {
+    socket.on('receiveChat', ({ messages }) => {
+      if (!showChat) setChatBadge(true)
+      setChatMessages(messages)
+    })
+
+    return () => {
+      socket.removeAllListeners('receiveChat')
+    }
+  }, [showChat])
+
+  useEffect(() => {
+    socket.on('inventorySync', ({ newInventory }) => {
+      if (!showInventory) setInvBadge(true)
+      setInventory(newInventory)
+    })
+
+    return () => {
+      socket.removeAllListeners('inventorySync')
+    }
+  }, [showInventory])
 
   const emitReadyWalkingMode = useCallback(() => {
     socket.emit('readyWalkingMode', { battleRoomId })
   }, [battleRoomId])
+
+  const reconnectWalkingMode = useCallback(() => {
+    setMission(p_mission)
+    setCrewInfo(p_crewInfo)
+    setItemList(p_items)
+    if (p_inventory) setInventory(p_inventory)
+    else setInventory([])
+  }, [])
 
   const obtainItemEmit = useCallback(
     ({ item, newInventory }) => {
@@ -216,17 +297,17 @@ const WalkingMode = ({ route, navigation }) => {
       //Inventory데이터를 전달하는 식으로 처리해야 할듯 (비동기로 인해 값이 제대로 안들어갈시 변경 필요)
       //클라이언트에는 아이템 획들을 on하는 함수도 추가되어야함.
       console.log('obtainItemEmit')
-      socket.emit('inventorySync', { crewId, newInventory })
+      socket.emit('inventorySync', { crewId, battleRoomId, newInventory })
       socket.emit('obtainItem', { battleRoomId, userInfo, item })
       socket.emit('missionValidation', {
-        mission,
         newInventory,
         battleRoomId,
         crewInfo,
+        crewId,
         campusName: userInfo.campus.name,
       })
     },
-    [crewInfo, mission],
+    [crewInfo],
   )
 
   const obtainJokerEmit = useCallback(
@@ -260,6 +341,7 @@ const WalkingMode = ({ route, navigation }) => {
   }, [showFinishModal])
 
   const toggleInventory = useCallback(() => {
+    setShowChat(false)
     setInvBadge(false)
     if (showInventory) {
       setShowInventory(false)
@@ -273,6 +355,52 @@ const WalkingMode = ({ route, navigation }) => {
       }).start()
     }
   }, [showInventory])
+
+  const toggleChat = useCallback(() => {
+    setShowInventory(false)
+    setChatBadge(false)
+    if (showChat) {
+      setShowChat(false)
+      setChatAnimation(new Animated.Value(0))
+    } else {
+      setShowChat(true)
+      Animated.timing(chatAnimation, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start()
+    }
+  }, [showChat])
+
+  const sendMessageEmit = useCallback((messages) => {
+    console.log('send Chat Emit')
+    socket.emit('sendChat', { messages, crewId, battleRoomId })
+  }, [])
+
+  const sendItemsEmit = useCallback((items) => {
+    socket.emit('sendItems', {
+      battleRoomId,
+      crewId,
+      items,
+      userId: userInfo.id,
+    })
+  }, [])
+
+  const createItems = useCallback(
+    async (location) => {
+      const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
+        params: {
+          lat: location.latitude,
+          lng: location.longitude,
+        },
+      })
+
+      const itemList = data.data
+
+      return itemList
+    },
+    [location],
+  )
 
   return (
     <>
@@ -289,6 +417,10 @@ const WalkingMode = ({ route, navigation }) => {
           jokerMission={jokerMission}
           obtainItemEmit={obtainItemEmit}
           obtainJokerEmit={obtainJokerEmit}
+          sendItemsEmit={sendItemsEmit}
+          itemList={itemList}
+          setItemList={setItemList}
+          location={location}
         />
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionSuccess
@@ -310,7 +442,12 @@ const WalkingMode = ({ route, navigation }) => {
           showJokerTimer={showJokerTimer}
           jokerTimerCount={jokerTimerCount}
         />
-        <Banner toggleInventory={toggleInventory} invBadge={invBadge} />
+        <Banner
+          toggleInventory={toggleInventory}
+          invBadge={invBadge}
+          chatBadge={chatBadge}
+          toggleChat={toggleChat}
+        />
         <MissionInfo
           name={mission}
           infoVisible={infoVisible}
@@ -321,6 +458,15 @@ const WalkingMode = ({ route, navigation }) => {
           showInventory={showInventory}
           toggleInventory={toggleInventory}
           invAnimation={invAnimation}
+        />
+        <Chat
+          chatMessages={chatMessages}
+          setChatMessages={setChatMessages}
+          showChat={showChat}
+          toggleChat={toggleChat}
+          chatAnimation={chatAnimation}
+          sendMessageEmit={sendMessageEmit}
+          userInfo={userInfo}
         />
         <FinishModal
           modalVisible={showFinishModal}

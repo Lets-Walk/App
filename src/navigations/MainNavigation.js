@@ -9,6 +9,8 @@ import Home from '../screens/Home'
 import CrewNavigation from './CrewNavigation'
 import Ranking from '../screens/Ranking'
 import Setting from '../screens/Setting'
+import WalkingMode from '../screens/WalkingMode'
+import OnBoardingInApp from '../screens/OnBoardingInApp'
 
 const Tab = createBottomTabNavigator()
 
@@ -69,6 +71,7 @@ const MainNavigation = ({ user }) => {
       >
         {(props) => <Ranking {...props} user={user} />}
       </Tab.Screen>
+
       <Tab.Screen
         name="Setting"
         component={Setting}
@@ -77,6 +80,24 @@ const MainNavigation = ({ user }) => {
           tabBarIcon: ({ color, size }) => (
             <IoniconsIcon name="settings-sharp" color={color} size={size} />
           ),
+        }}
+      />
+      <Tab.Screen
+        name="WalkingMode" //워킹모드
+        component={WalkingMode}
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
+          tabBarVisible: false,
+       }}
+       />
+       <Tab.Screen
+        name="OnBoarding"
+        component={OnBoardingInApp}
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
+          tabBarVisible: false,
         }}
       />
     </Tab.Navigator>

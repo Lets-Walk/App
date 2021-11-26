@@ -17,10 +17,12 @@ const InfoContainer = styled.View`
 
 const BattleInfo = ({ crewInfo, userInfo }) => {
   //TODO : campusName과 life 받아서 CampusLife로 넘기기
+
   const [myCrew, setMyCrew] = useState(null)
   const [anotherCrew, setAnotherCrew] = useState(null)
 
   useEffect(() => {
+    if (!crewInfo) return <></>
     if (crewInfo[0].campus.name === userInfo.campus.name) {
       setMyCrew(crewInfo[0])
       setAnotherCrew(crewInfo[1])
