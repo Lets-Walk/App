@@ -88,7 +88,7 @@ const Home = ({ user, navigation }) => {
   useEffect(() => {
     console.log('home render')
 
-    const newResults = resultData.map((res, idx) => {
+    const newResults = resultData.reverse().map((res, idx) => {
       const outcome = res.winCampus === campus ? 'win' : 'lose'
       const opponent = campus === res.campus1 ? res.campus2 : res.campus1
       const members = res.participants.split(',')
