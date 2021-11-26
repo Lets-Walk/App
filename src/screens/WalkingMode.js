@@ -9,7 +9,10 @@ import {
 import styled from 'styled-components/native'
 import { useFocusEffect } from '@react-navigation/native'
 import { ActivityIndicator } from '@ant-design/react-native'
+import Geolocation from 'react-native-geolocation-service'
+import axios from 'axios'
 
+import requestPermission from '../utils/requestPermission'
 import NaverMap from '../components/NaverMap'
 import BattleInfo from '../components/BattleInfo'
 import MissionTimer from '../components/MissionTimer'
@@ -34,9 +37,13 @@ const Container = styled.View`
 
 const WalkingMode = ({ route, navigation }) => {
   const { socket, battleRoomId, userInfo, crewId } = route.params
+  const { isProgress, p_crewInfo, p_mission, p_inventory, p_items } =
+    route.params
   const [infoVisible, setInfoVisible] = useState(false) //미션정보 모달
   const [loading, setLoading] = useState(true)
   const [inventory, setInventory] = useState([])
+  const [location, setLocation] = useState(null)
+  const [itemList, setItemList] = useState([])
   const [invAnimation, setAnimValue] = useState(new Animated.Value(0))
   const [chatAnimation, setChatAnimation] = useState(new Animated.Value(0))
   const [invBadge, setInvBadge] = useState(false)
@@ -81,9 +88,31 @@ const WalkingMode = ({ route, navigation }) => {
     }, []),
   )
 
+  useEffect(async () => {
+    const result = await requestPermission()
+    if (result === 'granted') {
+      Geolocation.getCurrentPosition(
+        ({ coords }) => {
+          setLocation({
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+          })
+        },
+        (error) => {
+          console.log(error.code, error.message)
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      )
+    }
+  }, [])
+
   useEffect(() => {
     console.log('walking mode useEffect')
-    emitReadyWalkingMode()
+    if (isProgress) {
+      reconnectWalkingMode()
+    } else {
+      emitReadyWalkingMode()
+    }
 
     //이 부분 로그 여러개뜨는거 확인해보기.
     socket.on('waitingMission', ({ count }) => {
@@ -96,14 +125,6 @@ const WalkingMode = ({ route, navigation }) => {
 
     socket.on('missionCount', (count) => {
       setMissionCount(count)
-    })
-
-    //이부분 로그 여러개뜨는거 확인해보기.
-    socket.on('startWalkingMode', ({ mission }) => {
-      setShowTimer(false)
-      console.log(`미션 : ${mission}`)
-      setMission(mission)
-      setInfoVisible(true)
     })
 
     socket.on('obtainItem', ({ userInfo, item }) => {
@@ -175,6 +196,23 @@ const WalkingMode = ({ route, navigation }) => {
   }, [])
 
   useEffect(() => {
+    socket.on('startWalkingMode', async ({ mission }) => {
+      setShowTimer(false)
+      console.log(`미션 : ${mission}`)
+      setMission(mission)
+      setInfoVisible(true)
+      //아이템 마커 그리기
+      const items = await createItems(location)
+      setItemList(items)
+      sendItemsEmit(items)
+    })
+
+    return () => {
+      socket.removeAllListeners('startWalkingMode')
+    }
+  }, [location])
+
+  useEffect(() => {
     socket.on('missionSuccess', ({ crewInfo, mission, campusName, isEnd }) => {
       console.log('missionSuccess')
       setCrewInfo(crewInfo) //LIFE 깎기,
@@ -183,6 +221,10 @@ const WalkingMode = ({ route, navigation }) => {
       console.log('inventory초기화')
       setInventory([])
       setInvBadge(false)
+
+      //아이템 초기화
+      setItemList([])
+      sendItemsEmit([])
 
       setShowJokerTimer(false)
       setJokerTimerCount(0)
@@ -239,6 +281,14 @@ const WalkingMode = ({ route, navigation }) => {
     socket.emit('readyWalkingMode', { battleRoomId })
   }, [battleRoomId])
 
+  const reconnectWalkingMode = useCallback(() => {
+    setMission(p_mission)
+    setCrewInfo(p_crewInfo)
+    setItemList(p_items)
+    if (p_inventory) setInventory(p_inventory)
+    else setInventory([])
+  }, [])
+
   const obtainItemEmit = useCallback(
     ({ item, newInventory }) => {
       //아이템을 획득할때 전체와 크루에게 이벤트를 발생시키는 함수
@@ -247,10 +297,9 @@ const WalkingMode = ({ route, navigation }) => {
       //Inventory데이터를 전달하는 식으로 처리해야 할듯 (비동기로 인해 값이 제대로 안들어갈시 변경 필요)
       //클라이언트에는 아이템 획들을 on하는 함수도 추가되어야함.
       console.log('obtainItemEmit')
-      socket.emit('inventorySync', { crewId, newInventory })
+      socket.emit('inventorySync', { crewId, battleRoomId, newInventory })
       socket.emit('obtainItem', { battleRoomId, userInfo, item })
       socket.emit('missionValidation', {
-        mission,
         newInventory,
         battleRoomId,
         crewInfo,
@@ -258,7 +307,7 @@ const WalkingMode = ({ route, navigation }) => {
         campusName: userInfo.campus.name,
       })
     },
-    [crewInfo, mission],
+    [crewInfo],
   )
 
   const obtainJokerEmit = useCallback(
@@ -328,6 +377,31 @@ const WalkingMode = ({ route, navigation }) => {
     socket.emit('sendChat', { messages, crewId, battleRoomId })
   }, [])
 
+  const sendItemsEmit = useCallback((items) => {
+    socket.emit('sendItems', {
+      battleRoomId,
+      crewId,
+      items,
+      userId: userInfo.id,
+    })
+  }, [])
+
+  const createItems = useCallback(
+    async (location) => {
+      const { data } = await axios.get(SERVER_URL + '/api/map/marker', {
+        params: {
+          lat: location.latitude,
+          lng: location.longitude,
+        },
+      })
+
+      const itemList = data.data
+
+      return itemList
+    },
+    [location],
+  )
+
   return (
     <>
       <Container>
@@ -343,6 +417,10 @@ const WalkingMode = ({ route, navigation }) => {
           jokerMission={jokerMission}
           obtainItemEmit={obtainItemEmit}
           obtainJokerEmit={obtainJokerEmit}
+          sendItemsEmit={sendItemsEmit}
+          itemList={itemList}
+          setItemList={setItemList}
+          location={location}
         />
         <BattleInfo userInfo={userInfo} crewInfo={crewInfo} />
         <MissionSuccess

@@ -9,6 +9,7 @@ import Home from '../screens/Home'
 import CrewNavigation from './CrewNavigation'
 import Ranking from '../screens/Ranking'
 import Setting from '../screens/Setting'
+import WalkingMode from '../screens/WalkingMode'
 import OnBoardingInApp from '../screens/OnBoardingInApp'
 
 const Tab = createBottomTabNavigator()
@@ -82,6 +83,15 @@ const MainNavigation = ({ user }) => {
         }}
       />
       <Tab.Screen
+        name="WalkingMode" //워킹모드
+        component={WalkingMode}
+        options={{
+          headerShown: false,
+          tabBarButton: () => null,
+          tabBarVisible: false,
+       }}
+       />
+       <Tab.Screen
         name="OnBoarding"
         component={OnBoardingInApp}
         options={{
