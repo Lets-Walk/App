@@ -36,6 +36,8 @@ const SettingsModal = ({
   //   onConfirm = () => setVisible(false)
   // }
 
+  let key = 1
+
   return (
     <Modal
       isVisible={isVisible}
@@ -50,13 +52,19 @@ const SettingsModal = ({
       <CenterView>
         <Container style={{ width: width, height: height }}>
           <View
-            style={{ alignItems: 'center', marginTop: 20, marginBottom: 25 }}
+            style={{ alignItems: 'center', marginTop: 20, marginBottom: 20 }}
           >
             <Text style={styles.title}>{modalTitle}</Text>
           </View>
-          <ScrollView style={{ width: '95%', marginLeft: 15 }}>
-            <Text style={styles.text}>{modalText}</Text>
-          </ScrollView>
+          {/* <ScrollView style={{ width: '95%', marginLeft: 15, marginTop: 0 }}> */}
+          <View style={{ marginLeft: 15, marginRight: 15 }}>
+            {modalText.map((text) => (
+              <Text key={key++} style={styles.text}>
+                {text}
+              </Text>
+            ))}
+          </View>
+          {/* </ScrollView> */}
           <View style={styles.Button}>
             <TouchableOpacity onPress={onConfirm}>
               <Text

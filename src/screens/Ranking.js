@@ -14,6 +14,11 @@ import { List } from '@ant-design/react-native'
 import Confetti from '../animations/Confetti'
 import RankDetailModal from '../components/RankDetailModal'
 
+var today = new Date() // 오늘 날짜
+var dday = new Date(2021, 12 - 1, 31) // 2021.12.31 (월은 -1)
+var gap = dday.getTime() - today.getTime()
+var remaining = Math.ceil(gap / (1000 * 60 * 60 * 24))
+
 const Ranking = ({ user }) => {
   const startDate = '2021.12.01'
   const endDate = '2021.12.31'
@@ -76,12 +81,12 @@ const Ranking = ({ user }) => {
     },
   ]) // mockup data
 
-  const _handleDetail = (campus) => {
+  const _handleDetail = (campus, rank) => {
     // 서버에서 해당 대학정보, 참여자 정보 불러오기
-    console.log(campus)
     setIsVisible(true)
     setModalVisible(true)
     setCampusName(campus)
+    setCampusRank(rank)
   }
 
   const [isVisible, setIsVisible] = useState(false)
@@ -90,6 +95,7 @@ const Ranking = ({ user }) => {
     setModalVisible(false)
   }, [])
   const [campusName, setCampusName] = useState('')
+  const [campusRank, setCampusRank] = useState(0)
 
   return (
     <ScreenName name="대학랭킹">
@@ -98,8 +104,9 @@ const Ranking = ({ user }) => {
         setVisible={setModalVisible}
         onConfirm={_handleConfirm}
         campusName={campusName}
+        campusRank={campusRank}
       />
-      <View style={{ flex: 1, alignItems: 'center', top: 30 }}>
+      <View style={{ flex: 1, alignItems: 'center', top: 20 }}>
         <Confetti />
         <Image
           source={require('../utils/medals.png')}
@@ -109,6 +116,16 @@ const Ranking = ({ user }) => {
           }}
         />
         {/* <Text style={styles.ListTitleText}>대학별 랭킹</Text> */}
+        <Text
+          style={{
+            color: 'red',
+            fontFamily: 'Cafe24Shiningstar',
+            fontSize: 25,
+            marginTop: 5,
+          }}
+        >
+          대항전 종료까지 {remaining}일 남았습니다.
+        </Text>
 
         <View style={styles.ResultContainer}>
           <ScrollView>
@@ -201,7 +218,9 @@ const Ranking = ({ user }) => {
                       }}
                     >
                       <TouchableOpacity
-                        onPress={() => _handleDetail(result.campus)}
+                        onPress={() =>
+                          _handleDetail(result.campus, result.rank)
+                        }
                       >
                         <FontAwesomeIcon
                           name="chevron-right"

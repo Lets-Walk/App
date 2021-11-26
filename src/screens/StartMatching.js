@@ -12,7 +12,7 @@ const StartMatching = ({ navigation, user }) => {
   const campus = user.Campus
   const userId = user.id
   const nickname = user.nickname
-  const [campusScore, setCampusScore] = useState('')
+  const [campusScore, setCampusScore] = useState(0)
   const [campusRank, setCampusRank] = useState(1)
   const profileUrl = SERVER_URL + '/static/profiles/' + user.profileUrl
   const campusLogoUrl = SERVER_URL + '/static/logos/' + campus.image
@@ -48,15 +48,16 @@ const StartMatching = ({ navigation, user }) => {
         <View style={styles.campusRankContainer}>
           <Text
             style={{
-              fontSize: 32,
-              fontFamily: 'BMHANNAAir_ttf',
-              marginBottom: 0,
+              fontSize: 26,
+              fontFamily: 'ONEMobileRegular',
+              marginBottom: 10,
             }}
           >
             현재 순위
           </Text>
-          <Text style={{ fontSize: 24, fontFamily: 'BMHANNAAir_ttf' }}>
-            {campusRank}위 ({campusScore}점)
+          <Text style={{ fontSize: 24, fontFamily: 'ONEMobileLight' }}>
+            {/* {campusRank}위 ({campusScore}점) */}
+            {campusRank}위 (1820점)
           </Text>
         </View>
 
@@ -83,14 +84,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   campusNameText: {
-    fontFamily: 'BMHANNAAir_ttf',
-    fontSize: 48,
+    fontFamily: 'ONEMobileBold',
+    fontSize: 35,
+    marginBottom: 5,
   },
   logoContainer: {
     width: 150,
     height: 150,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 15,
     resizeMode: 'contain',
   },
   campusRankContainer: { alignItems: 'center' },
