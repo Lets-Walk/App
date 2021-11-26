@@ -126,7 +126,10 @@ const Home = ({ user, navigation }) => {
 
     socket.emit('reconnect', { battleRoomId, campusName: campus })
     socket.on('reconnect', (currentBattle) => {
-      if (!currentBattle) return
+      if (!currentBattle) {
+        socket.disconnect()
+        return
+      }
       const myCrew = currentBattle.crewInfo.find(
         (crew) => crew.campus.name === campus,
       )
