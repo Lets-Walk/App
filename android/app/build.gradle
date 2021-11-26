@@ -125,6 +125,10 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    dexOptions {
+       javaMaxHeapSize "3g"
+    }
+    
     defaultConfig {
         applicationId "com.app"
         minSdkVersion rootProject.ext.minSdkVersion
