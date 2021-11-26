@@ -13,9 +13,8 @@ import ScreenName from '../components/ScreenName'
 import SettingsButton from '../components/SettingsButton'
 import Modal from 'react-native-modal'
 import SettingsModal from '../components/SettingsModal'
-import ConfirmModal from '../components/ConfirmModal'
 
-const Setting = () => {
+const Setting = ({ navigation }) => {
   const height = Dimensions.get('window').height
   const [isIntroVisible, setIsIntroVisible] = useState(false) // 앱 소개
   const [versionVisible, setVersionVisible] = useState(false) // 버전정보
@@ -41,7 +40,7 @@ const Setting = () => {
     useState(false)
 
   const _handleIntro = useCallback(() => {
-    setIsIntroVisible(true)
+    navigation.navigate('OnBoarding')
   })
 
   const _handleVersion = useCallback(() => {
@@ -68,22 +67,13 @@ const Setting = () => {
     // Logout logic
   }
 
+  const textArr = ['안녕하세요', '반갑습니다']
+
   return (
     <ScreenName name="설정">
       <SettingsModal
-        modalTitle="워크투게더 소개"
-        modalText="앱 소개 내용 작성..."
-        isVisible={isIntroVisible}
-        width="100%"
-        height="100%"
-        onConfirm={useCallback(() => {
-          setIsIntroVisible(false)
-        })}
-      />
-
-      <SettingsModal
         modalTitle="버전정보"
-        modalText="ver. 1.0.0"
+        modalText={['ver 1.0.0']}
         isVisible={versionVisible}
         width="80%"
         height="30%"
@@ -94,23 +84,7 @@ const Setting = () => {
 
       <SettingsModal
         modalTitle="이용약관"
-        modalText="크루 매칭을 통해 같은 대학 소속 사용자 4명이 한 크루가 됩니다.
-
-        배틀 모드에서 타대학 크루와 크루대 크루 포커 아이템 선착순 줍기 미션을 수행하게 됩니다. 
-        
-        처음에 주어진 5개 라이프는 상대 크루가 먼저 미션을 성공할 때마다 1개씩 차감됩니다.
-        
-        인벤토리는 크루끼리 공유하며 미션 종료 시마다 인벤토리와 아이템 위치는 초기화 됩니다. 
-        
-        아이템 위치는 사용자 현위치의 반경 1km이내이며 아이템 사이 최소 간격은 200m입니다.
-        
-        조커 아이템은 랜덤 효과를 지니고 있습니다.
-        
-        채팅 사용이 가능하며 타인의 득템 정보를 실시간으로 확인할 수 있습니다.
-        
-        성별, 키 정보를 통한 걸음 수 검증이나 이동 속도 검증에서 의심을 받지 않도록 주의하여야 합니다. (자전거 및 대중교통 이용 불가)
-        
-        상대 크루의 라이프가 모두 소진되면 승리한 것이며 진 크루보다 승점 40점을 더 소속 대학 점수판에 더할 수 있습니다."
+        modalText={['이용약관 내용']}
         isVisible={termsVisible}
         width="100%"
         height="100%"
@@ -121,10 +95,24 @@ const Setting = () => {
 
       <SettingsModal
         modalTitle="자주 묻는 질문(FAQ)"
-        modalText="자주 묻는 질문(FAQ) 내용 작성..."
+        modalText={[
+          'Q1. 학교 이메일이 없으면 이용이 불가능한가요?',
+          '',
+          'A1. 네. 워크투게더는 대학생분들의 걷기 운동을 촉진하기 위하여 제공되는 서비스이므로 대학 이메일 계정이 없으신 분들은 이용이 불가능한 점 양해부탁드립니다.',
+          '',
+          '',
+          'Q2. 무료로 이용이 가능한가요?',
+          '',
+          'A2. 네. 워크투게더는 전면 무료 서비스로 제공되고 있습니다. 단, 모바일 데이터 사용 시 통신사 이용요금이 부과될 수 있는 점 주의 바랍니다.',
+          '',
+          '',
+          'Q3. 앱 관련하여 문의사항이 있습니다.',
+          '',
+          'A3. 고객센터 이메일(walktogether.cs@gmail.com)로 연락바랍니다.',
+        ]}
         isVisible={FaqVisible}
         width="100%"
-        height="100%"
+        height="70%"
         onConfirm={useCallback(() => {
           setFaqVisible(false)
         })}
@@ -132,10 +120,13 @@ const Setting = () => {
 
       <SettingsModal
         modalTitle="고객센터"
-        modalText="고객센터 내용 작성..."
+        modalText={[
+          '문의사항은 아래 메일로 연락주세요.',
+          '(walktogether.cs@gmail.com)',
+        ]}
         isVisible={CsVisible}
         width="80%"
-        height="70%"
+        height="30%"
         onConfirm={useCallback(() => {
           setCsVisible(false)
         })}
@@ -207,7 +198,6 @@ const Setting = () => {
         <SettingsButton text="이용약관" pressFunction={_handleTerms} />
         <SettingsButton text="자주 묻는 질문(FAQ)" pressFunction={_handleFaq} />
         <SettingsButton text="고객센터" pressFunction={_handleCs} />
-        <SettingsButton text="내 정보 수정" />
         <SettingsButton text="로그아웃" pressFunction={_handleLogout} />
         <SettingsButton text="회원탈퇴" />
       </View>

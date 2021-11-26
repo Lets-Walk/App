@@ -213,15 +213,19 @@ const Home = ({ user }) => {
                 style={{ width: 20, height: 20, bottom: 2 }}
               />
               <Text style={[styles.BasicText, { fontFamily: 'ONEMobileBold' }]}>
-                {'\t'}나의 걸음 수{'\n'}
+                {'\t'}나의 걸음 수
               </Text>
             </View>
-            <Text style={[styles.BasicText, { flexDirection: 'row' }]}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-                {stepCount}{' '}
+            <View
+              style={{ alignItems: 'center', paddingRight: 20, paddingTop: 15 }}
+            >
+              <Text style={[styles.BasicText, { flexDirection: 'row' }]}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+                  {stepCount}{' '}
+                </Text>
+                <Text>걸음</Text>
               </Text>
-              <Text>걸음</Text>
-            </Text>
+            </View>
           </View>
 
           <View style={[{ backgroundColor: '#ffffff' }, styles.CountContainer]}>
@@ -235,17 +239,19 @@ const Home = ({ user }) => {
                 {'\t'}나의 전적
               </Text>
             </View>
-            <Text
-              style={[
-                styles.BasicText,
-                { paddingTop: 7, paddingBottom: 3, fontSize: 20 },
-              ]}
-            >
-              {winNum}승 {loseNum}패
-            </Text>
-            <Text style={[styles.BasicText, { fontSize: 14 }]}>
-              (승률: {winningRate}%)
-            </Text>
+            <View style={{ alignItems: 'center', paddingRight: 20 }}>
+              <Text
+                style={[
+                  styles.BasicText,
+                  { paddingTop: 15, paddingBottom: 3, fontSize: 20 },
+                ]}
+              >
+                {winNum}승 {loseNum}패
+              </Text>
+              <Text style={[styles.BasicText, { fontSize: 14, color: 'gray' }]}>
+                (승률: {winningRate}%)
+              </Text>
+            </View>
           </View>
         </View>
       </View>
@@ -360,9 +366,8 @@ const styles = StyleSheet.create({
   CountContainer: {
     marginTop: 20,
     marginLeft: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-
+    paddingTop: 25,
+    paddingLeft: 20,
     elevation: 5,
     height: 120,
     width: (Dimensions.get('window').width - 40) / 2 - 10,
