@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import NaverMapView, { Marker } from 'react-native-nmap'
 import Geolocation from 'react-native-geolocation-service'
@@ -7,7 +7,6 @@ import axios from 'axios'
 import { SERVER_URL } from '@env'
 import GetMarkerImage from '../utils/getMarkerImage'
 import getDistance from '../utils/getDistance'
-import { useCallback } from 'react/cjs/react.development'
 import showToast from '../utils/showToast'
 import { LongPressGestureHandler } from 'react-native-gesture-handler'
 
