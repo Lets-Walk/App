@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   View,
   Text,
@@ -10,9 +10,12 @@ import {
 } from 'react-native'
 import ScreenName from '../components/ScreenName'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
+import { useIsFocused } from '@react-navigation/native'
+import axios from 'axios'
 import { List } from '@ant-design/react-native'
 import Confetti from '../animations/Confetti'
 import RankDetailModal from '../components/RankDetailModal'
+import { SERVER_URL } from '@env'
 
 var today = new Date() // 오늘 날짜
 var dday = new Date(2021, 12 - 1, 31) // 2021.12.31 (월은 -1)
@@ -23,70 +26,30 @@ const Ranking = ({ user }) => {
   const startDate = '2021.12.01'
   const endDate = '2021.12.31'
   const userCampus = user.Campus.name
-  const [ranks, setRanks] = useState([
-    {
-      rank: 1,
-      campus: '중앙대학교',
-      score: 1820,
-    },
-    {
-      rank: 2,
-      campus: '숭실대학교',
-      score: 1610,
-    },
-    {
-      rank: 3,
-      campus: '서울대학교',
-      score: 1500,
-    },
-    {
-      rank: 4,
-      campus: '연세대학교',
-      score: 1480,
-    },
-    {
-      rank: 5,
-      campus: '건국대학교',
-      score: 1120,
-    },
-    {
-      rank: 6,
-      campus: '고려대학교',
-      score: 1090,
-    },
-    {
-      rank: 7,
-      campus: '동국대학교',
-      score: 870,
-    },
-    {
-      rank: 8,
-      campus: '서강대학교',
-      score: 850,
-    },
-    {
-      rank: 9,
-      campus: '한양대학교',
-      score: 790,
-    },
-    {
-      rank: 10,
-      campus: '홍익대학교',
-      score: 750,
-    },
-    {
-      rank: 11,
-      campus: '광운대학교',
-      score: 660,
-    },
-  ]) // mockup data
 
-  const _handleDetail = (campus, rank) => {
+  const isFocused = useIsFocused()
+
+  useEffect(async () => {
+    if (!isFocused) return
+    console.log('refresh campus ranking')
+    try {
+      const result = await axios.get(SERVER_URL + '/api/campus/rank', {
+        timeout: 5000,
+      })
+      const rankData = result.data.data
+      rankData.map((rank, idx) => (rank.rank = idx + 1))
+      setRanks(rankData)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [isFocused])
+  const [ranks, setRanks] = useState([]) // mockup data
+
+  const _handleDetail = (campus, rank, id) => {
     // 서버에서 해당 대학정보, 참여자 정보 불러오기
     setIsVisible(true)
     setModalVisible(true)
-    setCampusName(campus)
-    setCampusRank(rank)
+    setCampusData({ campus, rank, id })
   }
 
   const [isVisible, setIsVisible] = useState(false)
@@ -94,8 +57,7 @@ const Ranking = ({ user }) => {
   const _handleConfirm = useCallback(() => {
     setModalVisible(false)
   }, [])
-  const [campusName, setCampusName] = useState('')
-  const [campusRank, setCampusRank] = useState(0)
+  const [campusData, setCampusData] = useState(null)
 
   return (
     <ScreenName name="대학랭킹">
@@ -103,8 +65,7 @@ const Ranking = ({ user }) => {
         isVisible={modalVisible}
         setVisible={setModalVisible}
         onConfirm={_handleConfirm}
-        campusName={campusName}
-        campusRank={campusRank}
+        campusData={campusData}
       />
       <View style={{ flex: 1, alignItems: 'center', top: 20 }}>
         <Confetti />
@@ -133,7 +94,7 @@ const Ranking = ({ user }) => {
               {ranks.map((result) => (
                 <List.Item
                   key={result.rank}
-                  style={result.campus === userCampus ? styles.MyCampus : null}
+                  style={result.name === userCampus ? styles.MyCampus : null}
                 >
                   <View
                     style={{
@@ -195,7 +156,7 @@ const Ranking = ({ user }) => {
                       }}
                     >
                       <Text style={[styles.BasicText, { fontSize: 15 }]}>
-                        {result.campus}
+                        {result.name}
                       </Text>
                     </View>
                     <View
@@ -219,7 +180,7 @@ const Ranking = ({ user }) => {
                     >
                       <TouchableOpacity
                         onPress={() =>
-                          _handleDetail(result.campus, result.rank)
+                          _handleDetail(result.name, result.rank, result.id)
                         }
                       >
                         <FontAwesomeIcon
