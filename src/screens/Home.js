@@ -44,7 +44,7 @@ const Home = ({ user, navigation }) => {
   useEffect(async () => {
     if (!isFocused) return
 
-    console.log('refresh result')
+    // console.log('refresh result')
     //결과 받아와야함.
     const refreshUser = await auth()
     //배틀 결과 갱신
@@ -66,7 +66,6 @@ const Home = ({ user, navigation }) => {
   }, [])
 
   useEffect(() => {
-    console.log(battleRoomId)
     if (!battleRoomId) return
     if (!socket) {
       setSocket(io.connect(SERVER_URL))

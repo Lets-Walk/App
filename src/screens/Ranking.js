@@ -31,7 +31,7 @@ const Ranking = ({ user }) => {
 
   useEffect(async () => {
     if (!isFocused) return
-    console.log('refresh campus ranking')
+    // console.log('refresh campus ranking')
     try {
       const result = await axios.get(SERVER_URL + '/api/campus/rank', {
         timeout: 5000,

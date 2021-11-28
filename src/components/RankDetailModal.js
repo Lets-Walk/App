@@ -113,7 +113,7 @@ const RankDetailModal = ({
         },
       )
       const users = result.data.data
-      console.log(users)
+      // console.log(users)
       setCampusUsers(users)
     } catch (err) {
       console.log(err)
