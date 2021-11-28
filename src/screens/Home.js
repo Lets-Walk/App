@@ -104,12 +104,6 @@ const Home = ({ user, navigation }) => {
     })
   }, [socket])
 
-  useEffect(() => {
-    console.log('home render')
-    const newResults = parseResults(resultData)
-    setResults(newResults)
-  }, [])
-
   const parseResults = (result) => {
     const newResults = result.reverse().map((res, idx) => {
       const outcome = res.winCampus === campus ? 'win' : 'lose'
