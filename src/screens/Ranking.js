@@ -12,7 +12,7 @@ import ScreenName from '../components/ScreenName'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 import { useIsFocused } from '@react-navigation/native'
 import axios from 'axios'
-import { List } from '@ant-design/react-native'
+import { ActivityIndicator, List } from '@ant-design/react-native'
 import Confetti from '../animations/Confetti'
 import RankDetailModal from '../components/RankDetailModal'
 import { SERVER_URL } from '@env'
@@ -32,6 +32,7 @@ const Ranking = ({ user }) => {
   useEffect(async () => {
     if (!isFocused) return
     // console.log('refresh campus ranking')
+    setLoading(true)
     try {
       const result = await axios.get(SERVER_URL + '/api/campus/rank', {
         timeout: 5000,
@@ -42,6 +43,7 @@ const Ranking = ({ user }) => {
     } catch (err) {
       console.log(err)
     }
+    setLoading(false)
   }, [isFocused])
   const [ranks, setRanks] = useState([]) // mockup data
 
@@ -58,6 +60,7 @@ const Ranking = ({ user }) => {
     setModalVisible(false)
   }, [])
   const [campusData, setCampusData] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   return (
     <ScreenName name="대학랭킹">
@@ -89,114 +92,119 @@ const Ranking = ({ user }) => {
         </Text>
 
         <View style={styles.ResultContainer}>
-          <ScrollView>
-            <List>
-              {ranks.map((result) => (
-                <List.Item
-                  key={result.rank}
-                  style={result.name === userCampus ? styles.MyCampus : null}
-                >
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}
+          {loading ? (
+            <View style={styles.CenterView}>
+              <ActivityIndicator size="large" />
+            </View>
+          ) : (
+            <ScrollView>
+              <List>
+                {ranks.map((result) => (
+                  <List.Item
+                    key={result.rank}
+                    style={result.name === userCampus ? styles.MyCampus : null}
                   >
                     <View
                       style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
                       }}
                     >
-                      <Text style={[styles.BasicText, { fontSize: 15 }]}>
-                        {result.rank}위
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flex: 1,
-                      }}
-                    >
-                      {result.rank === 1 ? (
-                        <Image
-                          source={require('../utils/gold_medal.png')}
-                          style={{
-                            aspectRatio: 184 / 369,
-                            height: 30,
-                          }}
-                        />
-                      ) : null}
-                      {result.rank === 2 ? (
-                        <Image
-                          source={require('../utils/silver_medal.png')}
-                          style={{
-                            aspectRatio: 184 / 369,
-                            height: 30,
-                          }}
-                        />
-                      ) : null}
-                      {result.rank === 3 ? (
-                        <Image
-                          source={require('../utils/bronze_medal.png')}
-                          style={{
-                            aspectRatio: 184 / 369,
-                            height: 30,
-                          }}
-                        />
-                      ) : null}
-                    </View>
-                    <View
-                      style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flex: 3,
-                      }}
-                    >
-                      <Text style={[styles.BasicText, { fontSize: 15 }]}>
-                        {result.name}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flex: 2,
-                      }}
-                    >
-                      <Text style={[styles.BasicText, { fontSize: 15 }]}>
-                        {result.score}점
-                      </Text>
-                    </View>
-
-                    <View
-                      style={{
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flex: 1,
-                      }}
-                    >
-                      <TouchableOpacity
-                        onPress={() =>
-                          _handleDetail(result.name, result.rank, result.id)
-                        }
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flex: 1,
+                        }}
                       >
-                        <FontAwesomeIcon
-                          name="chevron-right"
-                          color="#001d40"
-                          size={15}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </List.Item>
-              ))}
-            </List>
-          </ScrollView>
-        </View>
+                        <Text style={[styles.BasicText, { fontSize: 15 }]}>
+                          {result.rank}위
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flex: 1,
+                        }}
+                      >
+                        {result.rank === 1 ? (
+                          <Image
+                            source={require('../utils/gold_medal.png')}
+                            style={{
+                              aspectRatio: 184 / 369,
+                              height: 30,
+                            }}
+                          />
+                        ) : null}
+                        {result.rank === 2 ? (
+                          <Image
+                            source={require('../utils/silver_medal.png')}
+                            style={{
+                              aspectRatio: 184 / 369,
+                              height: 30,
+                            }}
+                          />
+                        ) : null}
+                        {result.rank === 3 ? (
+                          <Image
+                            source={require('../utils/bronze_medal.png')}
+                            style={{
+                              aspectRatio: 184 / 369,
+                              height: 30,
+                            }}
+                          />
+                        ) : null}
+                      </View>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flex: 3,
+                        }}
+                      >
+                        <Text style={[styles.BasicText, { fontSize: 15 }]}>
+                          {result.name}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flex: 2,
+                        }}
+                      >
+                        <Text style={[styles.BasicText, { fontSize: 15 }]}>
+                          {result.score}점
+                        </Text>
+                      </View>
 
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          flex: 1,
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() =>
+                            _handleDetail(result.name, result.rank, result.id)
+                          }
+                        >
+                          <FontAwesomeIcon
+                            name="chevron-right"
+                            color="#001d40"
+                            size={15}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </List.Item>
+                ))}
+              </List>
+            </ScrollView>
+          )}
+        </View>
         <Text style={{ fontFamily: 'ONEMobileRegular' }}>
           대항전 기간: {startDate} ~ {endDate}
           {'\n'} 대학 순위는 실시간으로 업데이트 됩니다.
@@ -231,6 +239,11 @@ const styles = StyleSheet.create({
   },
   MyCampus: {
     backgroundColor: '#D1F2FF',
+  },
+  CenterView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 
