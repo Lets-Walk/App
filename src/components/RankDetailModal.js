@@ -171,10 +171,10 @@ const RankDetailModal = ({
                         </Text>
                       </View>
                       <View style={styles.list}>
-                        <Text style={styles.text}>{user.Walk.wincount}</Text>
+                        <Text style={styles.text}>{user.Walk.wincount}승</Text>
                       </View>
                       <View style={styles.list}>
-                        <Text style={styles.text}>{user.Walk.losecount}</Text>
+                        <Text style={styles.text}>{user.Walk.losecount}패</Text>
                       </View>
                     </View>
                   </List.Item>
