@@ -203,7 +203,8 @@ const Signup = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: '#ffffff' }}
-      behavior={'padding'}
+      behavior="height"
+      keyboardVerticalOffset={10}
     >
       <ConfirmModal
         isVisible={modalVisible}

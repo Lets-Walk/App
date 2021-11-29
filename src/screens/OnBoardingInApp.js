@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     height: 250,
   },
   image: {
-    height: '100%',
+    height: '85%',
   },
   imageContainer: {
     height: '70%',

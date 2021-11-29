@@ -15,14 +15,14 @@ const ScreenName = ({ name, children }) => {
           justifyContent: 'center',
           alignItems: 'center',
           height: '8%',
-          marginTop: 5,
+          marginTop: 2,
         }}
       >
         <Image
           source={require('../utils/screen_top.png')}
           style={{
             aspectRatio: 2846 / 759,
-            flex: 1,
+            height: '90%',
           }}
         />
       </View>
