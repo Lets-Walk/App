@@ -263,7 +263,7 @@ const Home = ({ user, navigation }) => {
                 {winNum}승 {loseNum}패
               </Text>
               <Text style={[styles.BasicText, { fontSize: 14, color: 'gray' }]}>
-                (승률: {winningRate}%)
+                (승률: {winningRate === 'NaN' ? 0 : winningRate}%)
               </Text>
             </View>
           </View>
