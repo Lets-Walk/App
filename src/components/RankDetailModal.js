@@ -145,10 +145,10 @@ const RankDetailModal = ({
           </View>
 
           <List
-          // renderHeader={
-          //   '\t 사용자명\t\t\t\t기여점수\t\t\t\t\t\t승\t\t\t\t\t\t\t\t\t 패'
-          // }
-          // style={{ marginLeft: 10, marginRight: 10 }}
+            renderHeader={
+              '\t 사용자명\t\t\t\t기여점수\t\t\t\t\t\t승\t\t\t\t\t\t\t\t\t 패'
+            }
+            style={{ marginLeft: 10, marginRight: 10 }}
           >
             <ScrollView style={{ height: '72%' }}>
               {loading ? (
