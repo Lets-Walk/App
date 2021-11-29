@@ -12,8 +12,8 @@ const StartMatching = ({ navigation, user }) => {
   const campus = user.Campus
   const userId = user.id
   const nickname = user.nickname
-  const [campusScore, setCampusScore] = useState(0)
-  const [campusRank, setCampusRank] = useState(1)
+  const [campusScore, setCampusScore] = useState(campus.score)
+  // const [campusRank, setCampusRank] = useState(1)
   const profileUrl = SERVER_URL + '/static/profiles/' + user.profileUrl
   const campusLogoUrl = SERVER_URL + '/static/logos/' + campus.image
 
@@ -48,16 +48,15 @@ const StartMatching = ({ navigation, user }) => {
         <View style={styles.campusRankContainer}>
           <Text
             style={{
-              fontSize: 26,
+              fontSize: 30,
               fontFamily: 'ONEMobileRegular',
               marginBottom: 10,
             }}
           >
-            현재 순위
+            현재 점수
           </Text>
           <Text style={{ fontSize: 24, fontFamily: 'ONEMobileLight' }}>
-            {/* {campusRank}위 ({campusScore}점) */}
-            {campusRank}위 (1820점)
+            {campusScore}점
           </Text>
         </View>
 
