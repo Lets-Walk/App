@@ -232,7 +232,7 @@ const Home = ({ user, navigation }) => {
                 style={{ width: 20, height: 20, bottom: 3 }}
               />
               <Text style={[styles.BasicText, { fontFamily: 'ONEMobileBold' }]}>
-                {'\t'}기여 점수
+                {'\t\t'}기여 점수
               </Text>
             </View>
             <View style={{ alignItems: 'center', paddingRight: 20 }}>
@@ -255,7 +255,7 @@ const Home = ({ user, navigation }) => {
                 style={{ width: 20, height: 20, bottom: 3 }}
               />
               <Text style={[styles.BasicText, { fontFamily: 'ONEMobileBold' }]}>
-                {'\t'}나의 전적
+                {'\t\t'}나의 전적
               </Text>
             </View>
             <View style={{ alignItems: 'center', paddingRight: 20 }}>

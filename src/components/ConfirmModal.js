@@ -13,7 +13,7 @@ const CenterView = styled.View`
 
 const Container = styled.View`
   width: 90%;
-  height: 30%;
+  height: 25%;
   background-color: #ffffff;
   border-radius: 15px;
 `
@@ -37,7 +37,7 @@ const ConfirmModal = ({ isVisible, setVisible, texts, onConfirm = null }) => {
       <CenterView>
         <Container>
           <View
-            style={{ alignItems: 'center', marginTop: 20, marginBottom: 25 }}
+            style={{ alignItems: 'center', marginTop: 20, marginBottom: 20 }}
           >
             <Text style={styles.title}>안 내</Text>
           </View>
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   Button: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
 })
 
