@@ -30,11 +30,14 @@ const Home = ({ user, navigation }) => {
   const campusLogoUrl = SERVER_URL + '/static/logos/' + user.Campus.image
 
   const [socket, setSocket] = useState(null)
-  const [stepCount, setStepCount] = useState(user.Walk.stepcount)
-  const [winNum, setWinNum] = useState(user.Walk.wincount)
-  const [loseNum, setLoseNum] = useState(user.Walk.losecount)
-  const winningRate = parseFloat((winNum / (winNum + loseNum)) * 100).toFixed(2) // 승률
-
+  const [walkData, setWalkData] = useState({
+    winNum: user.Walk.wincount,
+    loseNum: user.Walk.losecount,
+    contribution: user.Walk.contribution,
+  })
+  const winningRate = parseFloat(
+    (walkData.winNum / (walkData.winNum + walkData.loseNum)) * 100,
+  ).toFixed(2) // 승률
   const [results, setResults] = useState([]) // mockup data
   const [modalVisible, setModalVisible] = useState(false)
   const [modalNum, setModalNum] = useState(0)
@@ -51,9 +54,11 @@ const Home = ({ user, navigation }) => {
     const newResults = parseResults(refreshUser.Results)
     setResults(newResults)
 
-    //전적 갱신
-    setWinNum(refreshUser.Walk.wincount)
-    setLoseNum(refreshUser.Walk.losecount)
+    setWalkData({
+      winNum: refreshUser.Walk.wincount,
+      loseNum: refreshUser.Walk.losecount,
+      contribution: refreshUser.Walk.contribution,
+    })
   }, [isFocused])
 
   const _handleSee = (num) => {
@@ -221,23 +226,23 @@ const Home = ({ user, navigation }) => {
         <View style={{ flexDirection: 'row' }}>
           <View style={[{ backgroundColor: '#ffffff' }, styles.CountContainer]}>
             <View style={{ flexDirection: 'row' }}>
-              {/* <FontAwesomeIcon name="shoe-prints" color="#001d40" size={15} /> */}
+              {/* <FontAwesomeIcon name="crown" color="#001d40" size={15} /> */}
               <Image
                 source={Footprint}
-                style={{ width: 20, height: 20, bottom: 2 }}
+                style={{ width: 20, height: 20, bottom: 3 }}
               />
               <Text style={[styles.BasicText, { fontFamily: 'ONEMobileBold' }]}>
-                {'\t'}나의 걸음 수
+                {'\t'}기여 점수
               </Text>
             </View>
-            <View
-              style={{ alignItems: 'center', paddingRight: 20, paddingTop: 15 }}
-            >
-              <Text style={[styles.BasicText, { flexDirection: 'row' }]}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-                  {stepCount}{' '}
-                </Text>
-                <Text>걸음</Text>
+            <View style={{ alignItems: 'center', paddingRight: 20 }}>
+              <Text
+                style={[
+                  styles.BasicText,
+                  { paddingTop: 15, paddingBottom: 3, fontSize: 20 },
+                ]}
+              >
+                {walkData.contribution}점
               </Text>
             </View>
           </View>
@@ -260,7 +265,7 @@ const Home = ({ user, navigation }) => {
                   { paddingTop: 15, paddingBottom: 3, fontSize: 20 },
                 ]}
               >
-                {winNum}승 {loseNum}패
+                {walkData.winNum}승 {walkData.loseNum}패
               </Text>
               <Text style={[styles.BasicText, { fontSize: 14, color: 'gray' }]}>
                 (승률: {winningRate === 'NaN' ? 0 : winningRate}%)
