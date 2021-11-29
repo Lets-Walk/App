@@ -85,7 +85,8 @@ const Login = ({ navigation, setUser }) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: '#ffffff' }}
-      behavior={'padding'}
+      behavior="height"
+      keyboardVerticalOffset={10}
     >
       <Container>
         <ActivityIndicator
@@ -107,7 +108,7 @@ const Login = ({ navigation, setUser }) => {
             position: 'absolute',
             top: 10,
             alignItems: 'center',
-            height: '10%',
+            height: '8%',
           }}
         >
           <Image
