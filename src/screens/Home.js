@@ -9,12 +9,14 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import ScreenName from '../components/ScreenName'
+import { useIsFocused } from '@react-navigation/native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 import { List } from '@ant-design/react-native'
 import HomeResultModal from '../components/HomeResultModal'
 import { SERVER_URL } from '@env'
 import { Crown, Footprint } from '../../assets/icons'
 import { io } from 'socket.io-client'
+import auth from '../utils/auth'
 
 const Home = ({ user, navigation }) => {
   const name = user.name // 사용자 이름
@@ -37,6 +39,23 @@ const Home = ({ user, navigation }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [modalNum, setModalNum] = useState(0)
 
+  const isFocused = useIsFocused()
+
+  useEffect(async () => {
+    if (!isFocused) return
+
+    // console.log('refresh result')
+    //결과 받아와야함.
+    const refreshUser = await auth()
+    //배틀 결과 갱신
+    const newResults = parseResults(refreshUser.Results)
+    setResults(newResults)
+
+    //전적 갱신
+    setWinNum(refreshUser.Walk.wincount)
+    setLoseNum(refreshUser.Walk.losecount)
+  }, [isFocused])
+
   const _handleSee = (num) => {
     setModalNum(num)
     setModalVisible(true)
@@ -47,7 +66,6 @@ const Home = ({ user, navigation }) => {
   }, [])
 
   useEffect(() => {
-    console.log(battleRoomId)
     if (!battleRoomId) return
     if (!socket) {
       setSocket(io.connect(SERVER_URL))
@@ -85,10 +103,8 @@ const Home = ({ user, navigation }) => {
     })
   }, [socket])
 
-  useEffect(() => {
-    console.log('home render')
-
-    const newResults = resultData.reverse().map((res, idx) => {
+  const parseResults = (result) => {
+    const newResults = result.reverse().map((res, idx) => {
       const outcome = res.winCampus === campus ? 'win' : 'lose'
       const opponent = campus === res.campus1 ? res.campus2 : res.campus1
       const members = res.participants.split(',')
@@ -105,8 +121,8 @@ const Home = ({ user, navigation }) => {
       return resultObj
     })
 
-    setResults(newResults)
-  }, [])
+    return newResults
+  }
 
   return (
     <ScreenName name="홈">
@@ -247,7 +263,7 @@ const Home = ({ user, navigation }) => {
                 {winNum}승 {loseNum}패
               </Text>
               <Text style={[styles.BasicText, { fontSize: 14, color: 'gray' }]}>
-                (승률: {winningRate}%)
+                (승률: {winningRate === 'NaN' ? 0 : winningRate}%)
               </Text>
             </View>
           </View>

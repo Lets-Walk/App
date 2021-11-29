@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import {
   Text,
@@ -9,7 +9,9 @@ import {
 } from 'react-native'
 import Modal from 'react-native-modal'
 import { useWindowDimensions } from 'react-native'
-import { List } from '@ant-design/react-native'
+import { ActivityIndicator, List } from '@ant-design/react-native'
+import axios from 'axios'
+import { SERVER_URL } from '@env'
 
 const CenterView = styled.View`
   flex: 1;
@@ -90,15 +92,36 @@ const campusUsers = [
 const RankDetailModal = ({
   isVisible,
   setVisible,
-  campusName,
-  campusRank,
+  campusData,
   onConfirm = null,
 }) => {
+  if (!campusData) return <></>
   if (!onConfirm) {
     onConfirm = () => setVisible(false)
   }
 
+  const { campus: campusName, rank: campusRank, id: campusId } = campusData
   let ranker = 1
+  const [campusUsers, setCampusUsers] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(async () => {
+    try {
+      setLoading(true)
+      const result = await axios.get(
+        SERVER_URL + `/api/campus/${campusId}/members`,
+        {
+          timeout: 5000,
+        },
+      )
+      const users = result.data.data
+      // console.log(users)
+      setCampusUsers(users)
+      setLoading(false)
+    } catch (err) {
+      console.log(err)
+    }
+  }, [campusData])
 
   return (
     <Modal
@@ -128,29 +151,35 @@ const RankDetailModal = ({
             style={{ marginLeft: 10, marginRight: 10 }}
           >
             <ScrollView style={{ height: '72%' }}>
-              {campusUsers.map((user) => (
-                <List.Item key={ranker++}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}
-                  >
-                    <View style={styles.list}>
-                      <Text style={styles.text}>{user.nickname}</Text>
+              {loading ? (
+                <ActivityIndicator size="large" />
+              ) : (
+                campusUsers.map((user) => (
+                  <List.Item key={ranker++}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <View style={styles.list}>
+                        <Text style={styles.text}>{user.nickname}</Text>
+                      </View>
+                      <View style={styles.list}>
+                        <Text style={styles.text}>
+                          {user.Walk.contribution}점
+                        </Text>
+                      </View>
+                      <View style={styles.list}>
+                        <Text style={styles.text}>{user.Walk.wincount}</Text>
+                      </View>
+                      <View style={styles.list}>
+                        <Text style={styles.text}>{user.Walk.losecount}</Text>
+                      </View>
                     </View>
-                    <View style={styles.list}>
-                      <Text style={styles.text}>{user.myScore}점</Text>
-                    </View>
-                    <View style={styles.list}>
-                      <Text style={styles.text}>{user.win}</Text>
-                    </View>
-                    <View style={styles.list}>
-                      <Text style={styles.text}>{user.lose}</Text>
-                    </View>
-                  </View>
-                </List.Item>
-              ))}
+                  </List.Item>
+                ))
+              )}
             </ScrollView>
           </List>
 
@@ -203,6 +232,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flex: 1,
   },
+  CenterView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 })
 
-export default RankDetailModal
+export default React.memo(RankDetailModal)

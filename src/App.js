@@ -20,7 +20,7 @@ const App = () => {
 
   useEffect(async () => {
     setLoading(true)
-    await auth(setUser) //스플래시 무한로딩이면 주석처리하기
+    setUser(await auth()) //스플래시 무한로딩이면 주석처리하기
     setLoading(false)
     SplashScreen.hide()
     await requestPermission() //위치 권한 요청
