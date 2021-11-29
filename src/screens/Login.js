@@ -72,7 +72,7 @@ const Login = ({ navigation, setUser }) => {
       const { token } = result.data
       await AsyncStorage.setItem('token', token)
       setLoading(false)
-      await auth(setUser)
+      setUser(await auth())
     } catch (err) {
       console.log(err)
       if (err.response) console.log(err.response.data)
