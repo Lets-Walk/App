@@ -15,6 +15,7 @@ import Walking from '../animations/Walking'
 import ShoesLoading from '../animations/ShoesLoading'
 import ColorBackground from '../animations/ColorBackground'
 import Checking from '../animations/Checking'
+import Check from '../animations/Check'
 import CountDown from '../animations/CountDown'
 import WaitingUserList from '../components/WaitingUserList'
 import { useFocusEffect } from '@react-navigation/native'
@@ -127,7 +128,8 @@ const CrewMatching = ({ route, navigation }) => {
 
         <View style={styles.waitingContainer}>
           <WaitingUserList waitingUsers={waitingUsers} />
-          <Checking />
+          {/* <Checking /> */}
+          <Check />
         </View>
         <View style={styles.animationContainer}>
           {isMatching ? <CountDown /> : <ShoesLoading />}
