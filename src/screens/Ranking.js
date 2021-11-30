@@ -47,11 +47,11 @@ const Ranking = ({ user }) => {
   }, [isFocused])
   const [ranks, setRanks] = useState([]) // mockup data
 
-  const _handleDetail = (campus, rank, id) => {
+  const _handleDetail = (campus, rank, id, image) => {
     // 서버에서 해당 대학정보, 참여자 정보 불러오기
     setIsVisible(true)
     setModalVisible(true)
-    setCampusData({ campus, rank, id })
+    setCampusData({ campus, rank, id, image })
   }
 
   const [isVisible, setIsVisible] = useState(false)
@@ -161,9 +161,31 @@ const Ranking = ({ user }) => {
                           alignItems: 'center',
                           justifyContent: 'center',
                           flex: 3,
+                          flexDirection: 'row',
                         }}
                       >
-                        <Text style={[styles.BasicText, { fontSize: 15 }]}>
+                        <Image
+                          source={{
+                            uri: SERVER_URL + '/static/logos/' + result.image,
+                          }}
+                          style={{
+                            flex: 1,
+                            width: 30,
+                            height: 30,
+                            resizeMode: 'contain',
+                            marginRight: 3,
+                          }}
+                        ></Image>
+                        <Text
+                          style={[
+                            styles.BasicText,
+                            {
+                              fontSize: 15,
+                              flex: 3,
+                            },
+                          ]}
+                          numberOfLines={1}
+                        >
                           {result.name}
                         </Text>
                       </View>
@@ -188,7 +210,12 @@ const Ranking = ({ user }) => {
                       >
                         <TouchableOpacity
                           onPress={() =>
-                            _handleDetail(result.name, result.rank, result.id)
+                            _handleDetail(
+                              result.name,
+                              result.rank,
+                              result.id,
+                              result.image,
+                            )
                           }
                         >
                           <FontAwesomeIcon

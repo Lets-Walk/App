@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native'
 import Modal from 'react-native-modal'
 import { useWindowDimensions } from 'react-native'
@@ -25,70 +26,6 @@ const Container = styled.View`
   background-color: #ffffff;
   border-radius: 15px;
 `
-// mockup data
-const campusUsers = [
-  {
-    nickname: 'kevin',
-    myScore: 260,
-    win: 11,
-    lose: 2,
-  },
-  {
-    nickname: 'lee',
-    myScore: 240,
-    win: 10,
-    lose: 3,
-  },
-  {
-    nickname: 'jason',
-    myScore: 230,
-    win: 9,
-    lose: 2,
-  },
-  {
-    nickname: 'kim',
-    myScore: 190,
-    win: 7,
-    lose: 4,
-  },
-  {
-    nickname: 'yoon',
-    myScore: 180,
-    win: 8,
-    lose: 2,
-  },
-  {
-    nickname: 'park',
-    myScore: 170,
-    win: 7,
-    lose: 4,
-  },
-  {
-    nickname: 'alice',
-    myScore: 120,
-    win: 5,
-    lose: 3,
-  },
-  {
-    nickname: 'puang',
-    myScore: 110,
-    win: 5,
-    lose: 2,
-  },
-  {
-    nickname: 'peter',
-    myScore: 90,
-    win: 4,
-    lose: 3,
-  },
-  {
-    nickname: 'julia',
-    myScore: 80,
-    win: 4,
-    lose: 2,
-  },
-]
-
 const RankDetailModal = ({
   isVisible,
   setVisible,
@@ -100,7 +37,12 @@ const RankDetailModal = ({
     onConfirm = () => setVisible(false)
   }
 
-  const { campus: campusName, rank: campusRank, id: campusId } = campusData
+  const {
+    campus: campusName,
+    rank: campusRank,
+    id: campusId,
+    image: campusImage,
+  } = campusData
   let ranker = 1
   const [campusUsers, setCampusUsers] = useState([])
   const [loading, setLoading] = useState(false)
@@ -137,64 +79,89 @@ const RankDetailModal = ({
       <CenterView>
         <Container>
           <View
-            style={{ alignItems: 'center', marginTop: 20, marginBottom: 20 }}
+            style={{ flex: 2, justifyContent: 'center', alignItems: 'center' }}
           >
+            <Image
+              source={{ uri: SERVER_URL + '/static/logos/' + campusImage }}
+              style={{ width: 60, height: 60, resizeMode: 'contain' }}
+            />
             <Text style={styles.title}>
               {campusName} (현재 {campusRank}위)
             </Text>
           </View>
-
-          <List
-            renderHeader={
-              '\t 사용자명\t\t\t\t기여점수\t\t\t\t\t\t승\t\t\t\t\t\t\t\t\t 패'
-            }
-            style={{ marginLeft: 10, marginRight: 10 }}
-          >
-            <ScrollView style={{ height: '72%' }}>
-              {loading ? (
-                <ActivityIndicator size="large" />
-              ) : (
-                campusUsers.map((user) => (
-                  <List.Item key={ranker++}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <View style={styles.list}>
-                        <Text style={styles.text}>{user.nickname}</Text>
-                      </View>
-                      <View style={styles.list}>
-                        <Text style={styles.text}>
-                          {user.Walk.contribution}점
-                        </Text>
-                      </View>
-                      <View style={styles.list}>
-                        <Text style={styles.text}>{user.Walk.wincount}승</Text>
-                      </View>
-                      <View style={styles.list}>
-                        <Text style={styles.text}>{user.Walk.losecount}패</Text>
-                      </View>
-                    </View>
-                  </List.Item>
-                ))
+          <View style={{ flex: 8 }}>
+            <List
+              renderHeader={() => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: 'rgb(245, 245, 249)',
+                    height: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ flex: 2, textAlign: 'right' }}>사용자명</Text>
+                  <Text style={{ flex: 3, textAlign: 'center' }}>기여점수</Text>
+                  <Text style={{ flex: 1, textAlign: 'left' }}>승</Text>
+                  <Text style={{ flex: 1, textAlign: 'left' }}>패</Text>
+                </View>
               )}
-            </ScrollView>
-          </List>
-
-          <View style={styles.Button}>
-            <TouchableOpacity onPress={onConfirm}>
-              <Text
-                style={{
-                  fontSize: 25,
-                  color: '#4495D0',
-                  fontFamily: 'BMHANNAAir_ttf',
-                }}
-              >
-                확인
-              </Text>
-            </TouchableOpacity>
+              // style={{ marginLeft: 10, marginRight: 10 }}
+            >
+              <ScrollView>
+                {loading ? (
+                  <ActivityIndicator size="large" />
+                ) : (
+                  campusUsers.map((user) => (
+                    <List.Item key={ranker++}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          // justifyContent: 'space-between',
+                        }}
+                      >
+                        <View style={[styles.list, { flex: 2 }]}>
+                          <Text style={styles.text} numberOfLines={1}>
+                            {user.nickname}
+                          </Text>
+                        </View>
+                        <View style={[styles.list, { flex: 2 }]}>
+                          <Text style={styles.text}>
+                            {user.Walk.contribution}점
+                          </Text>
+                        </View>
+                        <View style={[styles.list, { flex: 1 }]}>
+                          <Text style={styles.text}>
+                            {user.Walk.wincount}승
+                          </Text>
+                        </View>
+                        <View style={[styles.list, { flex: 1 }]}>
+                          <Text style={styles.text}>
+                            {user.Walk.losecount}패
+                          </Text>
+                        </View>
+                      </View>
+                    </List.Item>
+                  ))
+                )}
+              </ScrollView>
+            </List>
+          </View>
+          <View style={{ flex: 1 }}>
+            <View style={styles.Button}>
+              <TouchableOpacity onPress={onConfirm}>
+                <Text
+                  style={{
+                    fontSize: 25,
+                    color: '#4495D0',
+                    fontFamily: 'BMHANNAAir_ttf',
+                  }}
+                >
+                  확인
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Container>
       </CenterView>
