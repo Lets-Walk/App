@@ -77,9 +77,11 @@ const HomeResultModal = ({
               }}
             >
               <Text style={styles.boldText}>참가자</Text>
-              <Text style={{ ...styles.text }} numberOfLines={1}>
+              <Text
+                style={{ ...styles.text, flex: 1, textAlign: 'right' }}
+                numberOfLines={2}
+              >
                 {members.join(', ')}
-                {/* {members[0]}, {members[1]}, {members[2]} */}
               </Text>
             </View>
             <View
