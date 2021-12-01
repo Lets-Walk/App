@@ -116,6 +116,7 @@ const CrewMatching = ({ route, navigation }) => {
   if (crewId) {
     return (
       <View style={styles.container}>
+        <Text style={styles.headerTxt}>배틀매칭</Text>
         <ConfirmModal
           isVisible={modalVisible}
           setVisible={setModalVisible}
@@ -152,6 +153,7 @@ const CrewMatching = ({ route, navigation }) => {
   } else {
     return (
       <View style={styles.container}>
+        <Text style={styles.headerTxt}>크루매칭</Text>
         <View style={styles.waitingContainer}>
           <WaitingUserList waitingUsers={waitingUsers} />
         </View>
@@ -211,6 +213,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 300,
     width: 300,
+  },
+  headerTxt: {
+    position: 'absolute',
+    top: 30,
+    fontFamily: 'BMHANNAAir_ttf',
+    fontSize: 36,
+    color: '#000000',
   },
 })
 
