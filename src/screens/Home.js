@@ -9,12 +9,14 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import ScreenName from '../components/ScreenName'
+import { useIsFocused } from '@react-navigation/native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5'
 import { List } from '@ant-design/react-native'
 import HomeResultModal from '../components/HomeResultModal'
 import { SERVER_URL } from '@env'
 import { Crown, Footprint } from '../../assets/icons'
 import { io } from 'socket.io-client'
+import auth from '../utils/auth'
 
 const Home = ({ user, navigation }) => {
   const name = user.name // 사용자 이름
@@ -22,93 +24,45 @@ const Home = ({ user, navigation }) => {
   const userEmail = user.email // 사용자 이메일
   const nickname = user.nickname // 사용자 닉네임
   const battleRoomId = user.battleRoomId
+  const resultData = user.Results
 
   const profileUrl = SERVER_URL + '/static/profiles/' + user.profileUrl
   const campusLogoUrl = SERVER_URL + '/static/logos/' + user.Campus.image
 
   const [socket, setSocket] = useState(null)
-  const [stepCount, setStepCount] = useState(user.Walk.stepcount)
-  const [winNum, setWinNum] = useState(user.Walk.wincount)
-  const [loseNum, setLoseNum] = useState(user.Walk.losecount)
-  const winningRate = parseFloat((winNum / (winNum + loseNum)) * 100).toFixed(2) // 승률
-
-  const [results, setResults] = useState([
-    // {
-    //   no: 1,
-    //   date: '21.12.26',
-    //   startTime: '10:23',
-    //   endTime: '10:55',
-    //   outcome: 'win',
-    //   opponent: '숭실대학교',
-    //   steps: 328,
-    //   members: ['kim', 'lee', 'jason'],
-    // },
-    // {
-    //   no: 2,
-    //   date: '21.12.28',
-    //   startTime: '09:11',
-    //   endTime: '09:42',
-    //   outcome: 'win',
-    //   opponent: '서울대학교',
-    //   steps: 277,
-    //   members: ['park', 'yoon', 'kevin'],
-    // },
-    // {
-    //   no: 3,
-    //   date: '21.12.28',
-    //   startTime: '14:48',
-    //   endTime: '15:01',
-    //   outcome: 'lose',
-    //   opponent: '건국대학교',
-    //   steps: 302,
-    //   members: ['park', 'kim2', 'john'],
-    // },
-    // {
-    //   no: 4,
-    //   date: '21.12.29',
-    //   startTime: '11:11',
-    //   endTime: '11:35',
-    //   outcome: 'lose',
-    //   opponent: '가야대학교',
-    //   steps: 411,
-    //   members: ['jang', 'harry', 'choi'],
-    // },
-    // {
-    //   no: 5,
-    //   date: '21.12.30',
-    //   startTime: '17:55',
-    //   endTime: '18:05',
-    //   outcome: 'win',
-    //   opponent: '연세대학교',
-    //   steps: 194,
-    //   members: ['yoon', 'kim', 'john'],
-    // },
-    // {
-    //   no: 6,
-    //   date: '21.12.31',
-    //   startTime: '12:55',
-    //   endTime: '15:05',
-    //   outcome: 'win',
-    //   opponent: '연세대학교',
-    //   steps: 194,
-    //   members: ['yoon', 'kim', 'john'],
-    // },
-    // {
-    //   no: 7,
-    //   date: '21.12.31',
-    //   startTime: '15:55',
-    //   endTime: '20:05',
-    //   outcome: 'lose',
-    //   opponent: '연세대학교',
-    //   steps: 194,
-    //   members: ['yoon', 'kim', 'john'],
-    // },
-  ]) // mockup data
+  const [walkData, setWalkData] = useState({
+    winNum: user.Walk.wincount,
+    loseNum: user.Walk.losecount,
+    contribution: user.Walk.contribution,
+  })
+  const winningRate = parseFloat(
+    (walkData.winNum / (walkData.winNum + walkData.loseNum)) * 100,
+  ).toFixed(2) // 승률
+  const [results, setResults] = useState([]) // mockup data
   const [modalVisible, setModalVisible] = useState(false)
   const [modalNum, setModalNum] = useState(0)
 
+  const isFocused = useIsFocused()
+
+  useEffect(async () => {
+    if (!isFocused) return
+
+    // console.log('refresh result')
+    //결과 받아와야함.
+    const refreshUser = await auth()
+    //배틀 결과 갱신
+    const newResults = parseResults(refreshUser.Results)
+    setResults(newResults)
+
+    setWalkData({
+      winNum: refreshUser.Walk.wincount,
+      loseNum: refreshUser.Walk.losecount,
+      contribution: refreshUser.Walk.contribution,
+    })
+  }, [isFocused])
+
   const _handleSee = (num) => {
-    setModalNum(num - 1)
+    setModalNum(num)
     setModalVisible(true)
   }
 
@@ -117,7 +71,6 @@ const Home = ({ user, navigation }) => {
   }, [])
 
   useEffect(() => {
-    console.log(battleRoomId)
     if (!battleRoomId) return
     if (!socket) {
       setSocket(io.connect(SERVER_URL))
@@ -126,7 +79,10 @@ const Home = ({ user, navigation }) => {
 
     socket.emit('reconnect', { battleRoomId, campusName: campus })
     socket.on('reconnect', (currentBattle) => {
-      if (!currentBattle) return
+      if (!currentBattle) {
+        socket.disconnect()
+        return
+      }
       const myCrew = currentBattle.crewInfo.find(
         (crew) => crew.campus.name === campus,
       )
@@ -152,15 +108,31 @@ const Home = ({ user, navigation }) => {
     })
   }, [socket])
 
-  useEffect(() => {
-    console.log('home render')
+  const parseResults = (result) => {
+    const newResults = result.reverse().map((res, idx) => {
+      const outcome = res.winCampus === campus ? 'win' : 'lose'
+      const opponent = campus === res.campus1 ? res.campus2 : res.campus1
+      const members = res.participants.split(',')
+      const resultObj = {
+        no: idx,
+        id: res.id,
+        date: res.date,
+        startTime: res.startTime,
+        endTime: res.endTime,
+        outcome: outcome,
+        opponent: opponent,
+        members: members,
+      }
+      return resultObj
+    })
 
-    //여기서 배틀룸 아이디 갱신하기
-  }, [])
+    return newResults
+  }
 
   return (
     <ScreenName name="홈">
       <HomeResultModal
+        key={results[modalNum]?.id}
         isVisible={modalVisible}
         setVisible={setModalVisible}
         date={results[modalNum]?.date}
@@ -254,23 +226,23 @@ const Home = ({ user, navigation }) => {
         <View style={{ flexDirection: 'row' }}>
           <View style={[{ backgroundColor: '#ffffff' }, styles.CountContainer]}>
             <View style={{ flexDirection: 'row' }}>
-              {/* <FontAwesomeIcon name="shoe-prints" color="#001d40" size={15} /> */}
+              {/* <FontAwesomeIcon name="crown" color="#001d40" size={15} /> */}
               <Image
                 source={Footprint}
-                style={{ width: 20, height: 20, bottom: 2 }}
+                style={{ width: 20, height: 20, bottom: 3 }}
               />
               <Text style={[styles.BasicText, { fontFamily: 'ONEMobileBold' }]}>
-                {'\t'}나의 걸음 수
+                {'\t\t'}기여 점수
               </Text>
             </View>
-            <View
-              style={{ alignItems: 'center', paddingRight: 20, paddingTop: 15 }}
-            >
-              <Text style={[styles.BasicText, { flexDirection: 'row' }]}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-                  {stepCount}{' '}
-                </Text>
-                <Text>걸음</Text>
+            <View style={{ alignItems: 'center', paddingRight: 20 }}>
+              <Text
+                style={[
+                  styles.BasicText,
+                  { paddingTop: 15, paddingBottom: 3, fontSize: 20 },
+                ]}
+              >
+                {walkData.contribution}점
               </Text>
             </View>
           </View>
@@ -283,7 +255,7 @@ const Home = ({ user, navigation }) => {
                 style={{ width: 20, height: 20, bottom: 3 }}
               />
               <Text style={[styles.BasicText, { fontFamily: 'ONEMobileBold' }]}>
-                {'\t'}나의 전적
+                {'\t\t'}나의 전적
               </Text>
             </View>
             <View style={{ alignItems: 'center', paddingRight: 20 }}>
@@ -293,10 +265,10 @@ const Home = ({ user, navigation }) => {
                   { paddingTop: 15, paddingBottom: 3, fontSize: 20 },
                 ]}
               >
-                {winNum}승 {loseNum}패
+                {walkData.winNum}승 {walkData.loseNum}패
               </Text>
               <Text style={[styles.BasicText, { fontSize: 14, color: 'gray' }]}>
-                (승률: {winningRate}%)
+                (승률: {winningRate === 'NaN' ? 0 : winningRate}%)
               </Text>
             </View>
           </View>
@@ -316,7 +288,7 @@ const Home = ({ user, navigation }) => {
           <ScrollView>
             <List>
               {results.map((result) => (
-                <List.Item key={result.no}>
+                <List.Item key={result.id}>
                   <View
                     style={{
                       flexDirection: 'row',

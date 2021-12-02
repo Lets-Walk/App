@@ -12,7 +12,7 @@ const CenterView = styled.View`
 
 const Container = styled.View`
   width: 100%;
-  height: 50%;
+  height: 42%;
   background-color: #ffffff;
   border-radius: 15px;
 `
@@ -60,7 +60,7 @@ const HomeResultModal = ({
               상{'\t'}세{'\t'}결{'\t'}과
             </Text>
           </View>
-          <View style={{ marginRight: 20, marginLeft: 20 }}>
+          <View style={{ marginRight: 20, marginLeft: 13 }}>
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
@@ -71,11 +71,17 @@ const HomeResultModal = ({
               </Text>
             </View>
             <View
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
             >
-              <Text style={styles.boldText}>함께 한 크루</Text>
-              <Text style={styles.text}>
-                {members[0]}, {members[1]}, {members[2]}
+              <Text style={styles.boldText}>참가자</Text>
+              <Text
+                style={{ ...styles.text, flex: 1, textAlign: 'right' }}
+                numberOfLines={2}
+              >
+                {members.join(', ')}
               </Text>
             </View>
             <View
@@ -84,12 +90,12 @@ const HomeResultModal = ({
               <Text style={styles.boldText}>상대 학교</Text>
               <Text style={styles.text}>{opponent}</Text>
             </View>
-            <View
+            {/* <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
               <Text style={styles.boldText}>나의 걸음수</Text>
               <Text style={styles.text}>{steps}보</Text>
-            </View>
+            </View> */}
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
@@ -179,6 +185,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ONEMobileRegular',
     fontSize: 17,
     marginBottom: 20,
+    overflow: 'hidden',
   },
   Button: {
     alignItems: 'center',

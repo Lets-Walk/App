@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { SvgXml } from 'react-native-svg'
-import { useEffect, useState } from 'react/cjs/react.development'
 import { Life, Life_empty } from '../../assets/images'
 import { SERVER_URL } from '@env'
 

@@ -13,7 +13,7 @@ const CenterView = styled.View`
 
 const Container = styled.View`
   width: 90%;
-  height: 30%;
+  height: 25%;
   background-color: #ffffff;
   border-radius: 15px;
 `
@@ -37,11 +37,11 @@ const ConfirmModal = ({ isVisible, setVisible, texts, onConfirm = null }) => {
       <CenterView>
         <Container>
           <View
-            style={{ alignItems: 'center', marginTop: 20, marginBottom: 25 }}
+            style={{ alignItems: 'center', marginTop: 20, marginBottom: 20 }}
           >
-            <Text style={styles.title}>안{'\t\t'}내</Text>
+            <Text style={styles.title}>안 내</Text>
           </View>
-          <View style={{ alignItems: 'center' }}>
+          <View style={{ alignItems: 'center', flex: 1 }}>
             {texts.map((text) => (
               <Text key={text} style={styles.text}>
                 {text}
@@ -70,9 +70,8 @@ const ConfirmModal = ({ isVisible, setVisible, texts, onConfirm = null }) => {
 const styles = StyleSheet.create({
   title: {
     color: 'black',
-    fontFamily: 'BMHANNAAir_ttf',
+    fontFamily: 'ONEMobileBold',
     fontSize: 25,
-    fontWeight: 'bold',
   },
   confirm: {
     alignItems: 'center',
@@ -83,14 +82,13 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'black',
-    fontFamily: 'BMHANNAAir_ttf',
-    fontSize: 20,
+    fontFamily: 'ONEMobileRegular',
+    fontSize: 18,
   },
   Button: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
-    marginTop: 20,
+    marginBottom: 10,
   },
 })
 
