@@ -21,22 +21,25 @@
 
 ## 👨‍👦‍👦 팀원 소개
 
-| <img alt="박종혁" src="https://avatars.githubusercontent.com/u/76427521?v=4" height="80"/> | <img alt="윤진호" src="https://avatars.githubusercontent.com/u/79308015?v=4" height="80"/> | <img alt="이주영" src="https://avatars.githubusercontent.com/u/74705447?v=4" height="80"/> |
+| <img alt="박종혁" src="https://avatars.githubusercontent.com/u/76427521?v=4" height="50"/> | <img alt="윤진호" src="https://avatars.githubusercontent.com/u/79308015?v=4" height="50"/> | <img alt="이주영" src="https://avatars.githubusercontent.com/u/74705447?v=4" height="50"/> |
 | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
 |                            [박종혁](https://github.com/jjonyo)                             |                          [윤진호](https://github.com/jhyoon9705)                           |                          [이주영](https://github.com//jjjuurang)                           |
 |                                     Backend + Frontend                                     |                                       Frontend + UI                                        |                                     UI + Data research                                     |
+
 
 <br>
 
 ## 🛠 사용 기술
 
-프론트엔드 : React Native, RN Naver map, Socket.io-Client
+- 프론트엔드(App) : React Native, RN Naver map, Socket.io-Client
 
-백엔드 : Node.js(TypeScript), Express, Sequelize, Postgresql, Docker, Socket.io
+- 백엔드(Server) : Node.js(TypeScript), Express, Sequelize, Postgresql, Docker, Socket.io
 
-배포 : AWS EC2
+- 배포 : AWS EC2
 
-협업 : Github, Notion, Slack, Trello, Figma
+- 협업 : Github, Notion, Slack, Trello, Figma
+
+<img src="https://user-images.githubusercontent.com/79308015/147062555-9a11f14f-124b-4c18-93ea-14f9db4bb9f2.png"  />
 
 <br>
 
@@ -51,3 +54,9 @@
 ![슬라이드7](https://user-images.githubusercontent.com/76427521/146711823-79ec19a5-b7f0-4aa1-b0bc-fb1a3a9367d4.png)
 ![슬라이드8](https://user-images.githubusercontent.com/76427521/146711824-13c93df1-1f4b-4940-b3a6-ba85f279df0e.png)
 ![슬라이드9](https://user-images.githubusercontent.com/76427521/146711826-b5c2bf7b-4ee9-4f0f-a12f-eb3c6fd9c238.png)
+
+<br>
+
+## :tv: 데모 영상
+
+[![워크투게더 데모 영상](https://img.youtube.com/vi/C9pqF1dVnDs/0.jpg)](https://www.youtube.com/watch?v=C9pqF1dVnDs)
